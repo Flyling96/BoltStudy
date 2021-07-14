@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!-- Project -->
+  <PropertyGroup>
+    <ProjectGuid>{8BDA7B48-D6EA-4762-822F-ECA6EA7D4345}</ProjectGuid>
+    <RootNamespace>Ludiq</RootNamespace>
+    <AssemblyName>Ludiq.Core.Runtime</AssemblyName>
+    <DefineConstants>GUID_1eea3bf15bb7ddb4582c462beee0ad13;TARGET_INCLUDE_ALL;TARGET_BACKEND_IL2CPP</DefineConstants>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <!-- Shared -->
+  <PropertyGroup>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <PathMap>$(AppOutputBase)=Ludiq.Core.Runtime\</PathMap>
+    <Platform>AnyCPU</Platform>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <LangVersion>7.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <NoWarn>1591</NoWarn>
+    <Configuration Condition=" '$(Configuration)' == '' ">Bolt1.Net3.Debug</Configuration>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Debug' ">Debug</Stability>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Release' Or '$(Configuration)' == 'Bolt1.Net4.Release' ">Release</Stability>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net3.Release' ">3.5</TargetFrameworkVersionNumber>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net4.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Release'">4.6</TargetFrameworkVersionNumber>
+    <OutputPath>$(BaseOutputPath)\$(Configuration)</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+  <!-- Debug -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Debug' ">
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE;ENABLE_PROFILER</DefineConstants>
+  </PropertyGroup>
+  <!-- Release -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Release' ">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <!-- .NET 3.5 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 3.5 ">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_2_0</DefineConstants>
+  </PropertyGroup>
+  <!-- .NET 4.6 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 4.6 ">
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_4_6</DefineConstants>
+  </PropertyGroup>
+  <!-- References -->
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="MiscUtil">
+      <HintPath>Dependencies\MiscUtil\MiscUtil.dll</HintPath>
+    </Reference>
+    <None Include="MiscUtil.defines">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Unity\2018.4\UnityEngine.dll</HintPath>
+    </Reference>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <!-- Sources -->
+  <ItemGroup>
+    <Compile Include="Cloning\Cloners\AnimationCurveCloner.cs" />
+    <Compile Include="Cloning\Cloners\ArrayCloner.cs" />
+    <Compile Include="Cloning\Cloners\FakeSerializationCloner.cs" />
+    <Compile Include="Cloning\Cloners\ListCloner.cs" />
+    <Compile Include="Cloning\Cloners\FieldsCloner.cs" />
+    <Compile Include="Cloning\ISpecifiesCloner.cs" />
+    <Compile Include="Collections\AotDictionary.cs" />
+    <Compile Include="Collections\AotList.cs" />
+    <Compile Include="Collections\DebugDictionary.cs" />
+    <Compile Include="Collections\INotifiedCollectionItem.cs" />
+    <Compile Include="Collections\INotifyCollectionChanged.cs" />
+    <Compile Include="Collections\IProxyableNotifyCollectionChanged.cs" />
+    <Compile Include="Collections\ISet.cs" Condition=" '$(TargetFrameworkVersionNumber)' == 3.5 " />
+    <Compile Include="Collections\MergedList.cs" />
+    <Compile Include="Collections\NoAllocEnumerator.cs" />
+    <Compile Include="Collections\VariantList.cs" />
+    <Compile Include="Collections\WatchedList.cs" />
+    <Compile Include="Dependencies\AssemblyQualifiedNameParser\ParsedAssemblyQualifiedName.cs" />
+    <Compile Include="EditorBinding\AllowsNullAttribute.cs" />
+    <Compile Include="EditorBinding\EditorTimeBinding.cs" />
+    <Compile Include="EditorBinding\ExpectedTypeAttribute.cs" />
+    <Compile Include="EditorBinding\IInspectableAttribute.cs" />
+    <Compile Include="EditorBinding\IncludeInSettingsAttribute.cs" />
+    <Compile Include="EditorBinding\InspectableIfAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectorActionDirectionAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectorAdaptiveWidthAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectorDelayedAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectViaImplementationsAttribute.cs" />
+    <Compile Include="EditorBinding\NullMeansSelfAttribute.cs" />
+    <Compile Include="EditorBinding\PredictableAttribute.cs" />
+    <Compile Include="EditorBinding\TypeIconAttribute.cs" />
+    <Compile Include="EditorBinding\TypeIconPriorityAttribute.cs" />
+    <Compile Include="EditorBinding\Typeset.cs" />
+    <Compile Include="EditorBinding\TypeSetAttribute.cs" />
+    <Compile Include="EditorBinding\WarnBeforeEditingAttribute.cs" />
+    <Compile Include="EditorBinding\WarnBeforeRemovingAttribute.cs" />
+    <Compile Include="Ensure\Ensure.cs" />
+    <Compile Include="Ensure\EnsureThat.Booleans.cs" />
+    <Compile Include="Ensure\EnsureThat.Collections.cs" />
+    <Compile Include="Ensure\EnsureThat.Comparables.cs" />
+    <Compile Include="Ensure\EnsureThat.cs" />
+    <Compile Include="Ensure\EnsureThat.Guids.cs" />
+    <Compile Include="Ensure\EnsureThat.NullableValueTypes.cs" />
+    <Compile Include="Ensure\EnsureThat.Objects.cs" />
+    <Compile Include="Ensure\EnsureThat.Strings.cs" />
+    <Compile Include="Ensure\EnsureThat.Types.cs" />
+    <Compile Include="Ensure\EnsureThat.ValueTypes.cs" />
+    <Compile Include="Ensure\ExceptionMessages.cs" />
+    <Compile Include="Ensure\Extensions\XComparable.cs" />
+    <Compile Include="Ensure\Extensions\XString.cs" />
+    <Compile Include="Ensure\EnsureThat.Reflection.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsArrayConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsDateConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsDictionaryConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsEnumConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsForwardConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsGuidConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsIEnumerableConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsKeyValuePairConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsNullableConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsPrimitiveConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsReflectedConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsTypeConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\fsWeakReferenceConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\AnimationCurve_DirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\Bounds_DirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\Gradient_DirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\GUIStyleState_DirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\GUIStyle_DirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\Keyframe_DirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\LayerMask_DirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\RectOffset_DirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\Rect_DirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\Converters\Unity\UnityEvent_Converter.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsAotCompilationManager.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsBaseConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsConfig.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsContext.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsConverterRegistrar.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsData.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsDirectConverter.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsExceptions.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsIgnoreAttribute.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsISerializationCallbacks.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsJsonParser.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsJsonPrinter.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsMemberSerialization.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsObjectAttribute.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsObjectProcessor.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsPropertyAttribute.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsResult.cs" />
+    <Compile Include="Dependencies\FullSerializer\fsSerializer.cs" />
+    <Compile Include="Dependencies\FullSerializer\Internal\fsCyclicReferenceManager.cs" />
+    <Compile Include="Dependencies\FullSerializer\Internal\fsOption.cs" />
+    <Compile Include="Dependencies\FullSerializer\Internal\fsPortableReflection.cs" />
+    <Compile Include="Dependencies\FullSerializer\Internal\fsTypeExtensions.cs" />
+    <Compile Include="Dependencies\FullSerializer\Internal\fsVersionedType.cs" />
+    <Compile Include="Dependencies\FullSerializer\Internal\fsVersionManager.cs" />
+    <Compile Include="Dependencies\FullSerializer\Reflection\fsMetaProperty.cs" />
+    <Compile Include="Dependencies\FullSerializer\Reflection\fsMetaType.cs" />
+    <Compile Include="Dependencies\FullSerializer\Reflection\fsReflectionUtility.cs" />
+    <Compile Include="Dependencies\FullSerializer\Reflection\fsTypeCache.cs" />
+    <Compile Include="EditorBinding\DisableAnnotationAttribute.cs" />
+    <Compile Include="Exceptions\DebugUtility.cs" />
+    <Compile Include="Exceptions\InvalidImplementationException.cs" />
+    <Compile Include="Cloning\ICloner.cs" />
+    <Compile Include="Cloning\Cloning.cs" />
+    <Compile Include="Cloning\CloningContext.cs" />
+    <Compile Include="Cloning\Cloner.cs" />
+    <Compile Include="Cloning\Cloners\EnumerableCloner.cs" />
+    <Compile Include="Cloning\Cloners\DictionaryCloner.cs" />
+    <Compile Include="Cloning\Cloners\ReflectedCloner.cs" />
+    <Compile Include="Platforms\AotIncompatibleAttribute.cs" />
+    <Compile Include="Pooling\DictionaryPool.cs" />
+    <Compile Include="Pooling\GenericPool.cs" />
+    <Compile Include="Pooling\IPoolable.cs" />
+    <Compile Include="Pooling\ManualPool.cs" />
+    <Compile Include="Reflection\MemberInfoComparer.cs" />
+    <Compile Include="Reflection\Optimization\ReflectionFieldAccessor.cs" />
+    <Compile Include="Reflection\Optimization\ReflectionPropertyAccessor.cs" />
+    <Compile Include="Reflection\RenamedFromAttribute.cs" />
+    <Compile Include="Reflection\RuntimeCodebase.cs" />
+    <Compile Include="Unity\ISingleton.cs" />
+    <Compile Include="Unity\SceneSingleton.cs" />
+    <Compile Include="Unity\SingletonAttribute.cs" />
+    <Compile Include="Unity\UnityObjectOwnershipUtility.cs" />
+    <Compile Include="Unity\RequiresUnityAPIAttribute.cs" />
+    <Compile Include="Utilities\IInitializable.cs" />
+    <Compile Include="Utilities\Recursion.cs" />
+    <Compile Include="Utilities\IGettable.cs" />
+    <Compile Include="Reflection\GenericClosingException.cs" />
+    <Compile Include="Serialization\ISerializationDependency.cs" />
+    <Compile Include="Serialization\ISerializationDepender.cs" />
+    <Compile Include="Platforms\IAotStubbable.cs" />
+    <Compile Include="Unity\LudiqBehaviour.cs" />
+    <Compile Include="Unity\LudiqScriptableObject.cs" />
+    <Compile Include="Collections\FlexibleDictionary.cs" />
+    <Compile Include="Collections\GuidCollection.cs" />
+    <Compile Include="Collections\IKeyedCollection.cs" />
+    <Compile Include="Collections\IMergedCollection.cs" />
+    <Compile Include="Collections\MergedCollection.cs" />
+    <Compile Include="Collections\MergedKeyedCollection.cs" />
+    <Compile Include="Collections\NonNullableCollection.cs" />
+    <Compile Include="Collections\NonNullableDictionary.cs" />
+    <Compile Include="Collections\NonNullableHashSet.cs" />
+    <Compile Include="Collections\NonNullableList.cs" />
+    <Compile Include="Collections\VariantCollection.cs" />
+    <Compile Include="Collections\VariantKeyedCollection.cs" />
+    <Compile Include="Decorators\IDecoratorAttribute.cs" />
+    <Compile Include="EditorBinding\EditorBindingUtility.cs" />
+    <Compile Include="EditorBinding\InspectableAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectorExpandTooltipAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectorLabelAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectorRangeAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectorTextAreaAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectorToggleLeftAttribute.cs" />
+    <Compile Include="EditorBinding\Inspector\InspectorWideAttribute.cs" />
+    <Compile Include="Exceptions\InvalidConversionException.cs" />
+    <Compile Include="Exceptions\UnexpectedEnumValueException.cs" />
+    <Compile Include="Input\MouseButton.cs" />
+    <Compile Include="Input\PressState.cs" />
+    <Compile Include="Serialization\DictionaryAsset.cs" />
+    <Compile Include="Pooling\ArrayPool.cs" />
+    <Compile Include="Pooling\HashSetPool.cs" />
+    <Compile Include="Pooling\ListPool.cs" />
+    <Compile Include="Profiling\ProfiledSegment.cs" />
+    <Compile Include="Profiling\ProfiledSegmentCollection.cs" />
+    <Compile Include="Profiling\ProfilingScope.cs" />
+    <Compile Include="Profiling\ProfilingUtility.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reflection\ActionDirection.cs" />
+    <Compile Include="Reflection\AttributeUtility.cs" />
+    <Compile Include="Reflection\ConversionUtility.cs" />
+    <Compile Include="Reflection\IAttributeProvider.cs" />
+    <Compile Include="Reflection\IPrewarmable.cs" />
+    <Compile Include="Reflection\LooseAssemblyName.cs" />
+    <Compile Include="Reflection\MemberFilter.cs" />
+    <Compile Include="Reflection\Member.cs" />
+    <Compile Include="Reflection\MemberUtility.cs" />
+    <Compile Include="Reflection\Namespace.cs" />
+    <Compile Include="Reflection\Operators\AdditionHandler.cs" />
+    <Compile Include="Reflection\Operators\AmbiguousOperatorException.cs" />
+    <Compile Include="Reflection\Operators\AndHandler.cs" />
+    <Compile Include="Reflection\Operators\BinaryOperator.cs" />
+    <Compile Include="Reflection\Operators\BinaryOperatorHandler.cs" />
+    <Compile Include="Reflection\Operators\DecrementHandler.cs" />
+    <Compile Include="Reflection\Operators\DivisionHandler.cs" />
+    <Compile Include="Reflection\Operators\EqualityHandler.cs" />
+    <Compile Include="Reflection\Operators\ExclusiveOrHandler.cs" />
+    <Compile Include="Reflection\Operators\GreaterThanHandler.cs" />
+    <Compile Include="Reflection\Operators\GreaterThanOrEqualHandler.cs" />
+    <Compile Include="Reflection\Operators\IncrementHandler.cs" />
+    <Compile Include="Reflection\Operators\InequalityHandler.cs" />
+    <Compile Include="Reflection\Operators\InvalidOperatorException.cs" />
+    <Compile Include="Reflection\Operators\LeftShiftHandler.cs" />
+    <Compile Include="Reflection\Operators\LessThanHandler.cs" />
+    <Compile Include="Reflection\Operators\LessThanOrEqualHandler.cs" />
+    <Compile Include="Reflection\Operators\LogicalNegationHandler.cs" />
+    <Compile Include="Reflection\Operators\NumericNegationHandler.cs" />
+    <Compile Include="Reflection\Operators\ModuloHandler.cs" />
+    <Compile Include="Reflection\Operators\MultiplicationHandler.cs" />
+    <Compile Include="Reflection\Operators\OrHandler.cs" />
+    <Compile Include="Reflection\Operators\PlusHandler.cs" />
+    <Compile Include="Reflection\Operators\RightShiftHandler.cs" />
+    <Compile Include="Reflection\Operators\SubtractionHandler.cs" />
+    <Compile Include="Reflection\Operators\UnaryOperator.cs" />
+    <Compile Include="Reflection\Operators\OperatorHandler.cs" />
+    <Compile Include="Reflection\Operators\OperatorException.cs" />
+    <Compile Include="Reflection\Operators\UnaryOperatorHandler.cs" />
+    <Compile Include="Reflection\Operators\OperatorUtility.cs" />
+    <Compile Include="Reflection\Optimization\Action_5.cs" />
+    <Compile Include="Reflection\Optimization\Action_6.cs" />
+    <Compile Include="Reflection\Optimization\InstanceActionInvokerBase.cs" />
+    <Compile Include="Reflection\Optimization\InstanceActionInvoker_0.cs" />
+    <Compile Include="Reflection\Optimization\InstanceActionInvoker_1.cs" />
+    <Compile Include="Reflection\Optimization\InstanceActionInvoker_2.cs" />
+    <Compile Include="Reflection\Optimization\InstanceActionInvoker_3.cs" />
+    <Compile Include="Reflection\Optimization\InstanceActionInvoker_4.cs" />
+    <Compile Include="Reflection\Optimization\InstanceActionInvoker_5.cs" />
+    <Compile Include="Reflection\Optimization\InstanceFunctionInvokerBase.cs" />
+    <Compile Include="Reflection\Optimization\InstanceFunctionInvoker_0.cs" />
+    <Compile Include="Reflection\Optimization\InstanceFunctionInvoker_1.cs" />
+    <Compile Include="Reflection\Optimization\InstanceFunctionInvoker_2.cs" />
+    <Compile Include="Reflection\Optimization\InstanceFunctionInvoker_3.cs" />
+    <Compile Include="Reflection\Optimization\InstanceFunctionInvoker_4.cs" />
+    <Compile Include="Reflection\Optimization\InstanceFunctionInvoker_5.cs" />
+    <Compile Include="Reflection\Optimization\InstanceInvokerBase.cs" />
+    <Compile Include="Reflection\Optimization\InvokerBase.cs" />
+    <Compile Include="Reflection\Optimization\StaticActionInvokerBase.cs" />
+    <Compile Include="Reflection\Optimization\Func_5.cs" />
+    <Compile Include="Reflection\Optimization\Func_6.cs" />
+    <Compile Include="Reflection\Optimization\InstanceFieldAccessor.cs" />
+    <Compile Include="Reflection\Optimization\IOptimizedAccessor.cs" />
+    <Compile Include="Reflection\Optimization\IOptimizedInvoker.cs" />
+    <Compile Include="Reflection\Optimization\ReflectionInvoker.cs" />
+    <Compile Include="Reflection\Optimization\OptimizedReflection.cs" />
+    <Compile Include="Reflection\Optimization\InstancePropertyAccessor.cs" />
+    <Compile Include="Reflection\Optimization\StaticActionInvoker_0.cs" />
+    <Compile Include="Reflection\Optimization\StaticActionInvoker_1.cs" />
+    <Compile Include="Reflection\Optimization\StaticActionInvoker_2.cs" />
+    <Compile Include="Reflection\Optimization\StaticActionInvoker_3.cs" />
+    <Compile Include="Reflection\Optimization\StaticActionInvoker_4.cs" />
+    <Compile Include="Reflection\Optimization\StaticActionInvoker_5.cs" />
+    <Compile Include="Reflection\Optimization\StaticFieldAccessor.cs" />
+    <Compile Include="Reflection\Optimization\StaticFunctionInvokerBase.cs" />
+    <Compile Include="Reflection\Optimization\StaticFunctionInvoker_0.cs" />
+    <Compile Include="Reflection\Optimization\StaticFunctionInvoker_1.cs" />
+    <Compile Include="Reflection\Optimization\StaticFunctionInvoker_2.cs" />
+    <Compile Include="Reflection\Optimization\StaticFunctionInvoker_3.cs" />
+    <Compile Include="Reflection\Optimization\StaticFunctionInvoker_4.cs" />
+    <Compile Include="Reflection\Optimization\StaticFunctionInvoker_5.cs" />
+    <Compile Include="Reflection\Optimization\StaticInvokerBase.cs" />
+    <Compile Include="Reflection\Optimization\StaticPropertyAccessor.cs" />
+    <Compile Include="Reflection\TypeFilter.cs" />
+    <Compile Include="Reflection\TypeQualifier.cs" />
+    <Compile Include="Reflection\TypesMatching.cs" />
+    <Compile Include="Reflection\TypeUtility.cs" />
+    <Compile Include="Platforms\PlatformUtility.cs" />
+    <Compile Include="Serialization\DoNotSerializeAttribute.cs" />
+    <Compile Include="Serialization\Converters\LooseAssemblyNameConverter.cs" />
+    <Compile Include="Serialization\Converters\NamespaceConverter.cs" />
+    <Compile Include="Serialization\Converters\Ray2DConverter.cs" />
+    <Compile Include="Serialization\Converters\RayConverter.cs" />
+    <Compile Include="Serialization\SerializationData.cs" />
+    <Compile Include="Serialization\SerializationOperation.cs" />
+    <Compile Include="Serialization\Serialization.cs" />
+    <Compile Include="Serialization\SerializationVersionAttribute.cs" />
+    <Compile Include="Serialization\SerializeAsAttribute.cs" />
+    <Compile Include="Serialization\SerializeAttribute.cs" />
+    <Compile Include="Serialization\Converters\UnityObjectConverter.cs" />
+    <Compile Include="SerializedProperties\ISerializedPropertyProvider.cs" />
+    <Compile Include="SerializedProperties\SerializedPropertyProvider.cs" />
+    <Compile Include="SerializedProperties\SerializedPropertyProviderAttribute.cs" />
+    <Compile Include="Utilities\ReferenceCollector.cs" />
+    <Compile Include="Utilities\ReferenceEqualityComparer.cs" />
+    <Compile Include="Utilities\UnityObjectUtility.cs" />
+    <Compile Include="Utilities\XColor.cs" />
+    <Compile Include="Utilities\ComponentHolderProtocol.cs" />
+    <Compile Include="Utilities\CoroutineRunner.cs" />
+    <Compile Include="Utilities\Empty.cs" />
+    <Compile Include="Utilities\EnumUtility.cs" />
+    <Compile Include="Utilities\ExceptionUtility.cs" />
+    <Compile Include="Utilities\HashUtility.cs" />
+    <Compile Include="Unity\IUnityObjectOwnable.cs" />
+    <Compile Include="Utilities\IIdentifiable.cs" />
+    <Compile Include="Unity\IGizmoDrawer.cs" />
+    <Compile Include="Utilities\LinqUtility.cs" />
+    <Compile Include="Utilities\CSharpNameUtility.cs" />
+    <Compile Include="Utilities\OverrideStack.cs" />
+    <Compile Include="Unity\Singleton.cs" />
+    <Compile Include="Utilities\StringUtility.cs" />
+    <Compile Include="Unity\UnityThread.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Events -->
+  <PropertyGroup>
+  <!-- Kind of a hack to get builds working on Linux. Really we should be checking for bash -->
+    <PostBuildEvent Condition="$(OS) != 'Unix'">
+      echo $(DefineConstants) &gt; "$(TargetDir)\$(TargetName).defines"
+
+      robocopy "$(TargetDir)." "$(SolutionDir)Assemblies\$(ConfigurationName)" *.dll *.dll.mdb *.pdb *.xml *.defines /xf Unity*.*
+
+      if errorlevel 1 exit 0 else exit %25errorlevel%25
+    </PostBuildEvent>
+    <PostBuildEvent Condition="$(OS) == 'Unix'">
+      echo "$(DefineConstants)" &gt; "$(TargetDir)\$(TargetName).defines"
+
+      mkdir -p "$(SolutionDir)Assemblies/$(ConfigurationName)/"
+
+      rsync -rq "$(TargetDir)." "$(SolutionDir)Assemblies/$(ConfigurationName)/" --exclude 'Unity*.*' --include '*.dll' --include '*.dll.mdb' --include '*.pdb' --include '*.xml' --include '*.defines' 
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

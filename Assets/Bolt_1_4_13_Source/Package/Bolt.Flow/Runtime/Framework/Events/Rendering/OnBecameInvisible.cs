@@ -1,0 +1,11 @@
+namespace Bolt
+{
+	/// <summary>
+	/// Called when the renderer is no longer visible by any camera.
+	/// </summary>
+	[UnitCategory("Events/Rendering")]
+	public sealed class OnBecameInvisible : GameObjectEventUnit<EmptyEventArgs>
+	{
+		protected override string hookName => EventHooks.OnBecameInvisible;
+	}
+}

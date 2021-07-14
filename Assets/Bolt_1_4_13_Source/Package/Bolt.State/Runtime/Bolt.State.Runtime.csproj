@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!-- Project -->
+  <PropertyGroup>
+    <ProjectGuid>{3A1CFA72-FEA6-4963-83A5-BCF1DEEE18C5}</ProjectGuid>
+    <RootNamespace>Bolt</RootNamespace>
+    <AssemblyName>Bolt.State.Runtime</AssemblyName>
+    <DefineConstants>GUID_dcd2196c4e9166f499793f2007fcda35;TARGET_INCLUDE_ALL;TARGET_BACKEND_IL2CPP</DefineConstants>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <!-- Shared -->
+  <PropertyGroup>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <PathMap>$(AppOutputBase)=Bolt.State.Runtime\</PathMap>
+    <Platform>AnyCPU</Platform>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <LangVersion>7.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <NoWarn>1591</NoWarn>
+    <Configuration Condition=" '$(Configuration)' == '' ">Bolt1.Net3.Debug</Configuration>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Debug' ">Debug</Stability>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Release' Or '$(Configuration)' == 'Bolt1.Net4.Release' ">Release</Stability>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net3.Release' ">3.5</TargetFrameworkVersionNumber>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net4.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Release'">4.6</TargetFrameworkVersionNumber>
+    <OutputPath>$(BaseOutputPath)\$(Configuration)</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+  <!-- Debug -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Debug' ">
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE;ENABLE_PROFILER</DefineConstants>
+  </PropertyGroup>
+  <!-- Release -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Release' ">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <!-- .NET 3.5 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 3.5 ">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_2_0</DefineConstants>
+  </PropertyGroup>
+  <!-- .NET 4.6 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 4.6 ">
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_4_6</DefineConstants>
+  </PropertyGroup>
+  <!-- References -->
+  <ItemGroup>
+    <Reference Include="System.Core" />
+    <ProjectReference Include="..\..\Bolt.Core\Runtime\Bolt.Core.Runtime.csproj">
+      <Project>{0fe89c0a-b748-486b-aedc-1aadb2d1fc31}</Project>
+      <Name>Bolt.Core.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Bolt.Flow\Runtime\Bolt.Flow.Runtime.csproj">
+      <Project>{43E23583-9CD3-41EC-9848-86DED656C496}</Project>
+      <Name>Bolt.Flow.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ludiq.Core\Runtime\Ludiq.Core.Runtime.csproj">
+      <Project>{8bda7b48-d6ea-4762-822f-eca6ea7d4345}</Project>
+      <Name>Ludiq.Core.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ludiq.Graphs\Runtime\Ludiq.Graphs.Runtime.csproj">
+      <Project>{aabbe8dc-1b61-4d5b-bf81-7b66aa2566ff}</Project>
+      <Name>Ludiq.Graphs.Runtime</Name>
+    </ProjectReference>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Unity\2018.4\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <!-- Sources -->
+  <ItemGroup>
+    <Compile Include="AnyState.cs" />
+    <Compile Include="FlowStateTransition.cs" />
+    <Compile Include="NesterState.cs" />
+    <Compile Include="NesterStateTransition.cs" />
+    <Compile Include="INesterState.cs" />
+    <Compile Include="INesterStateTransition.cs" />
+    <Compile Include="IStateDebugData.cs" />
+    <Compile Include="IState.cs" />
+    <Compile Include="IStateTransition.cs" />
+    <Compile Include="IStateTransitionDebugData.cs" />
+    <Compile Include="OnEnterState.cs" />
+    <Compile Include="OnExitState.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateEnterReason.cs" />
+    <Compile Include="StateEventHooks.cs" />
+    <Compile Include="StateExitReason.cs" />
+    <Compile Include="StateGraph.cs" />
+    <Compile Include="StateGraphData.cs" />
+    <Compile Include="StateMacro.cs" />
+    <Compile Include="StateMachine.cs" />
+    <Compile Include="FlowState.cs" />
+    <Compile Include="State.cs" />
+    <Compile Include="StateUnit.cs" />
+    <Compile Include="SuperState.cs" />
+    <Compile Include="StateTransition.cs" />
+    <Compile Include="TriggerStateTransition.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Events -->
+  <PropertyGroup>
+  <!-- Kind of a hack to get builds working on Linux. Really we should be checking for bash -->
+    <PostBuildEvent Condition="$(OS) != 'Unix'">
+      echo $(DefineConstants) &gt; "$(TargetDir)\$(TargetName).defines"
+
+      robocopy "$(TargetDir)." "$(SolutionDir)Assemblies\$(ConfigurationName)" *.dll *.dll.mdb *.pdb *.xml *.defines /xf Unity*.*
+
+      if errorlevel 1 exit 0 else exit %25errorlevel%25
+    </PostBuildEvent>
+    <PostBuildEvent Condition="$(OS) == 'Unix'">
+      echo "$(DefineConstants)" &gt; "$(TargetDir)\$(TargetName).defines"
+
+      mkdir -p "$(SolutionDir)Assemblies/$(ConfigurationName)/"
+
+      rsync -rq "$(TargetDir)." "$(SolutionDir)Assemblies/$(ConfigurationName)/" --exclude 'Unity*.*' --include '*.dll' --include '*.dll.mdb' --include '*.pdb' --include '*.xml' --include '*.defines' 
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

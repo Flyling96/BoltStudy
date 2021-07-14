@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!-- Project -->
+  <PropertyGroup>
+    <ProjectGuid>{56432C98-9376-4015-98D6-D610E44028D7}</ProjectGuid>
+    <RootNamespace>Ludiq</RootNamespace>
+    <AssemblyName>Ludiq.Graphs.Editor</AssemblyName>
+    <DefineConstants>GUID_e7591b9110e32ca45b2c5f1372169149;TARGET_INCLUDE_EDITOR</DefineConstants>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <!-- Shared -->
+  <PropertyGroup>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <PathMap>$(AppOutputBase)=Ludiq.Graphs.Editor\</PathMap>
+    <Platform>AnyCPU</Platform>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <LangVersion>7.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <NoWarn>1591</NoWarn>
+    <Configuration Condition=" '$(Configuration)' == '' ">Bolt1.Net3.Debug</Configuration>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Debug' ">Debug</Stability>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Release' Or '$(Configuration)' == 'Bolt1.Net4.Release' ">Release</Stability>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net3.Release' ">3.5</TargetFrameworkVersionNumber>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net4.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Release'">4.6</TargetFrameworkVersionNumber>
+    <OutputPath>$(BaseOutputPath)\$(Configuration)</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+  <!-- Debug -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Debug' ">
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE;ENABLE_PROFILER</DefineConstants>
+  </PropertyGroup>
+  <!-- Release -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Release' ">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <!-- .NET 3.5 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 3.5 ">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_2_0</DefineConstants>
+  </PropertyGroup>
+  <!-- .NET 4.6 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 4.6 ">
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_4_6</DefineConstants>
+  </PropertyGroup>
+  <!-- References -->
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <ProjectReference Include="..\..\Ludiq.Core\Editor\Ludiq.Core.Editor.csproj">
+      <Project>{dc73d5b1-75d0-4f0b-af83-e92185f73ab0}</Project>
+      <Name>Ludiq.Core.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ludiq.Core\Runtime\Ludiq.Core.Runtime.csproj">
+      <Project>{8bda7b48-d6ea-4762-822f-eca6ea7d4345}</Project>
+      <Name>Ludiq.Core.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Runtime\Ludiq.Graphs.Runtime.csproj">
+      <Project>{aabbe8dc-1b61-4d5b-bf81-7b66aa2566ff}</Project>
+      <Name>Ludiq.Graphs.Runtime</Name>
+    </ProjectReference>
+    <Reference Include="UnityEditor, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Unity\2018.4\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Unity\2018.4\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <!-- Sources -->
+  <ItemGroup>
+    <Compile Include="AlignOperation.cs" />
+    <Compile Include="Analysis\GraphElementAnalysis.cs" />
+    <Compile Include="Analysis\IGraphElementAnalysis.cs" />
+    <Compile Include="Canvases\CanvasAttribute.cs" />
+    <Compile Include="Canvases\CanvasProvider.cs" />
+    <Compile Include="Canvases\WidgetList.cs" />
+    <Compile Include="Context\GraphContextAttribute.cs" />
+    <Compile Include="Context\GraphContextProvider.cs" />
+    <Compile Include="Context\IGraphContext.cs" />
+    <Compile Include="Analysis\Analyser.cs" />
+    <Compile Include="Analysis\AnalyserAttribute.cs" />
+    <Compile Include="Analysis\AnalyserProvider.cs" />
+    <Compile Include="Analysis\Analysis.cs" />
+    <Compile Include="Description\GraphDescription.cs" />
+    <Compile Include="Description\GraphDescriptor.cs" />
+    <Compile Include="Description\GraphElementDescription.cs" />
+    <Compile Include="Description\GraphItemDescriptor.cs" />
+    <Compile Include="Analysis\IAnalyser.cs" />
+    <Compile Include="Analysis\IAnalysis.cs" />
+    <Compile Include="Description\IGraphDescription.cs" />
+    <Compile Include="Description\IGraphElementDescription.cs" />
+    <Compile Include="Description\IMachineDescription.cs" />
+    <Compile Include="Description\IMacroDescription.cs" />
+    <Compile Include="Description\MachineDescription.cs" />
+    <Compile Include="Description\MachineDescriptor.cs" />
+    <Compile Include="Description\MacroDescription.cs" />
+    <Compile Include="Description\MacroDescriptor.cs" />
+    <Compile Include="DistributeOperation.cs" />
+    <Compile Include="Context\GraphClipboard.cs" />
+    <Compile Include="Context\GraphContext.cs" />
+    <Compile Include="Context\GraphContextMenuItem.cs" />
+    <Compile Include="Context\GraphContextExtension.cs" />
+    <Compile Include="Canvases\Canvas.cs" />
+    <Compile Include="Context\GraphContextExtensionAttribute.cs" />
+    <Compile Include="Context\GraphContextExtensionProvider.cs" />
+    <Compile Include="Debugging\GraphDebugDataProvider.cs" />
+    <Compile Include="Description\GraphNesterDescriptor.cs" />
+    <Compile Include="Inspection\GraphElementEditor.cs" />
+    <Compile Include="Inspection\GraphInspector.cs" />
+    <Compile Include="Inspection\GraphNestEditor.cs" />
+    <Compile Include="LudiqGraphsEditorUtility.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_0.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_1.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_2.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_3.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_1_0.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_1_1.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_1_2.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_1_3.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_2_0.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_2_2.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_2_3.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_2_4.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_3_0.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_0.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_1.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_2.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_4.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_7.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_6.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_5.cs" />
+    <Compile Include="Widgets\Groups\GraphGroupEditor.cs" />
+    <Compile Include="Widgets\Groups\GraphGroupInspector.cs" />
+    <Compile Include="Widgets\IGraphElementWidget.cs" />
+    <Compile Include="Widgets\GraphElementWidget.cs" />
+    <Compile Include="Widgets\Nodes\NodeColorMix.cs" />
+    <Compile Include="Widgets\Widget.cs" />
+    <Compile Include="Widgets\WidgetAttribute.cs" />
+    <Compile Include="Widgets\WidgetProvider.cs" />
+    <Compile Include="Widgets\Groups\GraphGroupWidget.cs" />
+    <Compile Include="GraphGUI.cs" />
+    <Compile Include="Windows\GraphInspectorPanel.cs" />
+    <Compile Include="Windows\GraphInspectorWindow.cs" />
+    <Compile Include="Context\GraphSelection.cs" />
+    <Compile Include="Canvases\CanvasControlScheme.cs" />
+    <Compile Include="GraphPointerData.cs" />
+    <Compile Include="Windows\GraphSidebarPanelWindow.cs" />
+    <Compile Include="Windows\GraphWindow.cs" />
+    <Compile Include="Canvases\ICanvas.cs" />
+    <Compile Include="Canvases\IGraphContextExtension.cs" />
+    <Compile Include="Widgets\IWidget.cs" />
+    <Compile Include="Widgets\Nodes\INodeWidget.cs" />
+    <Compile Include="Inspection\MacroEditor.cs" />
+    <Compile Include="Inspection\GraphEditor.cs" />
+    <Compile Include="Inspection\MachineEditor.cs" />
+    <Compile Include="Widgets\Nodes\NodeColor.cs" />
+    <Compile Include="Widgets\Nodes\NodeWidget.cs" />
+    <Compile Include="Widgets\Nodes\NodeShape.cs" />
+    <Compile Include="Plugin\LudiqGraphsConfiguration.cs" />
+    <Compile Include="Plugin\LudiqGraphsManifest.cs" />
+    <Compile Include="Plugin\LudiqGraphs.cs" />
+    <Compile Include="Plugin\LudiqGraphsResources.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\ICanvasWindow.cs" />
+  </ItemGroup>
+  <!-- Resources -->
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Arrows\ArrowDown%4032x.png" />
+    <EmbeddedResource Include="Resources\Arrows\ArrowLeft%4032x.png" />
+    <EmbeddedResource Include="Resources\Arrows\ArrowRight%4032x.png" />
+    <EmbeddedResource Include="Resources\Arrows\ArrowUp%4032x.png" />
+    <EmbeddedResource Include="Resources\Group%4064x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignBottomEdges%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignBottomEdges%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignCenters%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignCenters%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignLeftEdges%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignLeftEdges%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignMiddles%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignMiddles%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignRightEdges%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignRightEdges%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignTopEdges%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.AlignOperation\AlignTopEdges%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeBottomEdges%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeBottomEdges%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeCenters%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeCenters%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeHorizontalGaps%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeHorizontalGaps%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeLeftEdges%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeLeftEdges%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeMiddles%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeMiddles%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeRightEdges%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeRightEdges%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeTopEdges%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeTopEdges%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeVerticalGaps%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.DistributeOperation\DistributeVerticalGaps%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\GraphGroup%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\GraphGroup%4032x.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphInspectorWindow%4016x.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphInspectorWindow%4016x_Pro.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphInspectorWindow%4032x.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphInspectorWindow%4032x_Pro.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphWindow%4016x.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphWindow%4016x_Pro.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphWindow%4032x.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphWindow%4032x_Pro.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphSidebarAnchorLeft%40Pro.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphSidebarAnchorLeft.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphSidebarAnchorRight%40Pro.png" />
+    <EmbeddedResource Include="Resources\Windows\GraphSidebarAnchorRight.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Events -->
+  <PropertyGroup>
+  <!-- Kind of a hack to get builds working on Linux. Really we should be checking for bash -->
+    <PostBuildEvent Condition="$(OS) != 'Unix'">
+      echo $(DefineConstants) &gt; "$(TargetDir)\$(TargetName).defines"
+
+      robocopy "$(TargetDir)." "$(SolutionDir)Assemblies\$(ConfigurationName)" *.dll *.dll.mdb *.pdb *.xml *.defines /xf Unity*.*
+
+      if errorlevel 1 exit 0 else exit %25errorlevel%25
+    </PostBuildEvent>
+    <PostBuildEvent Condition="$(OS) == 'Unix'">
+      echo "$(DefineConstants)" &gt; "$(TargetDir)\$(TargetName).defines"
+
+      mkdir -p "$(SolutionDir)Assemblies/$(ConfigurationName)/"
+
+      rsync -rq "$(TargetDir)." "$(SolutionDir)Assemblies/$(ConfigurationName)/" --exclude 'Unity*.*' --include '*.dll' --include '*.dll.mdb' --include '*.pdb' --include '*.xml' --include '*.defines' 
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

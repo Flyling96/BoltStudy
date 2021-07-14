@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!-- Project -->
+  <PropertyGroup>
+    <ProjectGuid>{AABBE8DC-1B61-4D5B-BF81-7B66AA2566FF}</ProjectGuid>
+    <RootNamespace>Ludiq</RootNamespace>
+    <AssemblyName>Ludiq.Graphs.Runtime</AssemblyName>
+    <DefineConstants>GUID_efc4f8221b9f2e04998ad78e9b2b01b6;TARGET_INCLUDE_ALL;TARGET_BACKEND_IL2CPP</DefineConstants>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <!-- Shared -->
+  <PropertyGroup>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <PathMap>$(AppOutputBase)=Ludiq.Graphs.Runtime\</PathMap>
+    <Platform>AnyCPU</Platform>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <LangVersion>7.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <NoWarn>1591</NoWarn>
+    <Configuration Condition=" '$(Configuration)' == '' ">Bolt1.Net3.Debug</Configuration>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Debug' ">Debug</Stability>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Release' Or '$(Configuration)' == 'Bolt1.Net4.Release' ">Release</Stability>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net3.Release' ">3.5</TargetFrameworkVersionNumber>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net4.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Release'">4.6</TargetFrameworkVersionNumber>
+    <OutputPath>$(BaseOutputPath)\$(Configuration)</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+  <!-- Debug -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Debug' ">
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE;ENABLE_PROFILER</DefineConstants>
+  </PropertyGroup>
+  <!-- Release -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Release' ">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <!-- .NET 3.5 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 3.5 ">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_2_0</DefineConstants>
+  </PropertyGroup>
+  <!-- .NET 4.6 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 4.6 ">
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_4_6</DefineConstants>
+  </PropertyGroup>
+  <!-- References -->
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <ProjectReference Include="..\..\Ludiq.Core\Runtime\Ludiq.Core.Runtime.csproj">
+      <Project>{8bda7b48-d6ea-4762-822f-eca6ea7d4345}</Project>
+      <Name>Ludiq.Core.Runtime</Name>
+    </ProjectReference>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Unity\2018.4\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <!-- Sources -->
+  <ItemGroup>
+    <Compile Include="Connections\ConnectionCollection.cs" />
+    <Compile Include="Connections\ConnectionCollectionBase.cs" />
+    <Compile Include="Connections\GraphConnectionCollection.cs" />
+    <Compile Include="Connections\IConnection.cs" />
+    <Compile Include="Connections\IConnectionCollection.cs" />
+    <Compile Include="Connections\InvalidConnectionException.cs" />
+    <Compile Include="GraphInstances.cs" />
+    <Compile Include="Graph.cs" />
+    <Compile Include="GraphDebugData.cs" />
+    <Compile Include="GraphElementCollection.cs" />
+    <Compile Include="GraphData.cs" />
+    <Compile Include="GraphNest.cs" />
+    <Compile Include="GraphPointer.cs" />
+    <Compile Include="GraphPointerException.cs" />
+    <Compile Include="GraphReference.cs" />
+    <Compile Include="GraphsExceptionUtility.cs" />
+    <Compile Include="GraphStack.cs" />
+    <Compile Include="Graphs\IGraph.cs" />
+    <Compile Include="Graphs\IGraphElement.cs" />
+    <Compile Include="GraphElement.cs" />
+    <Compile Include="Graphs\IGraphItem.cs" />
+    <Compile Include="IGraphData.cs" />
+    <Compile Include="IGraphDebugData.cs" />
+    <Compile Include="IGraphElementData.cs" />
+    <Compile Include="IGraphElementWithData.cs" />
+    <Compile Include="IGraphElementCollection.cs" />
+    <Compile Include="IGraphElementDebugData.cs" />
+    <Compile Include="IGraphElementWithDebugData.cs" />
+    <Compile Include="IGraphNest.cs" />
+    <Compile Include="IGraphNester.cs" />
+    <Compile Include="IGraphNesterElement.cs" />
+    <Compile Include="IGraphParent.cs" />
+    <Compile Include="IGraphParentElement.cs" />
+    <Compile Include="IGraphRoot.cs" />
+    <Compile Include="Machines\IMachine.cs" />
+    <Compile Include="Machines\Machine.cs" />
+    <Compile Include="Graphs\GraphSource.cs" />
+    <Compile Include="Macros\IMacro.cs" />
+    <Compile Include="Macros\Macro.cs" />
+    <Compile Include="Groups\GraphGroup.cs" />
+    <Compile Include="MergedGraphElementCollection.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Events -->
+  <PropertyGroup>
+  <!-- Kind of a hack to get builds working on Linux. Really we should be checking for bash -->
+    <PostBuildEvent Condition="$(OS) != 'Unix'">
+      echo $(DefineConstants) &gt; "$(TargetDir)\$(TargetName).defines"
+
+      robocopy "$(TargetDir)." "$(SolutionDir)Assemblies\$(ConfigurationName)" *.dll *.dll.mdb *.pdb *.xml *.defines /xf Unity*.*
+
+      if errorlevel 1 exit 0 else exit %25errorlevel%25
+    </PostBuildEvent>
+    <PostBuildEvent Condition="$(OS) == 'Unix'">
+      echo "$(DefineConstants)" &gt; "$(TargetDir)\$(TargetName).defines"
+
+      mkdir -p "$(SolutionDir)Assemblies/$(ConfigurationName)/"
+
+      rsync -rq "$(TargetDir)." "$(SolutionDir)Assemblies/$(ConfigurationName)/" --exclude 'Unity*.*' --include '*.dll' --include '*.dll.mdb' --include '*.pdb' --include '*.xml' --include '*.defines' 
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

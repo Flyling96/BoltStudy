@@ -1,0 +1,771 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!-- Project -->
+  <PropertyGroup>
+    <ProjectGuid>{DC73D5B1-75D0-4F0B-AF83-E92185F73AB0}</ProjectGuid>
+    <RootNamespace>Ludiq</RootNamespace>
+    <AssemblyName>Ludiq.Core.Editor</AssemblyName>
+    <DefineConstants>GUID_8878d90c345be1a43ab0c9a9898ad433;TARGET_INCLUDE_EDITOR</DefineConstants>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <!-- Shared -->
+  <PropertyGroup>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <PathMap>$(AppOutputBase)=Ludiq.Core.Editor\</PathMap>
+    <Platform>AnyCPU</Platform>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <LangVersion>7.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <NoWarn>1591</NoWarn>
+    <Configuration Condition=" '$(Configuration)' == '' ">Bolt1.Net3.Debug</Configuration>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Debug' ">Debug</Stability>
+    <Stability Condition=" '$(Configuration)' == 'Bolt1.Net3.Release' Or '$(Configuration)' == 'Bolt1.Net4.Release' ">Release</Stability>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net3.Debug' Or '$(Configuration)' == 'Bolt1.Net3.Release' ">3.5</TargetFrameworkVersionNumber>
+    <TargetFrameworkVersionNumber Condition=" '$(Configuration)' == 'Bolt1.Net4.Debug' Or '$(Configuration)' == 'Bolt1.Net4.Release'">4.6</TargetFrameworkVersionNumber>
+    <OutputPath>$(BaseOutputPath)\$(Configuration)</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+  <!-- Debug -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Debug' ">
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE;ENABLE_PROFILER</DefineConstants>
+  </PropertyGroup>
+  <!-- Release -->
+  <PropertyGroup Condition=" '$(Stability)' == 'Release' ">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <!-- .NET 3.5 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 3.5 ">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_2_0</DefineConstants>
+  </PropertyGroup>
+  <!-- .NET 4.6 -->
+  <PropertyGroup Condition=" '$(TargetFrameworkVersionNumber)' == 4.6 ">
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET_4_6</DefineConstants>
+  </PropertyGroup>
+  <!-- References -->
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Resources%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Resources%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Configuration\EditorPref%4012x.png" />
+    <EmbeddedResource Include="Resources\Icons\Configuration\EditorPref%4012x_Pro.png" />
+    <EmbeddedResource Include="Resources\Icons\Configuration\EditorPref%4024x.png" />
+    <EmbeddedResource Include="Resources\Icons\Configuration\EditorPref%4024x_Pro.png" />
+    <EmbeddedResource Include="Resources\Icons\Configuration\ProjectSetting%4012x.png" />
+    <EmbeddedResource Include="Resources\Icons\Configuration\ProjectSetting%4012x_Pro.png" />
+    <EmbeddedResource Include="Resources\Icons\Configuration\ProjectSetting%4024x.png" />
+    <EmbeddedResource Include="Resources\Icons\Configuration\ProjectSetting%4024x_Pro.png" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Threading, Version=1.0.2856.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" Condition="$(TargetFrameworkVersionNumber) == 3.5">
+      <HintPath>..\..\..\TaskParallelLibrary\System.Threading.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Compile Include="Interface\Licenses\License.CCA3.cs" />
+    <None Include="System.Threading.defines" Condition="$(TargetFrameworkVersionNumber) == 3.5">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Reference Include="UnityEditor, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Unity\2018.4\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Unity\2018.4\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Unity\2018.4\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <None Include="YamlDotNet.defines">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Reference Include="Ionic.Zip">
+      <HintPath>Dependencies\DotNetZip\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>Dependencies\YamlDotNet\YamlDotNet.dll</HintPath>
+    </Reference>
+    <None Include="Ionic.Zip.defines">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <ProjectReference Include="..\Runtime\Ludiq.Core.Runtime.csproj">
+      <Project>{8bda7b48-d6ea-4762-822f-eca6ea7d4345}</Project>
+      <Name>Ludiq.Core.Runtime</Name>
+    </ProjectReference>
+    <Content Include="Dependencies\Assemblies\sqlite3.dll" />
+    <Content Include="Dependencies\Assemblies\sqlite3.dll.meta" />
+  </ItemGroup>
+  <!-- Sources -->
+  <ItemGroup>
+    <Compile Include="Assignment\Assigner.cs" />
+    <Compile Include="Assignment\IAssigner.cs" />
+    <Compile Include="Interface\Licenses\License.Iconmonstr.cs" />
+    <Compile Include="Interface\Licenses\License.MiscUtil.cs" />
+    <Compile Include="Interface\Licenses\License.MIT.cs" />
+    <Compile Include="Interface\Licenses\License.MSPL.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_0.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_1.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_12.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_13.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_2.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_3.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_4.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_11.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_9.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_8.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_7.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_6.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_4_5.cs" />
+    <Compile Include="Plugin\Migrations\Migration_1_4_0_f5_to_1_4_0_f6.cs" />
+    <Compile Include="Plugin\Migrations\Migration_1_4_5_to_1_4_6.cs" />
+    <Compile Include="SemanticLabel.cs" />
+    <Compile Include="Utilities\VersionControlUtility.cs" />
+    <Compile Include="Utilities\Warning.cs" />
+    <Compile Include="Utilities\WarningLevel.cs" />
+    <Compile Include="Interface\SharedEditorTextureDictionary.cs" />
+    <Compile Include="Interface\TextureResolution.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_MD4.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_2_4.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_3_0.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_3_1.cs" />
+    <Compile Include="Plugin\Migrations\Migration_1_2_4_to_1_3_0.cs" />
+    <Compile Include="ResourceProviders\AssetBundleResourceProvider.cs" />
+    <Compile Include="Decorators\MultiDecoratorProvider.cs" />
+    <Compile Include="Decorators\SingleDecoratorProvider.cs" />
+    <Compile Include="Dependencies\SQLite\SQLite.cs" />
+    <Compile Include="Assignment\AssignsAttribute.cs" />
+    <Compile Include="Descriptors\Description.cs" />
+    <Compile Include="Assignment\Assignment.cs" />
+    <Compile Include="Descriptors\IDescription.cs" />
+    <Compile Include="Exceptions\EditorDebugUtility.cs" />
+    <Compile Include="Exceptions\UnityEditorInternalException.cs" />
+    <Compile Include="Inspection\DraggedListItem.cs" />
+    <Compile Include="Inspection\InspectorImplementationOrderAttribute.cs" />
+    <Compile Include="Inspection\EditorAttribute.cs" />
+    <Compile Include="Inspection\EditorProvider.cs" />
+    <Compile Include="Inspection\Other\DictionaryAssetEditor.cs" />
+    <Compile Include="Inspection\Primitives\GuidInspector.cs" />
+    <Compile Include="Inspection\Reflection\NamespaceInspector.cs" />
+    <Compile Include="Inspection\Primitives\ShortInspector.cs" />
+    <Compile Include="Inspection\Primitives\UshortInspector.cs" />
+    <Compile Include="Inspection\Special\AutomaticReflectedInspector.cs" />
+    <Compile Include="Inspection\Special\UnknownEditor.cs" />
+    <Compile Include="Inspection\Unity\LayerMaskInspector.cs" />
+    <Compile Include="Interface\DragAndDrop\DragAndDropUtility.cs" />
+    <Compile Include="Interface\DragAndDrop\IDragAndDropHandler.cs" />
+    <Compile Include="Interface\EventWrapper.cs" />
+    <Compile Include="Interface\Fuzzy\ExtensibleFuzzyOptionTree.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyGroup.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyGroupOption.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyOptionAttribute.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyOptionNode.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyOptionProvider.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyOptionTree.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyOptionTreeExtensionAttribute.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyOptionTreeExtensionProvider.cs" />
+    <Compile Include="Interface\Fuzzy\IFuzzyOptionTree.cs" />
+    <Compile Include="Interface\Fuzzy\NullOption.cs" />
+    <Compile Include="Interface\Icons\PluginIconMapper.cs" />
+    <Compile Include="Interface\Icons\Icons.cs" />
+    <Compile Include="Descriptors\IDescriptor.cs" />
+    <Compile Include="Meta\PluginConfigurationItemMetadata.cs" />
+    <Compile Include="Meta\ProjectSettingMetadata.cs" />
+    <Compile Include="Platforms\AccessorInfoStubWriter.cs" />
+    <Compile Include="Platforms\AotStubWriter.cs" />
+    <Compile Include="Platforms\AotStubWriterAttribute.cs" />
+    <Compile Include="Platforms\AotStubWriterProvider.cs" />
+    <Compile Include="Platforms\ConstructorInfoStubWriter.cs" />
+    <Compile Include="Platforms\EditorPlatformUtility.cs" />
+    <Compile Include="Platforms\FieldInfoStubWriter.cs" />
+    <Compile Include="Platforms\MemberInfoStubWriter.cs" />
+    <Compile Include="Platforms\MethodBaseStubWriter.cs" />
+    <Compile Include="Platforms\MethodInfoStubWriter.cs" />
+    <Compile Include="Platforms\PropertyInfoStubWriter.cs" />
+    <Compile Include="ResourceProviders\AssemblyResourceProvider.cs" />
+    <Compile Include="Plugins\IPluginLinked.cs" />
+    <Compile Include="Plugins\PluginAcknowledgement.cs" />
+    <Compile Include="Plugins\PluginRuntimeAssemblyAttribute.cs" />
+    <Compile Include="Plugins\PluginUtility.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_AqnParser.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_DeepCopy.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_DotNetZip.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_FatcowIcons.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_FullSerializer.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_Iconmonstr.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_MiscUtil.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_ReorderableList.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_SQLite.cs" />
+    <Compile Include="Plugin\Acknowledgements\Acknowledgement_YamlDotNet.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_0.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_1.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_2.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_3.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_4.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_5.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_0_6.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_2_0.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_2_1.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_2_2.cs" />
+    <Compile Include="Plugin\Changelogs\Changelog_1_2_3.cs" />
+    <Compile Include="Plugin\LudiqCoreMigration.cs" />
+    <Compile Include="Plugin\Migrations\Migration_1_2_2_to_1_2_3.cs" />
+    <Compile Include="Plugin\Migrations\Migration_1_0_5_to_1_0_6.cs" />
+    <Compile Include="Products\Product.cs" />
+    <Compile Include="Products\ProductAttribute.cs" />
+    <Compile Include="Products\ProductContainer.cs" />
+    <Compile Include="Product\LudiqProduct.cs" />
+    <Compile Include="Reflection\CodebaseSubset.cs" />
+    <Compile Include="Reflection\EnumOptionTree.cs" />
+    <Compile Include="Platforms\AotPreBuilder.cs" />
+    <Compile Include="Reflection\LooseAssemblyNameOptionTree.cs" />
+    <Compile Include="Reflection\MemberOptionTree.cs" />
+    <Compile Include="Reflection\TypeOptionTree.cs" />
+    <Compile Include="ResourceProviders\CreateTextureOptions.cs" />
+    <Compile Include="ResourceProviders\EditorAssetResourceProvider.cs" />
+    <Compile Include="ResourceProviders\IResourceProvider.cs" />
+    <Compile Include="Threading\ThreadableAssetWrapper.cs" />
+    <Compile Include="Descriptors\Descriptor.cs" />
+    <Compile Include="Descriptors\DescriptorAttribute.cs" />
+    <Compile Include="Descriptors\DescriptorProvider.cs" />
+    <Compile Include="Utilities\AssetBundleUtility.cs" />
+    <Compile Include="Utilities\AssetUtility.cs" />
+    <Compile Include="Utilities\ConsoleProfiler.cs" />
+    <Compile Include="Utilities\EditorApplicationUtility.cs" />
+    <Compile Include="Utilities\EditorFilteringUtility.cs" />
+    <Compile Include="Utilities\EditorLinqUtility.cs" />
+    <Compile Include="Utilities\EditorSerializationUtility.cs" />
+    <Compile Include="Utilities\EditorTimeUtility.cs" />
+    <Compile Include="Utilities\LudiqEditorUtility.cs" />
+    <Compile Include="Plugins\PluginGuidMapper.cs" />
+    <Compile Include="Utilities\MD4.cs" />
+    <Compile Include="Utilities\NativeUtility.cs" />
+    <Compile Include="Utilities\ScriptReferenceResolver.cs" />
+    <Compile Include="Utilities\ScriptReference.cs" />
+    <Compile Include="Utilities\ScriptReferenceReplacement.cs" />
+    <Compile Include="Utilities\UnityAPI.cs" />
+    <Compile Include="Utilities\EditorTypeUtility.cs" />
+    <Compile Include="Utilities\IconExportUtility.cs" />
+    <Compile Include="Utilities\SearchResult.cs" />
+    <Compile Include="Utilities\SearchUtility.cs" />
+    <Compile Include="Utilities\UndoUtility.cs" />
+    <Compile Include="Windows\AboutWindow\AboutPage.cs" />
+    <Compile Include="Windows\AboutWindow\IAboutable.cs" />
+    <Compile Include="Windows\AboutWindow\AboutablePage.cs" />
+    <Compile Include="Windows\AboutWindow\AboutPluginsPage.cs" />
+    <Compile Include="Windows\AboutWindow\AboutWindow.cs" />
+    <Compile Include="Windows\AboutWindow\AcknowledgementPage.cs" />
+    <Compile Include="Windows\AboutWindow\AcknowledgementsPage.cs" />
+    <Compile Include="Windows\AboutWindow\ChangelogPage.cs" />
+    <Compile Include="Windows\AboutWindow\ChangelogsPage.cs" />
+    <Compile Include="Plugins\PluginConfigurationItemAttribute.cs" />
+    <Compile Include="Plugins\EditorPrefAttribute.cs" />
+    <Compile Include="Plugins\ProjectSettingAttribute.cs" />
+    <Compile Include="Plugins\InitializeAfterPluginsAttribute.cs" />
+    <Compile Include="Plugins\IPluginModule.cs" />
+    <Compile Include="Plugins\Plugin.cs" />
+    <Compile Include="Plugins\PluginConfiguration.cs" />
+    <Compile Include="Plugins\PluginDependencyAttribute.cs" />
+    <Compile Include="Plugins\PluginModuleDependencyAttribute.cs" />
+    <Compile Include="Plugins\PluginPaths.cs" />
+    <Compile Include="Windows\AotPreBuildWindow\AotPreBuildPage.cs" />
+    <Compile Include="Windows\AotPreBuildWindow\AotPreBuildWindow.cs" />
+    <Compile Include="Windows\BackupWindow\BackupPage.cs" />
+    <Compile Include="Windows\BackupWindow\BackupWindow.cs" />
+    <Compile Include="Windows\ConfigurationPanel\ConfigurationPanel.cs" />
+    <Compile Include="Windows\GeneratePropertyProvidersWindow\GeneratePropertyProvidersPage.cs" />
+    <Compile Include="Windows\GeneratePropertyProvidersWindow\GeneratePropertyProvidersWindow.cs" />
+    <Compile Include="Windows\LudiqEditorWindow.cs" />
+    <Compile Include="Windows\SetupWizard\SetupCompletePage.cs" />
+    <Compile Include="Windows\SetupWizard\SetupWizard.cs" />
+    <Compile Include="Windows\SetupWizard\WelcomePage.cs" />
+    <Compile Include="Dependencies\ReorderableList\Element Adder Menu\ElementAdderMenuBuilder.cs" />
+    <Compile Include="Dependencies\ReorderableList\Element Adder Menu\ElementAdderMenuCommandAttribute.cs" />
+    <Compile Include="Dependencies\ReorderableList\Element Adder Menu\ElementAdderMeta.cs" />
+    <Compile Include="Dependencies\ReorderableList\Element Adder Menu\GenericElementAdderMenu.cs" />
+    <Compile Include="Dependencies\ReorderableList\Element Adder Menu\GenericElementAdderMenuBuilder.cs" />
+    <Compile Include="Dependencies\ReorderableList\Element Adder Menu\IElementAdder.cs" />
+    <Compile Include="Dependencies\ReorderableList\Element Adder Menu\IElementAdderMenu.cs" />
+    <Compile Include="Dependencies\ReorderableList\Element Adder Menu\IElementAdderMenuBuilder.cs" />
+    <Compile Include="Dependencies\ReorderableList\Element Adder Menu\IElementAdderMenuCommand.cs" />
+    <Compile Include="Dependencies\ReorderableList\GenericListAdaptor.cs" />
+    <Compile Include="Dependencies\ReorderableList\Internal\GUIHelper.cs" />
+    <Compile Include="Dependencies\ReorderableList\Internal\ReorderableListResources.cs" />
+    <Compile Include="Dependencies\ReorderableList\Internal\SerializedPropertyUtility.cs" />
+    <Compile Include="Dependencies\ReorderableList\IReorderableListAdaptor.cs" />
+    <Compile Include="Dependencies\ReorderableList\IReorderableListDropTarget.cs" />
+    <Compile Include="Dependencies\ReorderableList\ReorderableListControl.cs" />
+    <Compile Include="Dependencies\ReorderableList\ReorderableListEvents.cs" />
+    <Compile Include="Dependencies\ReorderableList\ReorderableListFlags.cs" />
+    <Compile Include="Dependencies\ReorderableList\ReorderableListGUI.cs" />
+    <Compile Include="Dependencies\ReorderableList\ReorderableListStyles.cs" />
+    <Compile Include="Dependencies\ReorderableList\SerializedPropertyAdaptor.cs" />
+    <Compile Include="Windows\GenerateDocumentationWindow\GenerateDocumentationPage.cs" />
+    <Compile Include="Windows\GenerateDocumentationWindow\GenerateDocumentationWindow.cs" />
+    <Compile Include="Documentation\XmlDocumentation.cs" />
+    <Compile Include="Documentation\XmlDocumentationTags.cs" />
+    <Compile Include="Inspection\ImplementationInspector.cs" />
+    <Compile Include="Inspection\IndividualEditor.cs" />
+    <Compile Include="Inspection\IndividualPropertyDrawer.cs" />
+    <Compile Include="Inspection\Inspector.cs" />
+    <Compile Include="Inspection\InspectorAttribute.cs" />
+    <Compile Include="Inspection\InspectorBlock.cs" />
+    <Compile Include="Inspection\InspectorProvider.cs" />
+    <Compile Include="Inspection\InspectorUtility.cs" />
+    <Compile Include="Inspection\MetadataCollectionAdaptor.cs" />
+    <Compile Include="Inspection\MetadataDictionaryAdaptor.cs" />
+    <Compile Include="Inspection\MetadataListAdaptor.cs" />
+    <Compile Include="Inspection\OptimizedEditor.cs" />
+    <Compile Include="Inspection\OptimizedPropertyDrawer.cs" />
+    <Compile Include="Inspection\Reflection\MemberInspector.cs" />
+    <Compile Include="Inspection\Other\SemanticVersionInspector.cs" />
+    <Compile Include="Inspection\Primitives\BoolInspector.cs" />
+    <Compile Include="Inspection\Primitives\ByteInspector.cs" />
+    <Compile Include="Inspection\Primitives\CharInspector.cs" />
+    <Compile Include="Inspection\Primitives\ContinuousNumberDrawer.cs.cs" />
+    <Compile Include="Inspection\Primitives\DecimalInspector.cs" />
+    <Compile Include="Inspection\Primitives\DiscreteNumberInspector.cs" />
+    <Compile Include="Inspection\Primitives\DoubleInspector.cs" />
+    <Compile Include="Inspection\Primitives\FloatInspector.cs" />
+    <Compile Include="Inspection\Primitives\IntInspector.cs" />
+    <Compile Include="Inspection\Primitives\LongInspector.cs" />
+    <Compile Include="Inspection\Reflection\LooseAssemblyNameInspector.cs" />
+    <Compile Include="Inspection\Primitives\SbyteInspector.cs" />
+    <Compile Include="Inspection\Primitives\StringInspector.cs" />
+    <Compile Include="Inspection\Reflection\TypeInspector.cs" />
+    <Compile Include="Inspection\Primitives\UintInspector.cs" />
+    <Compile Include="Inspection\Primitives\UlongInspector.cs" />
+    <Compile Include="Inspection\Root\LudiqBehaviourEditor.cs" />
+    <Compile Include="Inspection\Root\LudiqRootObjectEditor.cs" />
+    <Compile Include="Inspection\Root\LudiqScriptableObjectEditor.cs" />
+    <Compile Include="Inspection\Special\CustomPropertyDrawerInspector.cs" />
+    <Compile Include="Inspection\Special\DictionaryInspector.cs" />
+    <Compile Include="Inspection\Special\EnumInspector.cs" />
+    <Compile Include="Inspection\Special\KeyValuePairInspector.cs" />
+    <Compile Include="Inspection\Special\ListInspector.cs" />
+    <Compile Include="Inspection\Special\NullableInspector.cs" />
+    <Compile Include="Inspection\Special\ReflectedInspector.cs" />
+    <Compile Include="Inspection\Special\SystemObjectInspector.cs" />
+    <Compile Include="Inspection\Special\UnknownInspector.cs" />
+    <Compile Include="Inspection\Unity\AnimationCurveInspector.cs" />
+    <Compile Include="Inspection\Unity\BoundsInspector.cs" />
+    <Compile Include="Inspection\Unity\ColorInspector.cs" />
+    <Compile Include="Inspection\Unity\QuaternionInspector.cs" />
+    <Compile Include="Inspection\Unity\Ray2DInspector.cs" />
+    <Compile Include="Inspection\Unity\RayInspector.cs" />
+    <Compile Include="Inspection\Unity\RectInspector.cs" />
+    <Compile Include="Inspection\Unity\UnityObjectInspector.cs" />
+    <Compile Include="Inspection\Unity\Vector2Inspector.cs" />
+    <Compile Include="Inspection\Unity\Vector3Inspector.cs" />
+    <Compile Include="Inspection\Unity\Vector4Inspector.cs" />
+    <Compile Include="Inspection\Unity\VectorInspector.cs" />
+    <Compile Include="Interface\LudiqGUI.cs" />
+    <Compile Include="Interface\LudiqGUIUtility.cs" />
+    <Compile Include="Interface\LudiqStyles.cs" />
+    <Compile Include="Interface\Colors\ColorPalette.cs" />
+    <Compile Include="Interface\Colors\ColorUtility.cs" />
+    <Compile Include="Interface\Colors\SkinnedColor.cs" />
+    <Compile Include="Interface\Dropdowns\DropdownOption.cs" />
+    <Compile Include="Interface\Dropdowns\DropdownSeparator.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyOption.cs" />
+    <Compile Include="Interface\Fuzzy\FuzzyWindow.cs" />
+    <Compile Include="Interface\Dropdowns\IDropdownOption.cs" />
+    <Compile Include="Interface\Fuzzy\IFuzzyOption.cs" />
+    <Compile Include="Interface\Edge.cs" />
+    <Compile Include="Interface\EditorTexture.cs" />
+    <Compile Include="Interface\Fonts\FontCollection.cs" />
+    <Compile Include="Interface\Fonts\FontVariant.cs" />
+    <Compile Include="Interface\Fonts\FontWeight.cs" />
+    <Compile Include="Interface\Icons\IconSize.cs" />
+    <Compile Include="Plugin\LudiqCoreResources.cs" />
+    <Compile Include="Interface\Icons\LanguageIconSet.cs" />
+    <Compile Include="Interface\Icons\LanguageIconsSkin.cs" />
+    <Compile Include="Interface\ListOption.cs" />
+    <Compile Include="Meta\CastMetadata.cs" />
+    <Compile Include="Meta\DictionaryIndexMetadata.cs" />
+    <Compile Include="Meta\DictionaryKeyAtIndexMetadata.cs" />
+    <Compile Include="Meta\DictionaryValueAtIndexMetadata.cs" />
+    <Compile Include="Meta\EditorPrefMetadata.cs" />
+    <Compile Include="Meta\IndexerMetadata.cs" />
+    <Compile Include="Meta\IndexMetadata.cs" />
+    <Compile Include="Meta\MemberMetadata.cs" />
+    <Compile Include="Meta\Metadata.cs" />
+    <Compile Include="Meta\ObjectMetadata.cs" />
+    <Compile Include="Meta\ProxyMetadata.cs" />
+    <Compile Include="Meta\RootMetadata.cs" />
+    <Compile Include="Plugins\PluginManifest.cs" />
+    <Compile Include="Plugins\PluginResources.cs" />
+    <Compile Include="Plugin\LudiqCoreManifest.cs" />
+    <Compile Include="Plugin\LudiqCorePaths.cs" />
+    <Compile Include="Plugin\LudiqCore.cs" />
+    <Compile Include="Plugin\LudiqCoreConfiguration.cs" />
+    <Compile Include="Plugin\NamingSchemePage.cs" />
+    <Compile Include="Plugins\PluginAttribute.cs" />
+    <Compile Include="Plugins\PluginContainer.cs" />
+    <Compile Include="Plugins\PluginModuleAttribute.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reflection\DocumentedOption.cs" />
+    <Compile Include="Reflection\EnumOption.cs" />
+    <Compile Include="Reflection\LooseAssemblyNameOption.cs" />
+    <Compile Include="Reflection\MemberOption.cs" />
+    <Compile Include="Reflection\NamespaceOption.cs" />
+    <Compile Include="Reflection\ParameterStringMode.cs" />
+    <Compile Include="Reflection\TypeOption.cs" />
+    <Compile Include="SerializedProperties\SerializedPropertyProviderProvider.cs" />
+    <Compile Include="SerializedProperties\SerializedPropertyUtility.cs" />
+    <Compile Include="Threading\BackgroundWorker.cs" />
+    <Compile Include="Threading\BackgroundWorkerAttribute.cs" />
+    <Compile Include="Documentation\DocumentationGenerator.cs" />
+    <Compile Include="Interface\Annotations\AnnotationDisabler.cs" />
+    <Compile Include="Utilities\AnnotationUtility.cs" />
+    <Compile Include="Utilities\BackupUtility.cs" />
+    <Compile Include="Utilities\Clipboard.cs" />
+    <Compile Include="Utilities\DefineUtility.cs" />
+    <Compile Include="Utilities\NameUtility.cs" />
+    <Compile Include="Reflection\Codebase.cs" />
+    <Compile Include="Utilities\MathfEx.cs" />
+    <Compile Include="Utilities\Paths.cs" />
+    <Compile Include="Utilities\PathUtility.cs" />
+    <Compile Include="Utilities\ProgressUtility.cs" />
+    <Compile Include="Utilities\EditorUnityObjectUtility.cs" />
+    <Compile Include="Plugins\PluginChangelog.cs" />
+    <Compile Include="Plugins\PluginMigration.cs" />
+    <Compile Include="SemanticVersion.cs" />
+    <Compile Include="Windows\Sidebars\SidebarPanelWindow.cs" />
+    <Compile Include="Windows\Sidebars\ISidebarPanelContent.cs" />
+    <Compile Include="Windows\Sidebars\Sidebar.cs" />
+    <Compile Include="Windows\Sidebars\SidebarAnchor.cs" />
+    <Compile Include="Windows\Sidebars\SidebarPanel.cs" />
+    <Compile Include="Windows\Sidebars\Sidebars.cs" />
+    <Compile Include="Windows\TabbedPage.cs" />
+    <Compile Include="Windows\UpdateWizard\UpdateBackupPage.cs" />
+    <Compile Include="Windows\UpdateWizard\UpdateCompletePage.cs" />
+    <Compile Include="Windows\UpdateWizard\UpdateConsolidatePage.cs" />
+    <Compile Include="Windows\UpdateWizard\UpdateMigrationPage.cs" />
+    <Compile Include="Windows\UpdateWizard\UpdateStartPage.cs" />
+    <Compile Include="Windows\UpdateWizard\UpdateUserActionsPage.cs" />
+    <Compile Include="Windows\UpdateWizard\UpdateWizard.cs" />
+    <Compile Include="Windows\EditorWindowWrapper.cs" />
+    <Compile Include="Windows\ListPage.cs" />
+    <Compile Include="Windows\Page.cs" />
+    <Compile Include="Windows\SinglePageWindow.cs" />
+    <Compile Include="Windows\WebView.cs" />
+    <Compile Include="Windows\WebWindow.cs" />
+    <Compile Include="Windows\WindowClose.cs" />
+    <Compile Include="Windows\Wizard.cs" />
+    <Compile Include="Windows\WrappedEditorWindow.cs" />
+  </ItemGroup>
+  <!-- Resources -->
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.EventSystems.BaseEventData%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.EventSystems.BaseEventData%4016x.png" />
+    <EmbeddedResource Include="Resources\Fuzzy\Check%4012x.png" />
+    <EmbeddedResource Include="Resources\Fuzzy\Check%4012x_Pro.png" />
+    <EmbeddedResource Include="Resources\Fuzzy\Check%4024x.png" />
+    <EmbeddedResource Include="Resources\Fuzzy\Check%4024x_Pro.png" />
+    <EmbeddedResource Include="Resources\Fuzzy\StarOff%4016x.png" />
+    <EmbeddedResource Include="Resources\Fuzzy\StarOff%4032x.png" />
+    <EmbeddedResource Include="Resources\Fuzzy\StarOn%4016x.png" />
+    <EmbeddedResource Include="Resources\Fuzzy\StarOn%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.ConfigurationPanelTab\EditorPrefs%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Enums\Ludiq.ConfigurationPanelTab\ProjectSettings%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Class%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Class%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Const%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Const%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Constructor%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Constructor%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Enum%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Enum%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\ExtensionMethod%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\ExtensionMethod%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Field%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Field%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Interface%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Interface%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Method%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Method%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Namespace%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Namespace%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Property%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Property%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Struct%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioColor\Struct%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Class%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Class%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Const%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Const%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Constructor%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Constructor%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Enum%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Enum%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\ExtensionMethod%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\ExtensionMethod%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Field%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Field%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Interface%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Interface%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Method%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Method%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Namespace%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Namespace%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Property%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Property%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Struct%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Language\VisualStudioMonochrome\Structure%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Error%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Error%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Information%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Information%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Question%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Question%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Success%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Success%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Warning%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Messages\Warning%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\JetBrains%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\JetBrains%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\Ludiq%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\Ludiq%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\Microsoft%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\Microsoft%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\System%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\System%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\UnityEditor%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\UnityEditor%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\UnityEditorInternal%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\UnityEditorInternal%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\UnityEngine%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\UnityEngine%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\UnityEngineInternal%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Namespaces\UnityEngineInternal%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Null%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Null%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\State\Error%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\State\Error%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\State\Progress%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\State\Progress%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\State\Success%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\State\Success%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\State\Warning%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\State\Warning%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\bool%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\bool%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\byte%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\byte%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\char%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\char%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\decimal%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\decimal%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\double%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\double%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\enum%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\enum%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\float%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\float%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\int%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\int%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\long%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\long%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\Ludiq.Codebase%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\Ludiq.Codebase%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\object%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\object%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\sbyte%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\sbyte%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\short%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\short%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\string%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\string%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Assembly%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Assembly%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Exception%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Exception%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_bool%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_bool%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_char%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_char%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_enum%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_enum%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_float%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_float%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_int%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_int%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_string%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IEnumerable_string%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_bool%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_bool%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_char%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_char%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_enum%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_enum%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_float%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_float%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_int%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_int%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_string%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.Generic.IList_string%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.IDictionary%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.IDictionary%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.IEnumerable%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.IEnumerable%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.IList%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Collections.IList%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Type%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\System.Type%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\uint%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\uint%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\ulong%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\ulong%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.AI.NavMesh%4064x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.AnimationCurve%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.AnimationCurve%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.AnimatorStateInfo%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.AnimatorStateInfo%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Application%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Application%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Bounds%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Bounds%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Color%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Color%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.ContactPoint%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.ContactPoint%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.ContactPoint2D%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.ContactPoint2D%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Cursor%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Cursor%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Debug%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Debug%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Gizmos%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Gizmos%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.GUI%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.GUI%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.GUILayout%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.GUILayout%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.GUIUtility%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.GUIUtility%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Input%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Input%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.LayerMask%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.LayerMask%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Mathf%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Mathf%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Matrix4x4%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Matrix4x4%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.ParticleCollisionEvent%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.ParticleCollisionEvent%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Physics%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Physics%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Physics2D%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Physics2D%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Quaternion%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Quaternion%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Random%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Random%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Ray%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Ray%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Ray2D%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Ray2D%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.RaycastHit%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.RaycastHit%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.RaycastHit2D%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.RaycastHit2D%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Rect%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Rect%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.SceneManagement.Scene%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.SceneManagement.Scene%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.SceneManagement.SceneManager%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.SceneManagement.SceneManager%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Screen%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Screen%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Time%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Time%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Touch%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Touch%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Vector2%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Vector2%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Vector3%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Vector3%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Vector4%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\UnityEngine.Vector4%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\ushort%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Types\ushort%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Versioning\Downgrade%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Versioning\Downgrade%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Versioning\Upgrade%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Versioning\Upgrade%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Versioning\UpToDate%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Versioning\UpToDate%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\AboutWindow\AboutPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\AboutWindow\AboutPluginsPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\AboutWindow\AcknowledgementPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\AboutWindow\ChangelogPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\AotPreBuildWindow\AotPreBuildPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\BackupWindow\BackupPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\GenerateDocumentationWindow\GenerateDocumentationPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\GeneratePropertyProvidersWindow\GeneratePropertyProvidersPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SetupWizard\NamingSchemePage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SetupWizard\SetupCompletePage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SetupWizard\WelcomePage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SupportWindow%4016x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SupportWindow%4016x_Pro.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SupportWindow%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SupportWindow%4032x_Pro.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\UpdateWizard\UpdateCompletePage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\UpdateWizard\UpdateConsolidatePage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\UpdateWizard\UpdateMigrationPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\UpdateWizard\UpdateStartPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\UpdateWizard\UpdateUserActionsPage%4032x.png" />
+    <EmbeddedResource Include="Resources\Loader\Loader%40Pro.png" />
+    <EmbeddedResource Include="Resources\Loader\Loader.png" />
+    <EmbeddedResource Include="Resources\TypeSelector\TypeSelector%4018x.png" />
+    <EmbeddedResource Include="Resources\TypeSelector\TypeSelector%4018x_Pro.png" />
+    <EmbeddedResource Include="Resources\TypeSelector\TypeSelector%409x.png" />
+    <EmbeddedResource Include="Resources\TypeSelector\TypeSelector%409x_Pro.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SidebarAnchorRight%40Pro.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SidebarAnchorRight.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SidebarAnchorLeft%40Pro.png" />
+    <EmbeddedResource Include="Resources\Icons\Windows\SidebarAnchorLeft.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Events -->
+  <PropertyGroup>
+  <!-- Kind of a hack to get builds working on Linux. Really we should be checking for bash -->
+    <PostBuildEvent Condition="$(OS) != 'Unix'">
+      echo $(DefineConstants) &gt; "$(TargetDir)\$(TargetName).defines"
+
+      robocopy "$(TargetDir)." "$(SolutionDir)Assemblies\$(ConfigurationName)" *.dll *.dll.mdb *.pdb *.xml *.defines /xf Unity*.*
+
+      robocopy "$(ProjectDir)Dependencies\Assemblies" "$(SolutionDir)Assemblies\$(ConfigurationName)" *.dll *.dll.mdb *.pdb *.xml *.defines /E
+
+      if errorlevel 1 exit 0 else exit %25errorlevel%25
+    </PostBuildEvent>
+    <PostBuildEvent Condition="$(OS) == 'Unix'">
+      echo "$(DefineConstants)" &gt; "$(TargetDir)\$(TargetName).defines"
+      
+      mkdir -p "$(SolutionDir)Assemblies/$(ConfigurationName)/"
+
+      rsync -rq "$(TargetDir)." "$(SolutionDir)Assemblies/$(ConfigurationName)/" --exclude 'Unity*.*' --include '*.dll' --include '*.dll.mdb' --include '*.pdb' --include '*.xml' --include '*.defines' 
+      rsync -rq "$(ProjectDir)Dependencies\Assemblies" "$(SolutionDir)Assemblies/$(ConfigurationName)/" --include '*.dll' --include '*.dll.mdb' --include '*.pdb' --include '*.xml' --include '*.defines' 
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Bolt1.Net3.Release|AnyCPU' ">
+    <DefineConstants>GUID_8878d90c345be1a43ab0c9a9898ad433;TARGET_INCLUDE_EDITOR;RELEASE;NET_2_0</DefineConstants>
+    <PlatformTarget>anycpu</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Bolt1.Net4.Release|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+</Project>
