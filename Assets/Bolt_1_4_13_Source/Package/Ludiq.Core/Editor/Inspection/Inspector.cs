@@ -30,7 +30,11 @@ namespace Ludiq
 		private Exception failure;
 
 		protected float y;
-		public Metadata metadata { get; private set; }
+		public Metadata metadata 
+		{
+			get; 
+			private set; 
+		}
 
 		protected virtual bool safe => !LudiqCore.Configuration.developerMode;
 

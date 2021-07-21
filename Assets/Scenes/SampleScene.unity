@@ -170,7 +170,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: RecordPoint, ns: CustomBolt, asm: Assembly-CSharp}
+      type: {class: RecordPoint, ns: DragonSlay, asm: Assembly-CSharp}
       data:
         m_GameObject: {fileID: 241587739}
         m_RebirthPoint: {x: 0, y: 0, z: 0}
@@ -211,9 +211,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: Level, ns: CustomBolt, asm: Assembly-CSharp}
-      data:
-        m_GameObject: {fileID: 0}
+      type: {class: , ns: , asm: }
 --- !u!4 &377179242
 Transform:
   m_ObjectHideFlags: 0
@@ -473,7 +471,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: Actor, ns: CustomBolt, asm: Assembly-CSharp}
+      type: {class: Actor, ns: DragonSlay, asm: Assembly-CSharp}
       data:
         m_GameObject: {fileID: 1208839858}
         m_MaxHp: 300

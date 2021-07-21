@@ -398,7 +398,10 @@ namespace Bolt
 		#region Widget
 
 		[Serialize]
-		public Vector2 position { get; set; }
+		public Vector2 position { 
+			get; 
+			set; 
+		}
 
 		[DoNotSerialize]
 		public Exception definitionException { get; protected set; }

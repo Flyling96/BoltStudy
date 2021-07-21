@@ -84,7 +84,11 @@ namespace Ludiq
 
 		protected readonly bool hasDescriptor;
 
-		public Metadata metadata { get; private set; }
+		public Metadata metadata 
+		{ 
+			get; 
+			private set; 
+		}
 
 		private Metadata lastFetchedMetadata;
 

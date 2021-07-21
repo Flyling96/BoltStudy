@@ -5,8 +5,15 @@ using System;
 using Bolt;
 using Ludiq;
 
-namespace CustomBolt
+namespace DragonSlay
 {
+    public interface ISceneObjectFunc { }
+
+    public interface ITransform : ISceneObjectFunc
+    {
+        void Transform(Vector3 pos, Quaternion rot);
+    }
+
     public enum SceneObjectType
     {
         None,
@@ -17,7 +24,7 @@ namespace CustomBolt
 
 
     [Serializable]
-    public abstract class SceneObject
+    public abstract class SceneObject: ITransform
     {
         public abstract SceneObjectType m_Type { get; }
 
@@ -53,6 +60,11 @@ namespace CustomBolt
             m_GameObject = gameObject;
         }
 
+        public void Transform(Vector3 pos, Quaternion rot)
+        {
+            Position = pos;
+            Rotation = rot;
+        }
     }
 
     public class Level:SceneObject

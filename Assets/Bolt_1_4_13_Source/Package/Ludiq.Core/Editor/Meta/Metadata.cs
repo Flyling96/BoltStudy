@@ -39,7 +39,10 @@ namespace Ludiq
 
 		protected virtual bool isRoot => false;
 
-		public GUIContent label { get; protected set; }
+		public GUIContent label {
+			get;
+			protected set;
+		}
 
 		public virtual bool isEditable { get; set; } = true;
 

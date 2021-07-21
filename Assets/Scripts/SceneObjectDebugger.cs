@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CustomBolt
+namespace DragonSlay
 {
     public class SceneObjectDebugger : MonoBehaviour
     {

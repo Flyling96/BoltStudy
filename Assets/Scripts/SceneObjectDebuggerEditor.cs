@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace CustomBolt.Editor
+namespace DragonSlay.Editor
 {
     [CustomEditor(typeof(SceneObjectDebugger))]
     public class SceneObjectDebuggerEditor : UnityEditor.Editor

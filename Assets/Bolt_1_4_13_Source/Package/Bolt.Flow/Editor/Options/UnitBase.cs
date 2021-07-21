@@ -634,41 +634,41 @@ namespace Bolt
 			typesToGuids = new Dictionary<Type, HashSet<string>>();
 			guidsToTypes = new Dictionary<string, HashSet<Type>>();
 
-			UnityAPI.AwaitForever(() =>
-			{
-				foreach (var script in UnityEngine.Resources.FindObjectsOfTypeAll<MonoScript>())
-				{
-					var path = AssetDatabase.GetAssetPath(script);
-					var guid = AssetDatabase.AssetPathToGUID(path);
-					var type = script.GetClass();
+			//UnityAPI.AwaitForever(() =>
+			//{
+			//	foreach (var script in UnityEngine.Resources.FindObjectsOfTypeAll<MonoScript>())
+			//	{
+			//		var path = AssetDatabase.GetAssetPath(script);
+			//		var guid = AssetDatabase.AssetPathToGUID(path);
+			//		var type = script.GetClass();
 
-					// Skip built-in Unity plugins, which are referenced by full path
-					if (!path.StartsWith("Assets"))
-					{
-						continue;
-					}
+			//		// Skip built-in Unity plugins, which are referenced by full path
+			//		if (!path.StartsWith("Assets"))
+			//		{
+			//			continue;
+			//		}
 
-					// Add the GUID to the list, even if it doesn't have any type
-					if (!guidsToTypes.ContainsKey(guid))
-					{
-						guidsToTypes.Add(guid, new HashSet<Type>());
-					}
+			//		// Add the GUID to the list, even if it doesn't have any type
+			//		if (!guidsToTypes.ContainsKey(guid))
+			//		{
+			//			guidsToTypes.Add(guid, new HashSet<Type>());
+			//		}
 
-					// Skip scripts without types
-					if (type == null)
-					{
-						continue;
-					}
+			//		// Skip scripts without types
+			//		if (type == null)
+			//		{
+			//			continue;
+			//		}
 
-					if (!typesToGuids.ContainsKey(type))
-					{
-						typesToGuids.Add(type, new HashSet<string>());
-					}
+			//		if (!typesToGuids.ContainsKey(type))
+			//		{
+			//			typesToGuids.Add(type, new HashSet<string>());
+			//		}
 
-					typesToGuids[type].Add(guid);
-					guidsToTypes[guid].Add(type);
-				}
-			});
+			//		typesToGuids[type].Add(guid);
+			//		guidsToTypes[guid].Add(type);
+			//	}
+			//});
 		}
 		
 		public static IEnumerable<string> GetScriptGuids(Type type)
