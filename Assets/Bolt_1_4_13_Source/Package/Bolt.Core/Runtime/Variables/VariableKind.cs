@@ -32,6 +32,10 @@
 		/// Variables that persist even after the application quits.
 		/// Unity object references are not supported.
 		/// </summary>
-		Saved
+		Saved,
+		///// <summary>
+		///// Auto Add SceneObjectDataShell 
+		///// </summary>
+		//Auto
 	}
 }

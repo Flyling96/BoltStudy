@@ -27,19 +27,20 @@ namespace Bolt
 			
 			tabs.Clear();
 			
-			if (context?.graph is IGraphWithVariables)
-			{
-				tabs.Add(Graph(context.reference));
-			}
-			else
-			{
-				tabs.Add(Graph(null));
-			}
+			//if (context?.graph is IGraphWithVariables)
+			//{
+			//	tabs.Add(Graph(context.reference));
+			//}
+			//else
+			//{
+			//	tabs.Add(Graph(null));
+			//}
 
 			tabs.Add(Object(context?.reference.gameObject ?? Selection.activeGameObject));
+			//tabs.Add(Auto());
 			tabs.Add(Scene());
-			tabs.Add(Application());
-			tabs.Add(Saved());
+			//tabs.Add(Application());
+			//tabs.Add(Saved());
 
 			_currentTab = tabs.FirstOrDefault(t => t.enabled);
 			_currentSubTabIdentifier = _currentTab?.currentSubTab?.identifier;
@@ -218,6 +219,20 @@ namespace Bolt
 
 				tab.MakeFirstSubTabCurrent();
 			}
+
+			return tab;
+		}
+
+		private Tab Auto()
+		{
+			var tab = new Tab
+			(
+				this,
+				"Auto",
+				"Auto Variables",
+				"These variables are added automatically.",
+				BoltCore.Icons.variable
+			);
 
 			return tab;
 		}

@@ -161,19 +161,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 241587739}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e579df02bcbe54eaec4e285a890789, type: 3}
+  m_Script: {fileID: 11500000, guid: e71a0f425ae0c744cbc3c1bc384d1bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_SceneObjectType: 3
-  m_SceneObject:
+  m_SceneObjectData:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: RecordPoint, ns: DragonSlay, asm: Assembly-CSharp}
+      type: {class: RecordPointData, ns: DragonSlay, asm: Assembly-CSharp}
       data:
-        m_GameObject: {fileID: 241587739}
-        m_RebirthPoint: {x: 0, y: 0, z: 0}
+        m_Tid: 0
+        m_Position: {x: 0, y: 0, z: -13.91}
+        m_Rotation: {x: -0, y: -0, z: -0, w: 1}
+        m_IsExtend: 1
+        m_RebirthPointOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &377179238
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,9 +186,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 377179242}
-  - component: {fileID: 377179239}
   - component: {fileID: 377179244}
   - component: {fileID: 377179243}
+  - component: {fileID: 377179239}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -202,16 +205,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 377179238}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e579df02bcbe54eaec4e285a890789, type: 3}
+  m_Script: {fileID: 11500000, guid: e71a0f425ae0c744cbc3c1bc384d1bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_SceneObjectType: 1
-  m_SceneObject:
+  m_SceneObjectData:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: , ns: , asm: }
+      type: {class: SceneObjectData, ns: DragonSlay, asm: Assembly-CSharp}
+      data:
+        m_Tid: 0
+        m_Position: {x: 0, y: 0, z: 0}
+        m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+        m_IsExtend: 0
 --- !u!4 &377179242
 Transform:
   m_ObjectHideFlags: 0
@@ -259,7 +267,7 @@ MonoBehaviour:
   _data:
     _json: '{"declarations":{"collection":{"$content":[{"name":"Actor","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"RecordPoint","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Time","value":{"$content":0.0,"$type":"System.Single"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
     _objectReferences:
-    - {fileID: 1208839860}
+    - {fileID: 1208839859}
     - {fileID: 241587741}
 --- !u!1 &705507993
 GameObject:
@@ -445,7 +453,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1208839862}
-  - component: {fileID: 1208839860}
+  - component: {fileID: 1208839859}
   m_Layer: 0
   m_Name: Actor
   m_TagString: Untagged
@@ -453,7 +461,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1208839860
+--- !u!114 &1208839859
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -462,20 +470,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1208839858}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e579df02bcbe54eaec4e285a890789, type: 3}
+  m_Script: {fileID: 11500000, guid: e71a0f425ae0c744cbc3c1bc384d1bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_SceneObjectType: 2
-  m_SceneObject:
+  m_SceneObjectData:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: Actor, ns: DragonSlay, asm: Assembly-CSharp}
+      type: {class: SceneObjectData, ns: DragonSlay, asm: Assembly-CSharp}
       data:
-        m_GameObject: {fileID: 1208839858}
-        m_MaxHp: 300
-        m_HP: 300
+        m_Tid: 0
+        m_Position: {x: 0, y: 0, z: 0}
+        m_Rotation: {x: -0, y: -0, z: -0, w: 1}
+        m_IsExtend: 1
 --- !u!4 &1208839862
 Transform:
   m_ObjectHideFlags: 0

@@ -7,12 +7,25 @@ using Ludiq;
 
 namespace DragonSlay
 {
-    public interface ISceneObjectFunc { }
+    public interface ISceneObjectInterface { }
 
-    public interface ITransform : ISceneObjectFunc
+    public interface ITransform : ISceneObjectInterface
     {
         void Transform(Vector3 pos, Quaternion rot);
     }
+
+    public interface IArea: ISceneObjectInterface
+    {
+        Area Area { get; }
+    }
+
+
+    public struct Area
+    {
+        public Vector3 m_Center;
+        public float m_Radius;
+    }
+
 
     public enum SceneObjectType
     {
@@ -22,13 +35,31 @@ namespace DragonSlay
         RecordPoint,
     }
 
-
-    [Serializable]
     public abstract class SceneObject: ITransform
     {
+        public static ulong Current = 0;
+
         public abstract SceneObjectType m_Type { get; }
 
-        [SerializeField]
+        private ulong m_Uid;
+
+        public ulong Uid => m_Uid;
+
+        private int m_Tid;
+
+        public int Tid => m_Tid;
+
+        public virtual void OnCreate(SceneObjectData data,Transform parent = null)
+        {
+            m_GameObject = new GameObject();
+            m_GameObject.transform.SetParent(parent);
+            m_Uid = (ulong)m_Type * 1000000 + Current++;
+            m_GameObject.name = string.Format("{0}_{1}",m_Type.DisplayName(), m_Uid);
+            m_Tid = data.m_Tid;
+            Position = data.m_Position;
+            Rotation = data.m_Rotation;
+        }
+
         protected GameObject m_GameObject;
 
         public Vector3 Position
@@ -55,10 +86,6 @@ namespace DragonSlay
             }
         }
 
-        public SceneObject(GameObject gameObject)
-        {
-            m_GameObject = gameObject;
-        }
 
         public void Transform(Vector3 pos, Quaternion rot)
         {
@@ -71,19 +98,13 @@ namespace DragonSlay
     {
         public override SceneObjectType m_Type => SceneObjectType.Level;
 
-        public Level(GameObject gameObject) : base(gameObject) { }
 
     }
 
-    [Serializable]
     public class Actor:SceneObject
     {
         public override SceneObjectType m_Type => SceneObjectType.Actor;
 
-        public Actor(GameObject gameObject) : base(gameObject)
-        {
-            Init();
-        }
 
         public void Init()
         {
@@ -117,31 +138,37 @@ namespace DragonSlay
         }
     }
 
-    [Serializable]
     public class RecordPoint : SceneObject
     {
         public override SceneObjectType m_Type => SceneObjectType.RecordPoint;
 
-        public RecordPoint(GameObject gameObject) : base(gameObject) { }
+        public override void OnCreate(SceneObjectData data, Transform parent = null)
+        {
+            base.OnCreate(data, parent);
+            RecordPointData recordPointData = data as RecordPointData;
+            if(recordPointData != null)
+            {
+                m_RebirthPointOffset = recordPointData.m_RebirthPointOffset;
+            }
+        }
 
-        [SerializeField]
-        private Vector3 m_RebirthPoint;
+        private Vector3 m_RebirthPointOffset;
 
-        public Vector3 RebirthPoint
+        public Vector3 RebirthPointOffset
         {
             get
             {
-                return m_RebirthPoint;
+                return m_RebirthPointOffset;
             }
             set
             {
-                m_RebirthPoint = value;
+                m_RebirthPointOffset = value;
             }
         }
 
         public void RebirthActor(Actor actor)
         {
-            actor.Position = Position + m_RebirthPoint;
+            actor.Position = Position + m_RebirthPointOffset;
             actor.Init();
         }
     }
