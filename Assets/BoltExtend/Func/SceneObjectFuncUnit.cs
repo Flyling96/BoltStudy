@@ -4,7 +4,7 @@ using UnityEngine;
 using Ludiq;
 using DragonSlay;
 
-namespace Bolt.Extend
+namespace Bolt
 {
     public class SceneObjectFuncUnit<T>: Unit where T:ISceneObjectInterface
     {

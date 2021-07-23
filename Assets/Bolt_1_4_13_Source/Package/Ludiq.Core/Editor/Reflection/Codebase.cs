@@ -40,7 +40,7 @@ namespace Ludiq
 							continue;
 						}
 #endif
-						
+
 						_assemblies.Add(assembly);
 
 						var isRuntimeAssembly = IsRuntimeAssembly(assembly);
@@ -100,7 +100,7 @@ namespace Ludiq
 								_ludiqEditorTypes.Add(type);
 							}
 
-							if (isLudiqRuntimeAssembly)
+							if (isLudiqRuntimeAssembly || IsCustomType(assembly,type))
 							{
 								_ludiqRuntimeTypes.Add(type);
 							}
@@ -127,6 +127,34 @@ namespace Ludiq
 				ludiqEditorTypes = _ludiqEditorTypes.AsReadOnly();
 			}
 		}
+
+		private static IEnumerable<string> CustomTypeNames
+		{
+			get
+            {
+				yield return "ITransformFuncUnit";
+			}
+        }
+
+		private static bool IsCustomType(Assembly assembly, Type type)
+        {
+			if(!IsRuntimeAssembly(assembly))
+            {
+				return false;
+            }
+
+			if(type.Namespace != "Bolt.Extend")
+            {
+				return false;
+            }
+
+			if(CustomTypeNames.Contains(type.Name))
+            {
+				return true;
+            }
+
+			return false;
+        }
 
 		private static readonly List<Assembly> _assemblies;
 		private static readonly List<Assembly> _runtimeAssemblies;
