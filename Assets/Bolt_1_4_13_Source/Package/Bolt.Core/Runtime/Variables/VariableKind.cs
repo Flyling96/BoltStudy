@@ -33,9 +33,15 @@
 		/// Unity object references are not supported.
 		/// </summary>
 		Saved,
-		///// <summary>
-		///// Auto Add SceneObjectDataShell 
-		///// </summary>
-		//Auto
+
+		/// <summary>
+		/// Auto Add SceneObjectDataShell 
+		/// </summary>
+		AutoSceneObject,
+
+		/// <summary>
+		///  Auto Add SubGameobjectFlow
+		/// </summary>
+		AutoSubFlow,
 	}
 }

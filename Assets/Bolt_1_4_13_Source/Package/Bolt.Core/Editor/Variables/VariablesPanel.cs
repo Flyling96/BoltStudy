@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Ludiq;
 using UnityEditor;
 using UnityEngine;
@@ -37,7 +38,7 @@ namespace Bolt
 			//}
 
 			tabs.Add(Object(context?.reference.gameObject ?? Selection.activeGameObject));
-			//tabs.Add(Auto());
+			tabs.Add(AutoSubGraph(context?.reference.gameObject ?? Selection.activeGameObject));
 			tabs.Add(Scene());
 			//tabs.Add(Application());
 			//tabs.Add(Saved());
@@ -223,16 +224,26 @@ namespace Bolt
 			return tab;
 		}
 
-		private Tab Auto()
+		private Tab AutoSubGraph(GameObject @object)
 		{
 			var tab = new Tab
 			(
 				this,
-				"Auto",
-				"Auto Variables",
+				"AutoSubGraph",
+				"Auto SubGraph Variables",
 				"These variables are added automatically.",
 				BoltCore.Icons.variable
 			);
+
+			if(@object != null)
+			{
+				var variables = @object.GetComponent<Variables>();
+
+				if (variables != null)
+				{
+					tab.subTabs.Add(new SubTab("SubFlow", tab, VariableKind.AutoSubFlow, variables.subFlowDeclarations, variables, null));
+				}
+			}
 
 			return tab;
 		}

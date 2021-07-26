@@ -95,6 +95,12 @@ namespace Bolt
 					break;
 				}
 
+				case VariableKind.AutoSubFlow:
+				{
+					source = Variables.AutoSubFlow(reference.gameObject);
+					break;
+				}
+
 				default:
 					throw new UnexpectedEnumValueException<VariableKind>(kind);
 			}

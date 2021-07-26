@@ -133,6 +133,7 @@ namespace Ludiq
 			get
             {
 				yield return "ITransformFuncUnit";
+				yield return "CustomSuperUnit";
 			}
         }
 

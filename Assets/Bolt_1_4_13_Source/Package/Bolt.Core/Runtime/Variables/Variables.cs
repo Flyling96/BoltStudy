@@ -8,10 +8,13 @@ namespace Bolt
 	[AddComponentMenu("Bolt/Variables")]
 	[DisableAnnotation]
 	[IncludeInSettings(false)]
-	public class Variables : LudiqBehaviour, IAotStubbable
+	public partial class Variables : LudiqBehaviour, IAotStubbable
 	{
 		[Serialize, Inspectable, VariableKind(VariableKind.Object)]
 		public VariableDeclarations declarations { get; internal set; } = new VariableDeclarations();
+
+		[Serialize, Inspectable, VariableKind(VariableKind.AutoSubFlow)]
+		public VariableDeclarations subFlowDeclarations { get; internal set; } = new VariableDeclarations();
 
 		public static VariableDeclarations Graph(GraphPointer pointer)
 		{
@@ -43,6 +46,8 @@ namespace Bolt
 		}
 
 		public static VariableDeclarations Object(GameObject go) => go.GetOrAddComponent<Variables>().declarations;
+
+		public static VariableDeclarations AutoSubFlow(GameObject go) => go.GetOrAddComponent<Variables>().subFlowDeclarations;
 
 		public static VariableDeclarations Object(Component component) => Object(component.gameObject);
 
@@ -90,4 +95,17 @@ namespace Bolt
 			}
 		}
 	}
+
+#if UNITY_EDITOR
+	public partial class Variables
+	{
+		private void Update()
+		{
+			if(!UnityEngine.Application.isPlaying)
+			{
+
+			}
+		}
+	}
+#endif
 }

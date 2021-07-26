@@ -190,7 +190,7 @@ namespace Ludiq
 
 			if (stream == null)
 			{
-				Debug.LogWarning("Failed to get assembly resource stream:\n" + path);
+				//Debug.LogWarning("Failed to get assembly resource stream:\n" + path);
 
 				return null;
 			}

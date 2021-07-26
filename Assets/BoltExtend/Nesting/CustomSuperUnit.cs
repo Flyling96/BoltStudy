@@ -1,146 +1,148 @@
-﻿//using Ludiq;
-//using System;
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
+﻿using Ludiq;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-//namespace Bolt.Extend
-//{
-//	[SpecialUnit]
-//	[TypeIcon(typeof(FlowGraph))]
-//    [UnitCategory("Nesting")]
-//    public sealed class CustomSuperUnit : Unit, IGraphEventListener,IGraphParentElement
-//    {
-//		private FlowGraph m_Graph = null;
+namespace Bolt.Extend
+{
+	[TypeIcon(typeof(FlowGraph))]
+	[UnitCategory("Extend")]
+	public sealed class CustomSuperUnit : Unit, IGraphEventListener, IGraphParentElement
+	{
+		[Serialize]
+		public string m_VariableName;
 
-//		private FlowMacro m_Marco = null;
+		private FlowGraph m_Graph = null;
 
-//		[DoNotSerialize]
-//		public IGraph childGraph => m_Graph;
+		private FlowMacro m_Marco = null;
 
-//		[DoNotSerialize]
-//		public bool isSerializationRoot => true;
+		[DoNotSerialize]
+		public IGraph childGraph => m_Graph;
 
-//		[DoNotSerialize]
-//		public UnityEngine.Object serializedObject => m_Marco;
+		[DoNotSerialize]
+		public bool isSerializationRoot => true;
 
-//        public override void AfterAdd()
-//        {
-//            base.AfterAdd();
-//        }
+		[DoNotSerialize]
+		public UnityEngine.Object serializedObject => m_Marco;
 
-//        protected override void Definition()
-//		{
-//			if(m_Graph == null)
-//            {
-//				return;
-//            }
+		public override void AfterAdd()
+		{
+			base.AfterAdd();
+		}
 
-//			isControlRoot = true; // TODO: Infer relations instead
+		protected override void Definition()
+		{
+			if (m_Graph == null)
+			{
+				return;
+			}
 
-//			// Using portDefinitions and type checks instead of specific definition collections
-//			// to avoid duplicates. Iterating only once for speed.
+			isControlRoot = true; // TODO: Infer relations instead
 
-//			foreach (var definition in m_Graph.validPortDefinitions)
-//			{
-//				if (definition is ControlInputDefinition)
-//				{
-//					var controlInputDefinition = (ControlInputDefinition)definition;
-//					var key = controlInputDefinition.key;
+			// Using portDefinitions and type checks instead of specific definition collections
+			// to avoid duplicates. Iterating only once for speed.
 
-//					ControlInput(key, (flow) =>
-//					{
-//						foreach (var unit in m_Graph.units)
-//						{
-//							if (unit is GraphInput)
-//							{
-//								var inputUnit = (GraphInput)unit;
+			foreach (var definition in m_Graph.validPortDefinitions)
+			{
+				if (definition is ControlInputDefinition)
+				{
+					var controlInputDefinition = (ControlInputDefinition)definition;
+					var key = controlInputDefinition.key;
 
-//								flow.stack.EnterParentElement(this);
+					ControlInput(key, (flow) =>
+					{
+						foreach (var unit in m_Graph.units)
+						{
+							if (unit is GraphInput)
+							{
+								var inputUnit = (GraphInput)unit;
 
-//								return inputUnit.controlOutputs[key];
-//							}
-//						}
+								flow.stack.EnterParentElement(this);
 
-//						return null;
-//					});
-//				}
-//				else if (definition is ValueInputDefinition)
-//				{
-//					var valueInputDefinition = (ValueInputDefinition)definition;
-//					var key = valueInputDefinition.key;
-//					var type = valueInputDefinition.type;
-//					var hasDefaultValue = valueInputDefinition.hasDefaultValue;
-//					var defaultValue = valueInputDefinition.defaultValue;
+								return inputUnit.controlOutputs[key];
+							}
+						}
 
-//					var port = ValueInput(type, key);
+						return null;
+					});
+				}
+				else if (definition is ValueInputDefinition)
+				{
+					var valueInputDefinition = (ValueInputDefinition)definition;
+					var key = valueInputDefinition.key;
+					var type = valueInputDefinition.type;
+					var hasDefaultValue = valueInputDefinition.hasDefaultValue;
+					var defaultValue = valueInputDefinition.defaultValue;
 
-//					if (hasDefaultValue)
-//					{
-//						port.SetDefaultValue(defaultValue);
-//					}
-//				}
-//				else if (definition is ControlOutputDefinition)
-//				{
-//					var controlOutputDefinition = (ControlOutputDefinition)definition;
-//					var key = controlOutputDefinition.key;
+					var port = ValueInput(type, key);
 
-//					ControlOutput(key);
-//				}
-//				else if (definition is ValueOutputDefinition)
-//				{
-//					var valueOutputDefinition = (ValueOutputDefinition)definition;
-//					var key = valueOutputDefinition.key;
-//					var type = valueOutputDefinition.type;
+					if (hasDefaultValue)
+					{
+						port.SetDefaultValue(defaultValue);
+					}
+				}
+				else if (definition is ControlOutputDefinition)
+				{
+					var controlOutputDefinition = (ControlOutputDefinition)definition;
+					var key = controlOutputDefinition.key;
 
-//					ValueOutput(type, key, (flow) =>
-//					{
-//						flow.stack.EnterParentElement(this);
+					ControlOutput(key);
+				}
+				else if (definition is ValueOutputDefinition)
+				{
+					var valueOutputDefinition = (ValueOutputDefinition)definition;
+					var key = valueOutputDefinition.key;
+					var type = valueOutputDefinition.type;
 
-//						// Manual looping to avoid LINQ allocation
-//						// Also removing check for multiple output units for speed 
-//						// (The first output unit will be used without any error)
+					ValueOutput(type, key, (flow) =>
+					{
+						flow.stack.EnterParentElement(this);
 
-//						foreach (var unit in m_Graph.units)
-//						{
-//							if (unit is GraphOutput)
-//							{
-//								var outputUnit = (GraphOutput)unit;
+						// Manual looping to avoid LINQ allocation
+						// Also removing check for multiple output units for speed 
+						// (The first output unit will be used without any error)
 
-//								var value = flow.GetValue(outputUnit.valueInputs[key]);
+						foreach (var unit in m_Graph.units)
+						{
+							if (unit is GraphOutput)
+							{
+								var outputUnit = (GraphOutput)unit;
 
-//								flow.stack.ExitParentElement();
+								var value = flow.GetValue(outputUnit.valueInputs[key]);
 
-//								return value;
-//							}
-//						}
+								flow.stack.ExitParentElement();
 
-//						flow.stack.ExitParentElement();
+								return value;
+							}
+						}
 
-//						throw new InvalidOperationException("Missing output unit when to get value.");
-//					});
-//				}
-//			}
-//		}
+						flow.stack.ExitParentElement();
 
-//		public bool IsListening(GraphPointer pointer)
-//        {
-//            throw new System.NotImplementedException();
-//        }
+						throw new InvalidOperationException("Missing output unit when to get value.");
+					});
+				}
+			}
+		}
 
-//        public void StartListening(GraphStack stack)
-//        {
-//            throw new System.NotImplementedException();
-//        }
+		public bool IsListening(GraphPointer pointer)
+		{
+			throw new System.NotImplementedException();
+		}
 
-//        public void StopListening(GraphStack stack)
-//        {
-//            throw new System.NotImplementedException();
-//        }
+		public void StartListening(GraphStack stack)
+		{
+			throw new System.NotImplementedException();
+		}
 
-//        public IGraph DefaultGraph()
-//        {
-//			return FlowGraph.WithInputOutput();
-//		}
-//    }
-//}
+		public void StopListening(GraphStack stack)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public IGraph DefaultGraph()
+		{
+			return FlowGraph.WithInputOutput();
+		}
+	}
+}
