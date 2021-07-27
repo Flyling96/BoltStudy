@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 377179244}
   - component: {fileID: 377179243}
   - component: {fileID: 377179239}
+  - component: {fileID: 377179240}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -220,6 +221,21 @@ MonoBehaviour:
         m_Position: {x: 0, y: 0, z: 0}
         m_Rotation: {x: 0, y: 0, z: 0, w: 1}
         m_IsExtend: 0
+--- !u!114 &377179240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377179238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 544b36db2b21f2945ad7a0df43f53c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{}'
+    _objectReferences: []
 --- !u!4 &377179242
 Transform:
   m_ObjectHideFlags: 0
@@ -266,11 +282,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"declarations":{"collection":{"$content":[{"name":"Actor","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"RecordPoint","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Time","value":{"$content":0.0,"$type":"System.Single"},"$version":"A"},{"name":"FlowMachine","value":{"$content":2,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
+    _json: '{"declarations":{"collection":{"$content":[{"name":"Actor","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"RecordPoint","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Time","value":{"$content":0.0,"$type":"System.Single"},"$version":"A"},{"name":"FlowMachine","value":{"$content":2,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"},"subFlowDeclarations":{"collection":{"$content":[{"name":"Level_17588","value":{"$content":3,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Actor_17610","value":{"$content":4,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Actor
+      (1)_17628","value":{"$content":5,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
     _objectReferences:
     - {fileID: 1208839859}
     - {fileID: 241587741}
     - {fileID: 1208839860}
+    - {fileID: 377179243}
+    - {fileID: 1208839860}
+    - {fileID: 2097717169}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,7 +538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"declarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"}}'
+    _json: '{"declarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"subFlowDeclarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"}}'
     _objectReferences: []
 --- !u!4 &1208839862
 Transform:
@@ -577,7 +597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"declarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"}}'
+    _json: '{"declarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"subFlowDeclarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"}}'
     _objectReferences: []
 --- !u!4 &1401259383
 Transform:
@@ -655,7 +675,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"declarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"}}'
+    _json: '{"declarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"subFlowDeclarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"}}'
     _objectReferences: []
 --- !u!114 &2097717171
 MonoBehaviour:

@@ -8,7 +8,7 @@ namespace Bolt
 	[AddComponentMenu("Bolt/Variables")]
 	[DisableAnnotation]
 	[IncludeInSettings(false)]
-	public partial class Variables : LudiqBehaviour, IAotStubbable
+	public class Variables : LudiqBehaviour, IAotStubbable
 	{
 		[Serialize, Inspectable, VariableKind(VariableKind.Object)]
 		public VariableDeclarations declarations { get; internal set; } = new VariableDeclarations();
@@ -96,16 +96,4 @@ namespace Bolt
 		}
 	}
 
-#if UNITY_EDITOR
-	public partial class Variables
-	{
-		private void Update()
-		{
-			if(!UnityEngine.Application.isPlaying)
-			{
-
-			}
-		}
-	}
-#endif
 }

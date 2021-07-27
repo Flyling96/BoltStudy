@@ -588,6 +588,13 @@ namespace Bolt
 				yield return superUnit.Option();
 			}
 
+			// Custom Super Units
+
+			foreach (var superUnit in flowMacros.Select(flowMacro => new SuperUnit(flowMacro)))
+			{
+				yield return superUnit.Option();
+			}
+
 			// Extensions
 
 			foreach (var dynamicUnitsExtension in dynamicUnitsExtensions)
@@ -603,6 +610,11 @@ namespace Bolt
 		{
 			foreach (var variableKind in Enum.GetValues(typeof(VariableKind)).Cast<VariableKind>())
 			{
+				if(variableKind == VariableKind.AutoSubFlow || variableKind == VariableKind.AutoSceneObject)
+                {
+					continue;
+                }
+
 				foreach (var graphVariableName in EditorVariablesUtility.GetVariableNameSuggestions(variableKind, reference))
 				{
 					yield return new GetVariableOption(variableKind, graphVariableName);

@@ -6,17 +6,35 @@ using Ludiq;
 
 namespace Bolt.Extend
 {
-	[DisableAnnotation]
+    [RequireComponent(typeof(Variables))]
+    [DisableAnnotation]
 	[IncludeInSettings(false)]
 	public partial class AutoSubGraphVariables : LudiqBehaviour
     {
-        [Serialize, Inspectable, VariableKind(VariableKind.AutoSubFlow)]
-        public VariableDeclarations subGraphDeclarations { get; internal set; } = new VariableDeclarations();
+        private Variables m_Variables = null;
 
-        public static VariableDeclarations AutoSubGraph(GameObject go) => go.GetOrAddComponent<AutoSubGraphVariables>().subGraphDeclarations;
+        public Variables Variables
+        {
+            get
+            {
+                if(m_Variables == null)
+                {
+                    m_Variables = transform.GetComponent<Variables>();
+                }
 
+                return m_Variables;
+            }
+        }
 
-	}
+        public VariableDeclarations SubFlowDeclarations
+        {
+            get
+            {
+                return Variables?.subFlowDeclarations;
+            }
+        }
+
+    }
 
 #if UNITY_EDITOR
     [ExecuteInEditMode]
@@ -24,7 +42,16 @@ namespace Bolt.Extend
     {
         private void Update()
         {
-            
+            if(!Application.isPlaying)
+            {
+                var children = transform.GetComponentsInChildren<FlowMachine>();
+                for(int i =0; i < children.Length;i++)
+                {
+                    var child = children[i];
+                    var name = string.Format("{0}_{1}",child.transform.name,child.GetHashCode());
+                    SubFlowDeclarations[name] = child;
+                }
+            }
         }
     }
 #endif
