@@ -8,6 +8,7 @@ namespace Bolt.Extend
 {
     [UnitCategory("Extend")]
     [UnitOrder(0)]
+    [CustomRutimeType]
     public class ITransformFuncUnit:SceneObjectFuncUnit<ITransform>
     {
         [DoNotSerialize]

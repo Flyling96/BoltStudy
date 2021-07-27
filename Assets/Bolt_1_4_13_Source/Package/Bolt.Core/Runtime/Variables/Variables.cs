@@ -16,6 +16,9 @@ namespace Bolt
 		[Serialize, Inspectable, VariableKind(VariableKind.AutoSubFlow)]
 		public VariableDeclarations subFlowDeclarations { get; internal set; } = new VariableDeclarations();
 
+		[Serialize, Inspectable, VariableKind(VariableKind.AutoSceneObject)]
+		public VariableDeclarations subSceneObjectDeclarations { get; internal set; } = new VariableDeclarations();
+
 		public static VariableDeclarations Graph(GraphPointer pointer)
 		{
 			Ensure.That(nameof(pointer)).IsNotNull(pointer);
@@ -48,6 +51,8 @@ namespace Bolt
 		public static VariableDeclarations Object(GameObject go) => go.GetOrAddComponent<Variables>().declarations;
 
 		public static VariableDeclarations AutoSubFlow(GameObject go) => go.GetOrAddComponent<Variables>().subFlowDeclarations;
+
+		public static VariableDeclarations AutoSceneObject(GameObject go) => go.GetOrAddComponent<Variables>().subSceneObjectDeclarations;
 
 		public static VariableDeclarations Object(Component component) => Object(component.gameObject);
 

@@ -128,14 +128,15 @@ namespace Ludiq
 			}
 		}
 
-		private static IEnumerable<string> CustomTypeNames
-		{
-			get
-            {
-				yield return "ITransformFuncUnit";
-				yield return "CustomSuperUnit";
-			}
-        }
+		//private static IEnumerable<string> CustomTypeNames
+		//{
+		//	get
+  //          {
+		//		yield return "ITransformFuncUnit";
+		//		yield return "CustomSuperUnit";
+		//		yield return "SceneObjectUnit";
+		//	}
+  //      }
 
 		private static bool IsCustomType(Assembly assembly, Type type)
         {
@@ -149,7 +150,7 @@ namespace Ludiq
 				return false;
             }
 
-			if(CustomTypeNames.Contains(type.Name))
+			if(type.GetAttribute<CustomRutimeTypeAttribute>()!=null)
             {
 				return true;
             }

@@ -8,11 +8,9 @@ namespace Bolt.Extend
 {
 	[TypeIcon(typeof(FlowGraph))]
 	[UnitCategory("Extend")]
-	public sealed class CustomSuperUnit : Unit, IGraphEventListener, IGraphParentElement
+	[CustomRutimeType]
+	public sealed class CustomSuperUnit : SpecifyVariableUnit, IGraphEventListener, IGraphParentElement
 	{
-		[Serialize]
-		public string m_VariableName;
-
 		private FlowGraph m_Graph = null;
 
 		private FlowMacro m_Marco = null;
@@ -25,6 +23,10 @@ namespace Bolt.Extend
 
 		[DoNotSerialize]
 		public UnityEngine.Object serializedObject => m_Marco;
+
+		[DoNotSerialize]
+		[PortLabelHidden]
+		public ValueOutput value { get; private set; }
 
 		public override void AfterAdd()
 		{

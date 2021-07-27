@@ -39,7 +39,8 @@ namespace Bolt
 
 			tabs.Add(Object(context?.reference.gameObject ?? Selection.activeGameObject));
 			tabs.Add(AutoSubGraph(context?.reference.gameObject ?? Selection.activeGameObject));
-			tabs.Add(Scene());
+			tabs.Add(AutoSceneObject(context?.reference.gameObject ?? Selection.activeGameObject));
+			//tabs.Add(Scene());
 			//tabs.Add(Application());
 			//tabs.Add(Saved());
 
@@ -229,7 +230,7 @@ namespace Bolt
 			var tab = new Tab
 			(
 				this,
-				"AutoSubGraph",
+				"SubGraph",
 				"Auto SubGraph Variables",
 				"These variables are added automatically.",
 				BoltCore.Icons.variable
@@ -242,6 +243,30 @@ namespace Bolt
 				if (variables != null)
 				{
 					tab.subTabs.Add(new SubTab("SubFlow", tab, VariableKind.AutoSubFlow, variables.subFlowDeclarations, variables, null));
+				}
+			}
+
+			return tab;
+		}
+
+		private Tab AutoSceneObject(GameObject @object)
+		{
+			var tab = new Tab
+			(
+				this,
+				"SceneObject",
+				"Auto SceneObject Variables",
+				"These sceneObjects are added automatically.",
+				BoltCore.Icons.sceneVariable
+			);
+
+			if (@object != null)
+			{
+				var variables = @object.GetComponent<Variables>();
+
+				if (variables != null)
+				{
+					tab.subTabs.Add(new SubTab("SubSceneObject", tab, VariableKind.AutoSceneObject, variables.subSceneObjectDeclarations, variables, null));
 				}
 			}
 

@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Actor
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":-956.7019,"y":-209.1737},"zoom":1.0,"elements":[{"nest":{"source":"Macro","macro":0,"embed":null},"defaultValues":{},"position":{"x":-1225.0,"y":-355.0},"guid":"65a3657e-2906-4ab2-bc8d-b7a3c99c3f6e","$version":"A","$type":"Bolt.SuperUnit"}],"$version":"A"}}'
-    _objectReferences:
-    - {fileID: 11400000}
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":-956.7019,"y":-209.1737},"zoom":1.0,"elements":[],"$version":"A"}}'
+    _objectReferences: []

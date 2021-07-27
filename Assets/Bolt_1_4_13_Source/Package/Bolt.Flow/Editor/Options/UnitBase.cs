@@ -588,13 +588,6 @@ namespace Bolt
 				yield return superUnit.Option();
 			}
 
-			// Custom Super Units
-
-			foreach (var superUnit in flowMacros.Select(flowMacro => new SuperUnit(flowMacro)))
-			{
-				yield return superUnit.Option();
-			}
-
 			// Extensions
 
 			foreach (var dynamicUnitsExtension in dynamicUnitsExtensions)
