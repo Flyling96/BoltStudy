@@ -11,6 +11,9 @@ namespace Bolt.Extend
 	[IncludeInSettings(false)]
 	public partial class AutoVariables : LudiqBehaviour
     {
+        [HideInInspector]
+        public int m_CurrentSubObjectId = 10000;
+
         private Variables m_Variables = null;
 
         public Variables Variables
@@ -56,7 +59,12 @@ namespace Bolt.Extend
                 for(int i =0; i < children.Length;i++)
                 {
                     var child = children[i];
-                    var name = string.Format("{0}_Graph_{1}",child.transform.name,child.GetHashCode());
+                    if (child.transform == transform)
+                    {
+                        continue;
+                    }
+                    var subVariable = child.transform.GetOrAddComponent<SubVariable>();
+                    var name = string.Format("{0}_Graph_{1}",child.transform.name, subVariable.m_SubObjectId);
                     SubFlowDeclarations[name] = child;
                 }
 
@@ -65,7 +73,8 @@ namespace Bolt.Extend
                 for (int i = 0; i < shells.Length; i++)
                 {
                     var shell = shells[i];
-                    var name = string.Format("{0}_SceneObject_{1}", shell.transform.name, shell.GetHashCode());
+                    var subVariable = shell.transform.GetOrAddComponent<SubVariable>();
+                    var name = string.Format("{0}_SceneObject_{1}", shell.transform.name, subVariable.m_SubObjectId);
                     SceneObjectDeclarations[name] = shell;
                 }
             }
