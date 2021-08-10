@@ -26,7 +26,7 @@ namespace Ludiq
 		// Enabled is not true during Awake, to avoid double OnEnable triggering due to GraphNest delegates
 		// See: https://support.ludiq.io/communities/5/topics/1971-a/
 		[DoNotSerialize]
-		private bool _alive;
+		protected bool _alive;
 		
 		[DoNotSerialize]
 		private bool _enabled;
@@ -86,18 +86,21 @@ namespace Ludiq
 		
 		protected virtual void Awake()
 		{
-			_alive = true;
-			threadSafeGameObject = gameObject;
-
-			nest.afterGraphChange += CacheReference;
-			nest.beforeGraphChange += ClearCachedReference;
-
-			CacheReference();
-
-			if (graph != null)
+			if (!_alive)
 			{
-				graph.Prewarm();
-				InstantiateNest();
+				_alive = true;
+				threadSafeGameObject = gameObject;
+
+				nest.afterGraphChange += CacheReference;
+				nest.beforeGraphChange += ClearCachedReference;
+
+				CacheReference();
+
+				if (graph != null)
+				{
+					graph.Prewarm();
+					InstantiateNest();
+				}
 			}
 		}
 		

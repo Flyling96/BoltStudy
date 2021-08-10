@@ -39,6 +39,10 @@ namespace Bolt.Extend
 
         public void StartListening()
         {
+            if(!_alive)
+            {
+                Awake();
+            }
             graph.StartListening(reference);
         }
 
