@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using Ludiq;
 using System;
 
@@ -11,7 +9,23 @@ namespace Bolt.Extend
     {
 		public CustomSuperUnitWidget(FlowCanvas canvas, CustomSuperUnit unit) : base(canvas, unit) { }
 
-		protected override IEnumerable<DropdownOption> contextOptions
+        protected override NodeColorMix baseColor
+        {
+            get
+            {
+                using (var recursion = Recursion.New(1))
+                {
+                    if (unit.nest.graph != null)
+                    {
+                        return NodeColor.Green;
+                    }
+                }
+
+                return base.baseColor;
+            }
+        }
+
+        protected override IEnumerable<DropdownOption> contextOptions
 		{
 			get
 			{
@@ -55,5 +69,6 @@ namespace Bolt.Extend
 				base.OnDoubleClick();
 			}
 		}
+
 	}
 }

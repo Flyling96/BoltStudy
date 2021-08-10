@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Ludiq;
 using UnityEditor;
 using UnityEngine;
@@ -383,24 +385,52 @@ namespace Bolt
 				var kind = EditorVariablesUtility.kind;
 				var declaration = EditorVariablesUtility.declaration;
 
-				UnifiedVariableUnit unit;
 
-				if (e.alt)
+				if (kind == VariableKind.AutoSceneObject)
 				{
-					unit = new SetVariable();
+					string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+					UriBuilder uri = new UriBuilder(codeBase);
+					string path = Uri.UnescapeDataString(uri.Path);
+					string assemblyPath = Path.GetDirectoryName(path) + @"\Assembly-CSharp.dll";
+					Assembly assembly = Assembly.LoadFile(assemblyPath);
+					string typeName = "Bolt.Extend.SceneObjectUnit";
+					dynamic obj = assembly.CreateInstance(typeName);
+					Type type = assembly.GetType(typeName);
+					PropertyInfo variableName = type.GetProperty("VariableName", BindingFlags.Public | BindingFlags.Instance);
+					variableName.SetValue(obj, declaration.name);
+					Unit unit = (Unit)obj;
+					AddUnit(unit, DragAndDropUtility.position);
 				}
-				else if (e.shift)
+				else if (kind == VariableKind.AutoSubFlow)
 				{
-					unit = new IsVariableDefined();
+					var value = declaration.value as Extend.SubFlowMachine;
+					if (value != null && value.nest.macro != null)
+					{
+						var customSuperUnit = new Extend.CustomSuperUnit(value.nest.macro);
+						customSuperUnit.VariableName = declaration.name;
+						AddUnit(customSuperUnit, DragAndDropUtility.position);
+					}
 				}
 				else
 				{
-					unit = new GetVariable();
+					UnifiedVariableUnit unit;
+					if (e.alt)
+					{
+						unit = new SetVariable();
+					}
+					else if (e.shift)
+					{
+						unit = new IsVariableDefined();
+					}
+					else
+					{
+						unit = new GetVariable();
+					}
+					unit.kind = kind;
+					AddUnit(unit, DragAndDropUtility.position);
+					unit.name.SetDefaultValue(declaration.name);
 				}
 
-				unit.kind = kind;
-				AddUnit(unit, DragAndDropUtility.position);
-				unit.name.SetDefaultValue(declaration.name);
 			}
 		}
 

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Bolt
 {
 	[Widget(typeof(SuperUnit))]
-	public class SuperUnitWidget : NestrerUnitWidget<SuperUnit>, IDragAndDropHandler
+	public class SuperUnitWidget : NesterUnitWidget<SuperUnit>, IDragAndDropHandler
 	{
 		public SuperUnitWidget(FlowCanvas canvas, SuperUnit unit) : base(canvas, unit) { }
 

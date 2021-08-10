@@ -1,7 +1,9 @@
 ﻿using Ludiq;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace Bolt.Extend
 {
@@ -13,9 +15,9 @@ namespace Bolt.Extend
             variableNameInspector = new VariableNameInspector(variableNameMetadata, GetVariablesName);
         }
 
-        private VariableNameInspector variableNameInspector = null;
+        protected VariableNameInspector variableNameInspector = null;
 
-        private Metadata variableNameMetadata => metadata[nameof(SpecifyVariableUnit.m_VariableName)];
+        protected Metadata variableNameMetadata => metadata[nameof(SpecifyVariableUnit.VariableName)];
 
         protected override float GetInspectorHeight(float width)
         {
@@ -31,7 +33,7 @@ namespace Bolt.Extend
             }
         }
 
-        private IEnumerable<string> GetVariablesName()
+        protected IEnumerable<string> GetVariablesName()
         {
             if (unit is CustomSuperUnit)
             {
@@ -45,7 +47,7 @@ namespace Bolt.Extend
             return null;
         }
 
-        private float GetInspectorHeight()
+        protected virtual float GetInspectorHeight()
         {
             var width = variableNameInspector.GetAdaptiveWidth();
 
@@ -54,7 +56,6 @@ namespace Bolt.Extend
                 return variableNameInspector.GetCachedHeight(width, GUIContent.none, null);
             }
         }
-
 
     }
 }

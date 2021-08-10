@@ -22,7 +22,8 @@ namespace Ludiq
 			{
 				OnBeforeSerialize();
 				_data = this.Serialize(true);
-				OnAfterSerialize();
+                //Debug.Log($"[_LudiqScriptableObject.OnBeforeSerialize] {GetType()}, {_data.json}");
+                OnAfterSerialize();
 			}
 			catch (Exception ex)
 			{
@@ -43,12 +44,13 @@ namespace Ludiq
 
 			Serialization.isUnitySerializing = true;
 
-			try
+            try
 			{
 				object @this = this;
 				OnBeforeDeserialize();
 				_data.DeserializeInto(ref @this, true);
-				OnAfterDeserialize();
+                //Debug.Log($"[_LudiqScriptableObject.OnAfterDeserialize] {GetType()}, {_data.json}");
+                OnAfterDeserialize();
 				UnityThread.EditorAsync(OnPostDeserializeInEditor);
 			}
 			catch (Exception ex)

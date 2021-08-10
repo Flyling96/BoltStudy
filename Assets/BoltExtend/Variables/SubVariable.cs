@@ -18,6 +18,7 @@ namespace Bolt.Extend
             get
             {
                 var parent = transform;
+
                 while(parent != null)
                 {
                     var autoVariables = parent.GetComponent<AutoVariables>();
@@ -32,29 +33,28 @@ namespace Bolt.Extend
             }
         }
 
+        [SerializeField,HideInInspector]
         private bool m_IsInit = false;
 
-        private void Init()
+        private void CheckInit()
         {
-            var root = Root;
-            if (root != null)
+            if (!Application.isPlaying)
             {
-                m_SubObjectId = root.m_CurrentSubObjectId++;
-                m_IsInit = true;
+                if (!m_IsInit)
+                {
+                    var root = Root;
+                    if (root != null)
+                    {
+                        m_SubObjectId = root.m_CurrentSubObjectId++;
+                        m_IsInit = true;
+                    }
+                }
             }
-        }
-
-        public void Awake()
-        {
-            Init();
         }
 
         public void Update()
         {
-            if(!m_IsInit)
-            {
-                Init();
-            }
+            CheckInit();
         }
     }
 #endif

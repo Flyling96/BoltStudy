@@ -5,7 +5,7 @@ namespace Bolt
 {
 	[TypeIcon(typeof(FlowGraph))]
 	[UnitCategory("Nesting")]
-	public sealed class SuperUnit : NesterUnit<FlowGraph, FlowMacro>, IGraphEventListener, IGraphElementWithData
+	public class SuperUnit : NesterUnit<FlowGraph, FlowMacro>, IGraphEventListener, IGraphElementWithData
 	{
 		public sealed class Data : IGraphElementData
 		{

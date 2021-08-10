@@ -97,13 +97,19 @@ namespace Bolt
 
 				case VariableKind.AutoSceneObject:
 				{
-					source = Variables.AutoSceneObject(reference.gameObject);
+					if(reference.gameObject != null)
+					{
+						source = Variables.AutoSceneObject(reference.gameObject);
+					}
 					break;
 				}
 
 				case VariableKind.AutoSubFlow:
 				{
-					source = Variables.AutoSubFlow(reference.gameObject);
+					if(reference.gameObject != null)
+					{
+						source = Variables.AutoSubFlow(reference.gameObject);
+					}
 					break;
 				}
 

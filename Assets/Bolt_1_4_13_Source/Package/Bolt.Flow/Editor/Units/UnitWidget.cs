@@ -138,7 +138,7 @@ namespace Bolt
 
 		#region Lifecycle
 
-		public override bool foregroundRequiresInput => showSettings || unit.valueInputs.Any(vip => vip.hasDefaultValue);
+		public override bool foregroundRequiresInput => showSettings || (unit.valueInputs != null && unit.valueInputs.Any(vip => vip.hasDefaultValue));
 
 		public override void HandleInput()
 		{

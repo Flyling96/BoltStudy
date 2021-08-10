@@ -51,12 +51,18 @@ namespace Bolt
 		
 		protected override void AfterDefine()
 		{
-			graph.onPortDefinitionsChanged += Define;
+            if(graph != null)
+            {
+                graph.onPortDefinitionsChanged += Define;
+            }
 		}
 
 		protected override void BeforeUndefine()
 		{
-			graph.onPortDefinitionsChanged -= Define;
+            if(graph != null)
+            {
+    			graph.onPortDefinitionsChanged -= Define;
+            }
 		}
 	}
 }

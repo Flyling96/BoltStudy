@@ -33,6 +33,11 @@ namespace Ludiq
 				GraphInstances.Instantiate(instance.ChildReference(nester, true));
 			}
 
+            //if(GetType().Name == "CustomSuperUnit")
+            //{
+            //    GraphInstances.Instantiate(instance.ChildReference((IGraphParentElement)this, true));
+            //}
+
 			// StartListening is a recursive operation that will
 			// descend graphs recursively. It must be called after
 			// instantiation of all child graphs because it will require

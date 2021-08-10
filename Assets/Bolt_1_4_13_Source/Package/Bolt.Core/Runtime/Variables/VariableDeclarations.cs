@@ -8,8 +8,16 @@ namespace Bolt
 	[SerializationVersion("A")]
 	public sealed class VariableDeclarations : IEnumerable<VariableDeclaration>, ISpecifiesCloner
 	{
-		public VariableDeclarations()
+		private bool m_Editable;
+		public bool Editable {
+			get {
+				return m_Editable;
+			}
+		}
+
+		public VariableDeclarations(bool editable = true)
 		{
+			m_Editable = editable;
 			collection = new VariableDeclarationCollection();
 		}
 

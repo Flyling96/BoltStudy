@@ -165,7 +165,7 @@ namespace Ludiq
 		{
 			afterGraphChange?.Invoke();
 
-			if (graph != null)
+			if (graph != null && nester != null)
 			{
 				nester.InstantiateNest();
 			}

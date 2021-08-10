@@ -17,7 +17,7 @@ namespace Bolt.Extend
 				return;
 			}
 
-			var flowGraph = unit.childGraph as FlowGraph;
+			var flowGraph = unit.nest.graph as FlowGraph;
 			if(flowGraph == null)
 			{
 				return;

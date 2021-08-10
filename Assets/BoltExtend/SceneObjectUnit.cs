@@ -19,13 +19,11 @@ namespace Bolt.Extend
             value = ValueOutput(nameof(value), Get);
         }
 
-		private object Get(Flow flow)
+		private SceneObject Get(Flow flow)
 		{
-			var name = m_VariableName;
-
 			VariableDeclarations variables = Variables.AutoSceneObject(flow.stack.self);
 
-            var shell = variables.Get(name) as SceneObjectDataShell;
+            var shell = variables.Get(VariableName) as SceneObjectDataShell;
 
             return shell.SceneObject;
 		}

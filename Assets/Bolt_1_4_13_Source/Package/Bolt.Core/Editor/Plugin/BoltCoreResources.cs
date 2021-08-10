@@ -30,6 +30,8 @@ namespace Bolt
 			public EditorTexture sceneVariable { get; private set; }
 			public EditorTexture applicationVariable { get; private set; }
 			public EditorTexture savedVariable { get; private set; }
+			public EditorTexture autoSceneObject { get; private set; }
+			public EditorTexture subFlow { get; private set; }
 
 			public Icons(BoltCoreResources resources)
 			{
@@ -49,7 +51,9 @@ namespace Bolt
 				sceneVariable = resources.LoadIcon("Icons/Variables/SceneVariable.png");
 				applicationVariable = resources.LoadIcon("Icons/Variables/ApplicationVariable.png");
 				savedVariable = resources.LoadIcon("Icons/Variables/SavedVariable.png");
-				
+				autoSceneObject = resources.LoadIcon("Icons/Variables/ObjectVariable.png");
+				subFlow = resources.LoadIcon("Icons/Variables/GraphVariable.png");
+
 				if (VariablesWindow.instance != null)
 				{
 					VariablesWindow.instance.titleContent.image = variablesWindow?[IconSize.Small];
@@ -66,7 +70,9 @@ namespace Bolt
 					case Bolt.VariableKind.Scene: return sceneVariable;
 					case Bolt.VariableKind.Application: return applicationVariable;
 					case Bolt.VariableKind.Saved: return savedVariable;
-					default: throw new UnexpectedEnumValueException<VariableKind>(kind);
+					case Bolt.VariableKind.AutoSceneObject: return autoSceneObject;
+					case Bolt.VariableKind.AutoSubFlow: return subFlow;
+				default: throw new UnexpectedEnumValueException<VariableKind>(kind);
 				}
 			}
 		}

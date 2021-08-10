@@ -685,7 +685,8 @@ namespace Ludiq
 				default:
 					throw new UnexpectedEnumValueException<MemberTypes>(memberType.Value);
 			}
-				
+
+			//Debug.Log($"[_Member.Reflect] {targetType}, {name}");
 			isReflected = true;
 		}
 

@@ -27,6 +27,10 @@ namespace Bolt
 
 		protected override void OnGUI(Rect drawerPosition, GUIContent label)
 		{
+			bool editable = ((VariableDeclarations) metadata.value).Editable;
+			if(!editable) {
+				GUI.enabled = false;
+			}
 			adaptor.Field(drawerPosition, GUIContent.none);
 
 			drawerPosition.x = 0;
@@ -49,6 +53,9 @@ namespace Bolt
 			newNamePosition.height += 1;
 
 			OnNewNameGUI(newNamePosition);
+			if(!editable) {
+				GUI.enabled = true;
+			}
 		}
 
 		protected override float GetHeight(float width, GUIContent label)

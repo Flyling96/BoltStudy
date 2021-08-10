@@ -28,14 +28,14 @@ namespace Bolt
 			
 			tabs.Clear();
 			
-			//if (context?.graph is IGraphWithVariables)
-			//{
-			//	tabs.Add(Graph(context.reference));
-			//}
-			//else
-			//{
-			//	tabs.Add(Graph(null));
-			//}
+			if (context?.graph is IGraphWithVariables)
+			{
+				tabs.Add(Graph(context.reference));
+			}
+			else
+			{
+				tabs.Add(Graph(null));
+			}
 
 			tabs.Add(Object(context?.reference.gameObject ?? Selection.activeGameObject));
 			tabs.Add(AutoSubGraph(context?.reference.gameObject ?? Selection.activeGameObject));

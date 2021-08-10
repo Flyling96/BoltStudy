@@ -9,7 +9,7 @@ namespace Bolt.Extend
     [RequireComponent(typeof(Variables))]
     [DisableAnnotation]
 	[IncludeInSettings(false)]
-	public partial class AutoVariables : LudiqBehaviour
+	public partial class AutoVariables : MonoBehaviour
     {
         [HideInInspector]
         public int m_CurrentSubObjectId = 10000;
@@ -55,7 +55,7 @@ namespace Bolt.Extend
             if(!Application.isPlaying)
             {
                 SubFlowDeclarations.Clear();
-                var children = transform.GetComponentsInChildren<FlowMachine>();
+                var children = transform.GetComponentsInChildren<SubFlowMachine>(true);
                 for(int i =0; i < children.Length;i++)
                 {
                     var child = children[i];
@@ -69,7 +69,7 @@ namespace Bolt.Extend
                 }
 
                 SceneObjectDeclarations.Clear();
-                var shells = transform.GetComponentsInChildren<SceneObjectDataShell>();
+                var shells = transform.GetComponentsInChildren<SceneObjectDataShell>(true);
                 for (int i = 0; i < shells.Length; i++)
                 {
                     var shell = shells[i];

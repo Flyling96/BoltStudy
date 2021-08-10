@@ -35,11 +35,13 @@ namespace DragonSlay
         RecordPoint,
     }
 
-    public abstract class SceneObject: ITransform
+    public class SceneObject: ITransform // TEST 测试生成器节点，临时开放SceneObject反射
     {
         public static ulong Current = 0;
 
-        public abstract SceneObjectType m_Type { get; }
+        public virtual SceneObjectType m_Type { get; }
+
+        public SceneObjectDataShell Shell { get; protected set; }
 
         private ulong m_Uid;
 
@@ -49,12 +51,13 @@ namespace DragonSlay
 
         public int Tid => m_Tid;
 
-        public virtual void OnCreate(SceneObjectData data,Transform parent = null)
+        public virtual void OnCreate(SceneObjectDataShell shell, SceneObjectData data,Transform parent = null)
         {
+            Shell = shell;
             m_GameObject = new GameObject();
             m_GameObject.transform.SetParent(parent);
             m_Uid = (ulong)m_Type * 1000000 + Current++;
-            m_GameObject.name = string.Format("{0}_{1}",m_Type.DisplayName(), m_Uid);
+            m_GameObject.name = string.Format("{0}_{1}",m_Type, m_Uid);
             m_Tid = data.m_Tid;
             Position = data.m_Position;
             Rotation = data.m_Rotation;
@@ -91,6 +94,19 @@ namespace DragonSlay
         {
             Position = pos;
             Rotation = rot;
+        }
+
+        public static SceneObject CloneSceneObject(SceneObject template, Vector3 position, Quaternion rotation, int index)
+        {
+            GameObject templateGameObject = template.Shell.gameObject;
+            GameObject newGameObject = UnityEngine.Object.Instantiate(templateGameObject);
+            newGameObject.name = $"{templateGameObject.name}_{index}";
+            newGameObject.transform.SetParent(templateGameObject.transform.parent);
+            newGameObject.transform.position = position;
+            newGameObject.transform.rotation = rotation;
+            SceneObjectDataShell newShell = newGameObject.GetComponent<SceneObjectDataShell>();
+            newShell.InitSceneObjectData();
+            return newShell.SceneObject;
         }
     }
 
@@ -142,9 +158,9 @@ namespace DragonSlay
     {
         public override SceneObjectType m_Type => SceneObjectType.RecordPoint;
 
-        public override void OnCreate(SceneObjectData data, Transform parent = null)
+        public override void OnCreate(SceneObjectDataShell shell, SceneObjectData data, Transform parent = null)
         {
-            base.OnCreate(data, parent);
+            base.OnCreate(shell, data, parent);
             RecordPointData recordPointData = data as RecordPointData;
             if(recordPointData != null)
             {

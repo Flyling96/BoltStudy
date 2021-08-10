@@ -506,6 +506,10 @@ namespace Ludiq
 			{
 				return true;
 			}
+
+            if(t.Name == "SceneObject") {
+                return true;
+            }
 			
 			var attributeInclude = couldHaveAttribute ? t.GetAttribute<IncludeInSettingsAttribute>()?.include : null;
 

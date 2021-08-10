@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Bolt
 {
 	[Widget(typeof(StateUnit))]
-	public class StateUnitWidget : NestrerUnitWidget<StateUnit>, IDragAndDropHandler
+	public class StateUnitWidget : NesterUnitWidget<StateUnit>, IDragAndDropHandler
 	{
 		public StateUnitWidget(FlowCanvas canvas, StateUnit unit) : base(canvas, unit) { }
 

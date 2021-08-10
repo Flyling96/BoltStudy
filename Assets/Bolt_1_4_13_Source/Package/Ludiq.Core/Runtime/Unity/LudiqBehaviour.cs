@@ -21,6 +21,7 @@ namespace Ludiq
 			{
 				OnBeforeSerialize();
 				_data = this.Serialize(true);
+				//Debug.Log($"[_LudiqBehaviour.OnBeforeSerialize] {GetType()}, {_data.json}");
 				OnAfterSerialize();
 			}
 			catch (Exception ex)
@@ -46,7 +47,8 @@ namespace Ludiq
 				object @this = this;
 				OnBeforeDeserialize();
 				_data.DeserializeInto(ref @this, true);
-				OnAfterDeserialize();
+                //Debug.Log($"[_LudiqBehaviour.OnAfterDeserialize] {GetType()}, {_data.json}");
+                OnAfterDeserialize();
 			}
 			catch (Exception ex)
 			{

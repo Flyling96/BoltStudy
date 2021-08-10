@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +25,8 @@ namespace DragonSlay
                 return m_SceneObject;
             }
         }
+
+        public event Action OnDestroyEvent;
 
         public void InitSceneObjectData()
         {
@@ -55,8 +58,13 @@ namespace DragonSlay
 
             if (m_SceneObject != null)
             {
-                m_SceneObject.OnCreate(m_SceneObjectData, transform);
+                m_SceneObject.OnCreate(this, m_SceneObjectData, transform);
             }
+        }
+
+        public void OnDestroy()
+        {
+            OnDestroyEvent?.Invoke();
         }
     }
 }
