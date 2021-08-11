@@ -399,7 +399,8 @@ namespace Ludiq
 
 		public T GetElementDebugData<T>(IGraphElementWithDebugData element)
 		{
-			var elementDebugData = debugData.GetOrCreateElementData(element);
+			var data = m_SubRootGraphDebugData != null ? m_SubRootGraphDebugData : debugData;
+			var elementDebugData = data.GetOrCreateElementData(element);
 
 			if (elementDebugData is T)
 			{
@@ -491,6 +492,13 @@ namespace Ludiq
 			{
 				throw new GraphPointerException(error, this);
 			}
+		}
+
+		public IGraphDebugData m_SubRootGraphDebugData = null;
+
+		public void EnterRoot(IGraphRoot root)
+        {
+			m_SubRootGraphDebugData = fetchRootDebugDataBinding?.Invoke(root);
 		}
 
 		private void EnterValidParentElement(IGraphParentElement parentElement)

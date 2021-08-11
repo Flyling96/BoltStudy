@@ -54,6 +54,39 @@ namespace Bolt.Extend
             }
         }
 
+        private Flow m_ParentFlow = null;
+
+        public void GraphControlInput(Flow parentFlow,string key)
+        {
+            m_ParentFlow = parentFlow;
+
+            Flow flow =  Flow.New(reference);
+
+            flow.RestoreStack(m_ParentFlow.stack);
+
+            flow.stack.EnterRoot(this);
+
+            ControlOutput nextPort = null; 
+
+            foreach (var unit in graph.units)
+            {
+                if (unit is GraphInput)
+                {
+                    var inputUnit = (GraphInput)unit;
+
+                    nextPort = inputUnit.controlOutputs[key];
+
+                    break;
+                }
+            }
+
+            if(nextPort != null)
+            {
+                flow.Run(nextPort);
+            }
+        }
+
+
         private void TriggerRegisteredEvent<TArgs>(EventHook hook, TArgs args)
         {
             EventBus.Trigger(hook, args);

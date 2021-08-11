@@ -32,7 +32,10 @@ namespace Bolt
 		private object _value;
 
 		[Serialize]
-		public Type type { get; internal set; }
+		public Type type {
+			get; 
+			internal set; 
+		}
 
 		[DoNotSerialize]
 		public object value
