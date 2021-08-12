@@ -4,9 +4,9 @@ namespace Ludiq
 {
 	public class GraphDebugData : IGraphDebugData
 	{
-		protected Dictionary<IGraphElementWithDebugData, IGraphElementDebugData> elementsData { get; } = new Dictionary<IGraphElementWithDebugData, IGraphElementDebugData>();
+		public Dictionary<IGraphElementWithDebugData, IGraphElementDebugData> elementsData { get; } = new Dictionary<IGraphElementWithDebugData, IGraphElementDebugData>();
 
-		protected Dictionary<IGraphParentElement, IGraphDebugData> childrenGraphsData { get; } = new Dictionary<IGraphParentElement, IGraphDebugData>();
+		public Dictionary<IGraphParentElement, IGraphDebugData> childrenGraphsData { get; } = new Dictionary<IGraphParentElement, IGraphDebugData>();
 
 		IEnumerable<IGraphElementDebugData> IGraphDebugData.elementsData => elementsData.Values;
 
@@ -32,6 +32,21 @@ namespace Ludiq
 			}
 
 			return data;
+		}
+
+		public void CopyFrom(GraphDebugData data)
+        {
+			elementsData.Clear();
+			childrenGraphsData.Clear();
+			foreach (var element in data.elementsData)
+            {
+				elementsData.Add(element.Key, element.Value);
+			}
+
+			foreach (var child in data.childrenGraphsData)
+			{
+				childrenGraphsData.Add(child.Key, child.Value);
+			}
 		}
 	}
 }

@@ -9,6 +9,7 @@ namespace Ludiq
 		static GraphDebugDataProvider()
 		{
 			GraphPointer.fetchRootDebugDataBinding = FetchRootDebugData;
+			GraphPointer.setRootDebugDataBinding = SetRootDebugData;
 		}
 
 		private static IGraphDebugData FetchRootDebugData(IGraphRoot root)
@@ -21,6 +22,18 @@ namespace Ludiq
 
 			return rootData;
 		}
+
+		private static void SetRootDebugData(IGraphRoot root,IGraphDebugData data)
+        {
+			if(!rootDatas.ContainsKey(root))
+            {
+				rootDatas.Add(root, data);
+            }
+			else
+            {
+				rootDatas[root] = data;
+            }
+        }
 
 		private static Dictionary<IGraphRoot, IGraphDebugData> rootDatas = new Dictionary<IGraphRoot, IGraphDebugData>();
 	}

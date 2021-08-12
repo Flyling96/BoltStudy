@@ -359,6 +359,8 @@ namespace Ludiq
 
 		
 		public static Func<IGraphRoot, IGraphDebugData> fetchRootDebugDataBinding { get; set; }
+		public static Action<IGraphRoot, IGraphDebugData> setRootDebugDataBinding { get; set; }
+
 
 		public bool hasDebugData => _debugData != null;
 
@@ -399,8 +401,7 @@ namespace Ludiq
 
 		public T GetElementDebugData<T>(IGraphElementWithDebugData element)
 		{
-			var data = m_SubRootGraphDebugData != null ? m_SubRootGraphDebugData : debugData;
-			var elementDebugData = data.GetOrCreateElementData(element);
+			var elementDebugData = debugData.GetOrCreateElementData(element);
 
 			if (elementDebugData is T)
 			{
@@ -494,11 +495,10 @@ namespace Ludiq
 			}
 		}
 
-		public IGraphDebugData m_SubRootGraphDebugData = null;
 
-		public void EnterRoot(IGraphRoot root)
+		public void SetRootDebug(IGraphRoot root)
         {
-			m_SubRootGraphDebugData = fetchRootDebugDataBinding?.Invoke(root);
+			setRootDebugDataBinding(root, debugData);
 		}
 
 		private void EnterValidParentElement(IGraphParentElement parentElement)

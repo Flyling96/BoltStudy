@@ -1,4 +1,5 @@
 ﻿using Ludiq;
+using System;
 
 namespace Bolt.Extend
 {
@@ -20,6 +21,8 @@ namespace Bolt.Extend
 
 		protected override void Definition()
 		{
+			isControlRoot = true;
+
 			foreach (var definition in nest.graph.validPortDefinitions)
 			{
 				if (definition is ControlInputDefinition)
@@ -55,6 +58,46 @@ namespace Bolt.Extend
 					{
 						port.SetDefaultValue(defaultValue);
 					}
+				}
+				else if (definition is ControlOutputDefinition)
+				{
+					var controlOutputDefinition = (ControlOutputDefinition)definition;
+					var key = controlOutputDefinition.key;
+
+					ControlOutput(key);
+				}
+				else if (definition is ValueOutputDefinition)
+				{
+					var valueOutputDefinition = (ValueOutputDefinition)definition;
+					var key = valueOutputDefinition.key;
+					var type = valueOutputDefinition.type;
+
+					ValueOutput(type, key, (flow) =>
+					{
+						flow.stack.EnterParentElement(this);
+
+						// Manual looping to avoid LINQ allocation
+						// Also removing check for multiple output units for speed 
+						// (The first output unit will be used without any error)
+
+						foreach (var unit in nest.graph.units)
+						{
+							if (unit is GraphOutput)
+							{
+								var outputUnit = (GraphOutput)unit;
+
+								var value = flow.GetValue(outputUnit.valueInputs[key]);
+
+								flow.stack.ExitParentElement();
+
+								return value;
+							}
+						}
+
+						flow.stack.ExitParentElement();
+
+						throw new InvalidOperationException("Missing output unit when to get value.");
+					});
 				}
 			}
 			self = ValueInput(nameof(self), VariableName);
