@@ -498,7 +498,7 @@ namespace Ludiq
 
 		public void SetRootDebug(IGraphRoot root)
         {
-			setRootDebugDataBinding(root, debugData);
+			setRootDebugDataBinding?.Invoke(root, debugData);
 		}
 
 		private void EnterValidParentElement(IGraphParentElement parentElement)
