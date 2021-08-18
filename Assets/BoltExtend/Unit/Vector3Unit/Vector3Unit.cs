@@ -2,9 +2,42 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace Bolt.Extend 
  {
+    public class StructClass<T> where T : struct
+    {
+        public StructClass(T value, Action<T> cb)
+        {
+            m_Value = value;
+            m_VauleChangeCB = cb;
+        }
+
+        private T m_Value;
+
+        private Action<T> m_VauleChangeCB;
+
+        public T Value
+        {
+            get
+            {
+                return m_Value;
+            }
+            set
+            {
+                m_Value = value;
+                m_VauleChangeCB?.Invoke(value);
+            }
+        }
+    }
+
+    public class Vector3Class : StructClass<Vector3> 
+    {
+        public Vector3Class(Vector3 value, Action<Vector3> cb) : base(value, cb) { }
+    }
+
     [UnitCategory("Extend/Vector3Unit")]
     [UnitSurtitle("X")]
     [CustomRutimeType]
@@ -79,6 +112,14 @@ namespace Bolt.Extend
     [UnitCategory("Extend/Vector3Unit")]
     [CustomRutimeType]
     public class Vector3New : Unit {
+
+        [Serialize, Inspectable]
+        public Vector3 m_Value
+        {
+            get;
+            set;
+        }
+
         [DoNotSerialize]
         [PortLabelHidden]
         public ValueInput Vector3SetX {
@@ -101,13 +142,87 @@ namespace Bolt.Extend
             get; private set;
         }
         protected override void Definition() {
-            Vector3Get =  ValueOutput<Vector3>(nameof(Vector3), GetVector3);
+            Vector3Get =  ValueOutput<Vector3Class>(nameof(Vector3Class), GetVector3);
             Vector3SetX = ValueInput<float>("x",0f);
             Vector3SetY = ValueInput<float>("y",0f);
             Vector3SetZ = ValueInput<float>("z",0f);
         }
-        private Vector3 GetVector3(Flow flow) {
-            return new Vector3(flow.GetValue<float>(Vector3SetX), flow.GetValue<float>(Vector3SetY), flow.GetValue<float>(Vector3SetZ));
+        private Vector3Class GetVector3(Flow flow) {
+            //object target = m_Value;
+            return new Vector3Class(m_Value,(value)=> { m_Value = value; });
+        }
+    }
+
+    [UnitCategory("Extend/Vector3Unit")]
+    [UnitSurtitle("Set X")]
+    [CustomRutimeType]
+    public class Vector3XSet : Unit
+    {
+        [DoNotSerialize]
+        [PortLabelHidden]
+        public ControlInput Enter { get; set; }
+
+        [DoNotSerialize]
+        [PortLabelHidden]
+        public ControlOutput Exit { get; set; }
+
+        [DoNotSerialize]
+        [PortLabelHidden]
+        public ValueOutput XOutput
+        {
+            get; private set;
+        }
+        [DoNotSerialize]
+        [PortLabelHidden]
+        public ValueInput Vector3Input
+        {
+            private get; set;
+        }
+
+        [DoNotSerialize]
+        [PortLabelHidden]
+        public ValueInput XInput
+        {
+            private get; set;
+        }
+
+        protected override void Definition()
+        {
+            Vector3Input = ValueInput<Vector3Class>("");
+            XInput = ValueInput<float>(nameof(XInput));
+            XOutput = ValueOutput<float>(nameof(XOutput), GetVector3X);
+            Enter = ControlInput(nameof(Enter), EnterAction);
+            Exit = ControlOutput(nameof(Exit));
+        }
+        private float GetVector3X(Flow flow)
+        {
+            return flow.GetValue<float>(XInput);
+        }
+
+        ControlOutput EnterAction(Flow flow)
+        {
+            Vector3Class target = flow.GetValue(Vector3Input) as Vector3Class;
+            var x = (float)flow.GetValue(XInput);
+            target.Value = new Vector3(x, target.Value.y, target.Value.z);
+
+            //object target = flow.GetValue(Vector3Input);
+            //int size = Marshal.SizeOf(target);
+            //IntPtr intPtr = Marshal.AllocHGlobal(size);
+            //Marshal.StructureToPtr(target, intPtr, true);
+
+            ////FieldInfo field = typeof(Vector3).GetField("x");
+            //var x = (float)flow.GetValue(XInput);
+            ////field.SetValue(target, x);
+
+            //unsafe
+            //{
+            //    Vector3* ptr = (Vector3*)intPtr;
+            //    ptr->x = x;
+            //}
+
+            //Marshal.FreeHGlobal(intPtr);
+
+            return Exit;
         }
     }
 }
