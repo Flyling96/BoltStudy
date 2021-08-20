@@ -14,6 +14,7 @@ namespace Bolt
 		{
 			yield return new GraphInspectorPanel(this);
 			yield return new VariablesPanel(this);
+			yield return new Extend.FunctionPanel(this);
 		}
 	}
 }

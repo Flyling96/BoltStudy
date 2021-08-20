@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Bolt
 {
 	[SerializationVersion("A")]
-	public sealed class FlowGraph : Graph, IGraphWithVariables, IGraphEventListener
+	public sealed class FlowGraph : Graph, IGraphWithVariables, IGraphEventListener, IGraphWithFunctions
 	{
 		public FlowGraph()
 		{
@@ -29,6 +29,7 @@ namespace Bolt
 			valueOutputDefinitions = new UnitPortDefinitionCollection<ValueOutputDefinition>();
 
 			variables = new VariableDeclarations();
+			functions = new Extend.FunctionDeclarations();
 		}
 		
 		public override IGraphData CreateData()
@@ -65,6 +66,9 @@ namespace Bolt
 
 		[Serialize]
 		public VariableDeclarations variables { get; private set; }
+
+		[Serialize]
+		public Extend.FunctionDeclarations functions { get; private set; }
 
 		public IEnumerable<string> GetDynamicVariableNames(VariableKind kind, GraphReference reference)
 		{

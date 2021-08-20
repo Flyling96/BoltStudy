@@ -9,4 +9,9 @@ namespace Bolt
 
 		IEnumerable<string> GetDynamicVariableNames(VariableKind kind, GraphReference reference);
 	}
+
+	public interface IGraphWithFunctions
+    {
+		Extend.FunctionDeclarations functions { get; }
+    }
 }
