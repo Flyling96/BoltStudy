@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Bolt.Extend
 {
-	[Inspector(typeof(FunctionDeclarations))]
+	[Inspector(typeof(IFunctions))]
 	public class FunctionDeclarationsInspector : Inspector
 	{
 		public FunctionDeclarationsInspector(Metadata metadata) : base(metadata) { }
@@ -23,7 +23,7 @@ namespace Bolt.Extend
 
 		protected override void OnGUI(Rect drawerPosition, GUIContent label)
 		{
-			bool editable = ((FunctionDeclarations)metadata.value).Editable;
+			bool editable = ((IFunctions)metadata.value).Editable;
 			if (!editable)
 			{
 				GUI.enabled = false;
@@ -136,9 +136,9 @@ namespace Bolt.Extend
 
 			protected override bool CanDrop(object item)
 			{
-				var functionDeclaration = (FunctionDeclaration)item;
+				var functionDeclaration = (IFunctionElement)item;
 
-				if (((FunctionDeclarations)parentInspector.metadata.value).IsDefined(functionDeclaration.name))
+				if (((IFunctions)parentInspector.metadata.value).IsDefined(functionDeclaration.name))
 				{
 					EditorUtility.DisplayDialog("Dragged function", "A function with the same name already exists.", "OK");
 					return false;
@@ -155,7 +155,7 @@ namespace Bolt.Extend
 					EditorUtility.DisplayDialog("New function", "Please enter a function name.", "OK");
 					return false;
 				}
-				else if (((FunctionDeclarations)parentInspector.metadata.value).IsDefined(parentInspector.newName))
+				else if (((IFunctions)parentInspector.metadata.value).IsDefined(parentInspector.newName))
 				{
 					parentInspector.highlightNewNameField = true;
 					EditorUtility.DisplayDialog("New function", "A function with the same name already exists.", "OK");
@@ -167,7 +167,7 @@ namespace Bolt.Extend
 
 			protected override object ConstructItem()
 			{
-				var newItem = new FunctionDeclaration(parentInspector.newName);
+				var newItem = ((IFunctions)parentInspector.metadata.value).CreateFunction(parentInspector.newName);
 				parentInspector.newName = null;
 				parentInspector.highlightPlaceholder = false;
 				parentInspector.highlightNewNameField = false;

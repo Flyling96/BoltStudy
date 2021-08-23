@@ -129,7 +129,7 @@ namespace Bolt.Extend
 
 		private class Tab
         {
-			public Tab(string identifier, FunctionDeclarations declarations, Object targetObject, string label = "Default", string tooltip = null,bool enabled = true)
+			public Tab(string identifier, IFunctions declarations, Object targetObject, string label = "Default", string tooltip = null,bool enabled = true)
 			{
 				Ensure.That(nameof(declarations)).IsNotNull(declarations);
 				Ensure.That(nameof(label)).IsNotNull(label);

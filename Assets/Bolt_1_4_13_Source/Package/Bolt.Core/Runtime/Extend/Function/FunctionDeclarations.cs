@@ -5,9 +5,20 @@ using Ludiq;
 
 namespace Bolt.Extend
 {
-    [SerializationVersion("A")]
-    public class FunctionDeclarations : IEnumerable<FunctionDeclaration>
+	public interface IFunctions
     {
+		bool Editable { get; }
+		void Clear();
+		bool IsDefined(string key);
+		IFunctions GetDeclaration(string key);
+		IFunctionElement CreateFunction(string key);
+	}
+
+    [SerializationVersion("A")]
+    public class FunctionDeclarations<TGraph, TMacro> : IEnumerable<FunctionDeclaration<TGraph, TMacro>>, IFunctions
+		where TGraph : class, IGraph, new()
+		where TMacro : Macro<TGraph>
+	{
         private bool m_Editable;
         public bool Editable
         {
@@ -17,14 +28,19 @@ namespace Bolt.Extend
             }
         }
 
-        public FunctionDeclarations(bool editable = true)
+		public IFunctionElement CreateFunction(string key)
+        {
+			return new FunctionDeclaration<TGraph, TMacro>(key);
+        }
+
+		public FunctionDeclarations(bool editable = true)
         {
             m_Editable = editable;
-            collection = new FunctionDeclarationCollection();
+            collection = new FunctionDeclarationCollection<FunctionDeclaration<TGraph,TMacro>>();
         }
 
         [Serialize, InspectorWide(true)]
-        private FunctionDeclarationCollection collection;
+        private FunctionDeclarationCollection<FunctionDeclaration<TGraph, TMacro>> collection;
 
 		public void Clear()
 		{
@@ -41,17 +57,17 @@ namespace Bolt.Extend
 			return collection.Contains(variable);
 		}
 
-		public FunctionDeclaration GetDeclaration(string variable)
+		public IFunctions GetDeclaration(string variable)
 		{
 			if (collection.TryGetValue(variable, out var declaration))
 			{
-				return declaration;
+				return declaration as IFunctions;
 			}
 
 			throw new InvalidOperationException($"Variable not found: '{variable}'.");
 		}
 
-		public IEnumerator<FunctionDeclaration> GetEnumerator()
+		public IEnumerator<FunctionDeclaration<TGraph, TMacro>> GetEnumerator()
 		{
 			return collection.GetEnumerator();
 		}

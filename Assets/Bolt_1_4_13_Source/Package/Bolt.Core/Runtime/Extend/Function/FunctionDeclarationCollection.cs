@@ -5,21 +5,23 @@ using Ludiq;
 
 namespace Bolt.Extend
 {
+
     [SerializationVersion("A")]
-    public class FunctionDeclarationCollection : KeyedCollection<string, FunctionDeclaration>, IKeyedCollection<string, FunctionDeclaration>
+    public class FunctionDeclarationCollection<TFunctionElement> : KeyedCollection<string, TFunctionElement>, IKeyedCollection<string, TFunctionElement>
+        where TFunctionElement: IFunctionElement
     {
 
-        protected override string GetKeyForItem(FunctionDeclaration item)
+        protected override string GetKeyForItem(TFunctionElement item)
         {
             return item.name;
         }
 
-        public void EditorRename(FunctionDeclaration item,string newName)
+        public void EditorRename(TFunctionElement item,string newName)
         {
             ChangeItemKey(item, newName);
         }
 
-        public bool TryGetValue(string key, out FunctionDeclaration value)
+        public bool TryGetValue(string key, out TFunctionElement value)
         {
             if(Dictionary == null)
             {
@@ -29,5 +31,6 @@ namespace Bolt.Extend
 
             return Dictionary.TryGetValue(key, out value);
         }
+
     }
 }

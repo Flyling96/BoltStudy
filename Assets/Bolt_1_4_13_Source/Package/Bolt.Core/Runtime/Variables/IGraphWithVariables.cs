@@ -11,7 +11,7 @@ namespace Bolt
 	}
 
 	public interface IGraphWithFunctions
-    {
-		Extend.FunctionDeclarations functions { get; }
+	{
+		Extend.IFunctions functions { get; }
     }
 }

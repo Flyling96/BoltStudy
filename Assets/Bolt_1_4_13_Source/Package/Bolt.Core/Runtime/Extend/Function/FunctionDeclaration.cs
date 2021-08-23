@@ -3,9 +3,23 @@ using Ludiq;
 
 namespace Bolt.Extend
 {
-    [SerializationVersion("A")]
-    public sealed class FunctionDeclaration
-    {
+	public interface IFunctionElement
+	{
+		string name { get; }
+		GraphSource source { get; }
+		IGraph embed { get; set; }
+		IMacro macro { get; set; }
+		IGraph graph { get; }
+
+		Type graphType { get; }
+		Type macroType { get; }
+	}
+
+	[SerializationVersion("A")]
+    public sealed class FunctionDeclaration<TGraph, TMacro> : IFunctionElement
+		where TGraph : class, IGraph, new()
+		where TMacro : Macro<TGraph>
+	{
         [Serialize]
         public string name { get; private set; }
 
@@ -13,10 +27,14 @@ namespace Bolt.Extend
 		private GraphSource _source = GraphSource.Macro;
 
 		[DoNotSerialize]
-		private IMacro _macro;
+		private TMacro _macro;
 
 		[DoNotSerialize]
-		private IGraph _embed;
+		private TGraph _embed;
+
+		Type graphType => typeof(TGraph);
+
+		Type macroType => typeof(TMacro);
 
 		[Serialize]
 		public GraphSource source
@@ -38,7 +56,7 @@ namespace Bolt.Extend
 		}
 
 		[Serialize]
-		public IMacro macro
+		public TMacro macro
 		{
 			get => _macro;
 			set
@@ -57,7 +75,7 @@ namespace Bolt.Extend
 		}
 
 		[Serialize]
-		public IGraph embed
+		public TGraph embed
 		{
 			get => _embed;
 			set
@@ -74,6 +92,43 @@ namespace Bolt.Extend
 				AfterGraphChange();
 			}
 		}
+
+		[DoNotSerialize]
+		public TGraph graph
+		{
+			get
+			{
+				switch (source)
+				{
+					case GraphSource.Embed:
+						return embed;
+
+					case GraphSource.Macro:
+						return macro?.graph;
+
+					default:
+						throw new UnexpectedEnumValueException<GraphSource>(source);
+				}
+			}
+		}
+
+		IMacro IFunctionElement.macro
+		{
+			get => macro;
+			set => macro = (TMacro)value;
+		}
+
+		IGraph IFunctionElement.embed
+		{
+			get => embed;
+			set => embed = (TGraph)value;
+		}
+
+		IGraph IFunctionElement.graph => graph;
+
+		Type IFunctionElement.graphType => typeof(TGraph);
+
+		Type IFunctionElement.macroType => typeof(TMacro);
 
 		public FunctionDeclaration() { }
 
