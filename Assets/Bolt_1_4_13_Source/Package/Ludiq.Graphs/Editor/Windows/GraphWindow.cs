@@ -461,8 +461,16 @@ namespace Ludiq
 
 				foreach (var breadcrumb in reference.GetBreadcrumbs())
 				{
-					var title = breadcrumb.parent.Description().ToGUIContent(IconSize.Small);
-					title.text = " " + title.text;
+					GUIContent title;
+					if (breadcrumb.parent is IGraphFunctionElement functionElement)
+					{
+						title = new GUIContent(functionElement.ToString(), LudiqGraphs.Icons.window?[IconSize.Small]);
+					}
+					else
+					{
+						title = breadcrumb.parent.Description().ToGUIContent(IconSize.Small);
+						title.text = " " + title.text;
+					}
 					var style = breadcrumb.isRoot ? LudiqStyles.toolbarBreadcrumbRoot : LudiqStyles.toolbarBreadcrumb;
 					var isCurrent = breadcrumb == reference;
 

@@ -18,6 +18,8 @@ namespace Ludiq
 		
 		protected Dictionary<IGraphParentElement, IGraphData> childrenGraphsData { get; } = new Dictionary<IGraphParentElement, IGraphData>();
 
+		protected Dictionary<IGraphFunctionElement, IGraphData> functionGraphsData { get; } = new Dictionary<IGraphFunctionElement, IGraphData>();
+
 		protected Dictionary<Guid, IGraphElementData> phantomElementsData { get; } = new Dictionary<Guid, IGraphElementData>();
 
 		protected Dictionary<Guid, IGraphData> phantomChildrenGraphsData { get; } = new Dictionary<Guid, IGraphData>();
@@ -31,6 +33,11 @@ namespace Ludiq
 		{
 			return childrenGraphsData.TryGetValue(element, out data);
 		}
+
+		public bool TryGetFunctionGraphData(IGraphFunctionElement element,out IGraphData data)
+        {
+			return functionGraphsData.TryGetValue(element, out data);
+        }
 
 		public IGraphElementData CreateElementData(IGraphElementWithData element)
 		{
@@ -106,6 +113,47 @@ namespace Ludiq
 			if (childrenGraphsData.TryGetValue(element, out var childGraphData))
 			{
 				childrenGraphsData.Remove(element);
+				phantomChildrenGraphsData.Add(element.guid, childGraphData);
+			}
+			else
+			{
+				Debug.LogWarning($"Graph data does not contain child graph data to free for {element}.");
+			}
+		}
+
+		public IGraphData CreateFunctionGraphData(IGraphFunctionElement element)
+		{
+			// Debug.Log($"Creating child graph data for {element}");
+
+			if (functionGraphsData.ContainsKey(element))
+			{
+				throw new InvalidOperationException($"Graph data already contains child graph data for {element}.");
+			}
+
+			IGraphData childGraphData;
+
+			if (phantomChildrenGraphsData.TryGetValue(element.guid, out childGraphData))
+			{
+				// Debug.Log($"Restoring phantom child graph data for {element}.");
+				phantomChildrenGraphsData.Remove(element.guid);
+			}
+			else
+			{
+				childGraphData = element.childGraph.CreateData();
+			}
+
+			functionGraphsData.Add(element, childGraphData);
+
+			return childGraphData;
+		}
+
+		public void FreeFunctionGraphData(IGraphFunctionElement element)
+		{
+			// Debug.Log($"Freeing child graph data for {element}");
+
+			if (functionGraphsData.TryGetValue(element, out var childGraphData))
+			{
+				functionGraphsData.Remove(element);
 				phantomChildrenGraphsData.Add(element.guid, childGraphData);
 			}
 			else

@@ -29,7 +29,7 @@ namespace Bolt
 			valueOutputDefinitions = new UnitPortDefinitionCollection<ValueOutputDefinition>();
 
 			variables = new VariableDeclarations();
-			functions = new Extend.FunctionDeclarations<FlowGraph, FlowMacro>();
+			functions = new Extend.FlowFunctionDeclarations();
 		}
 		
 		public override IGraphData CreateData()
@@ -68,9 +68,11 @@ namespace Bolt
 		public VariableDeclarations variables { get; private set; }
 
 		[Serialize]
-		public Extend.FunctionDeclarations<FlowGraph, FlowMacro> functions { get; private set; }
+		public new Extend.FlowFunctionDeclarations functions { get; private set; }
 
-		Extend.IFunctions IGraphWithFunctions.functions => functions;
+	    IGraphFunctions IGraph.functions => functions;
+
+        IGraphFunctions IGraphWithFunctions.functions => functions;
 
 		public IEnumerable<string> GetDynamicVariableNames(VariableKind kind, GraphReference reference)
 		{
@@ -83,11 +85,6 @@ namespace Bolt
 		}
 
 		#endregion
-
-
-
-
-
 
 		#region Elements
 

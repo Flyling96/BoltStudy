@@ -1,10 +1,11 @@
 ﻿using Ludiq;
+using Ludiq.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
 namespace Bolt.Extend
 {
-	[Inspector(typeof(IFunctions))]
+	[Inspector(typeof(IGraphFunctions))]
 	public class FunctionDeclarationsInspector : Inspector
 	{
 		public FunctionDeclarationsInspector(Metadata metadata) : base(metadata) { }
@@ -23,7 +24,7 @@ namespace Bolt.Extend
 
 		protected override void OnGUI(Rect drawerPosition, GUIContent label)
 		{
-			bool editable = ((IFunctions)metadata.value).Editable;
+			bool editable = ((IGraphFunctions)metadata.value).Editable;
 			if (!editable)
 			{
 				GUI.enabled = false;
@@ -134,11 +135,31 @@ namespace Bolt.Extend
 
 			public new readonly FunctionDeclarationsInspector parentInspector;
 
-			protected override bool CanDrop(object item)
-			{
-				var functionDeclaration = (IFunctionElement)item;
+			//public override void DrawItem(Rect position, int index)
+			//{
+			//	var item = this[index];
 
-				if (((IFunctions)parentInspector.metadata.value).IsDefined(functionDeclaration.name))
+			//	var controlID = GUIUtility.GetControlID(FocusType.Passive);
+
+			//	var draggablePosition = ReorderableListGUI.CurrentItemTotalPosition;
+			//	draggablePosition.xMax = position.xMax + 2;
+
+			//	if (Event.current.GetTypeForControl(controlID) == EventType.MouseDown && draggablePosition.Contains(Event.current.mousePosition))
+			//	{
+			//		if (Event.current.button == (int)MouseButton.Left && Event.current.clickCount == 2)
+			//		{
+			//			Debug.LogError(87987);
+			//		}
+			//	}
+
+			//	base.DrawItem(position, index);
+			//}
+
+            protected override bool CanDrop(object item)
+			{
+				var functionDeclaration = (IGraphFunctionElement)item;
+
+				if (((IGraphFunctions)parentInspector.metadata.value).IsDefined(functionDeclaration.name))
 				{
 					EditorUtility.DisplayDialog("Dragged function", "A function with the same name already exists.", "OK");
 					return false;
@@ -155,7 +176,7 @@ namespace Bolt.Extend
 					EditorUtility.DisplayDialog("New function", "Please enter a function name.", "OK");
 					return false;
 				}
-				else if (((IFunctions)parentInspector.metadata.value).IsDefined(parentInspector.newName))
+				else if (((IGraphFunctions)parentInspector.metadata.value).IsDefined(parentInspector.newName))
 				{
 					parentInspector.highlightNewNameField = true;
 					EditorUtility.DisplayDialog("New function", "A function with the same name already exists.", "OK");
@@ -167,7 +188,7 @@ namespace Bolt.Extend
 
 			protected override object ConstructItem()
 			{
-				var newItem = ((IFunctions)parentInspector.metadata.value).CreateFunction(parentInspector.newName);
+				var newItem = ((IGraphFunctions)parentInspector.metadata.value).CreateFunction(parentInspector.newName);
 				parentInspector.newName = null;
 				parentInspector.highlightPlaceholder = false;
 				parentInspector.highlightNewNameField = false;

@@ -8,7 +8,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace Ludiq
 {
-	public abstract class GraphPointer
+    public abstract class GraphPointer
 	{
 		#region Lifecycle
 
@@ -71,22 +71,37 @@ namespace Ludiq
 			}
 		}
 
-		protected void Initialize(IGraphRoot root, IEnumerable<IGraphParentElement> parentElements, bool ensureValid)
+		protected void Initialize(IGraphRoot root, IEnumerable<IGraphParent> parents, bool ensureValid)
 		{
 			Initialize(root);
 
-			Ensure.That(nameof(parentElements)).IsNotNull(parentElements);
+			Ensure.That(nameof(parents)).IsNotNull(parents);
 
-			foreach (var parentElement in parentElements)
+			foreach (var parent in parents)
 			{
-				if (!TryEnterParentElement(parentElement, out var error))
+				if (parent is IGraphParentElement parentElement)
 				{
-					if (ensureValid)
+					if (!TryEnterParentElement(parentElement, out var error))
 					{
-						throw new GraphPointerException(error, this);
-					}
+						if (ensureValid)
+						{
+							throw new GraphPointerException(error, this);
+						}
 
-					break;
+						break;
+					}
+				}
+				else if(parent is IGraphFunctionElement functionElement)
+                {
+					if (!TryEnterFunctionElement(functionElement, out var error))
+					{
+						if (ensureValid)
+						{
+							throw new GraphPointerException(error, this);
+						}
+
+						break;
+					}
 				}
 			}
 		}
@@ -228,6 +243,8 @@ namespace Ludiq
 
 		protected readonly List<IGraphParentElement> parentElementStack = new List<IGraphParentElement>();
 
+		protected readonly List<IGraphFunctionElement> functionElementStack = new List<IGraphFunctionElement>();
+
 		protected readonly List<IGraph> graphStack = new List<IGraph>();
 
 		protected readonly List<IGraphData> dataStack = new List<IGraphData>();
@@ -297,7 +314,15 @@ namespace Ludiq
 				return parentElementStack[parentElementStack.Count - 1];
 			}
 		}
-		
+
+		public IGraphFunctionElement functionElement
+		{
+			get
+			{
+				return functionElementStack[functionElementStack.Count - 1];
+			}
+		}
+
 		public IGraph rootGraph => graphStack[0];
 
 		public IGraph graph => graphStack[graphStack.Count - 1];
@@ -417,6 +442,78 @@ namespace Ludiq
 
 		#region Traversal
 
+		protected bool TryEnterFunctionElement(IGraphFunctionElement functionElement, out string error, int? maxRecursionDepth = null)
+        {
+			if(!graph.functions.Contains(functionElement))
+            {
+				error = "The function doesn't exist.";
+				return false;
+			}
+
+			var childGraph = functionElement.childGraph;
+
+			if (childGraph == null)
+			{
+				error = "Trying to enter a graph parent element without a child graph.";
+				return false;
+			}
+
+			if (Recursion.safeMode)
+			{
+				var recursionDepth = 0;
+				var _maxRecursionDepth = maxRecursionDepth ?? Recursion.defaultMaxDepth;
+
+				foreach (var parentGraph in graphStack)
+				{
+					if (parentGraph == childGraph)
+					{
+						recursionDepth++;
+					}
+				}
+
+				if (recursionDepth > _maxRecursionDepth)
+				{
+					error = $"Max recursion depth of {_maxRecursionDepth} has been exceeded. Are you nesting a graph within itself?\nIf not, consider increasing '{nameof(Recursion)}.{nameof(Recursion.defaultMaxDepth)}'.";
+					return false;
+				}
+			}
+
+			EnterFunctionElement(functionElement);
+			error = null;
+			return true;
+		}
+
+		private void EnterFunctionElement(IGraphFunctionElement functionElement)
+		{
+            var childGraph = functionElement.childGraph;
+
+            parentStack.Add(functionElement);
+			functionElementStack.Add(functionElement);
+            graphStack.Add(childGraph);
+
+            IGraphData childGraphData = null;
+            _data?.TryGetFunctionGraphData(functionElement, out childGraphData);
+            dataStack.Add(childGraphData);
+
+            var childGraphDebugData = _debugData?.GetOrCreateFunctionGraphData(functionElement);
+            debugDataStack.Add(childGraphDebugData);
+        }
+
+		protected void ExitFunctionElement()
+		{
+			if (!isChild)
+			{
+				throw new GraphPointerException("Trying to exit the root graph.", this);
+			}
+
+			parentStack.RemoveAt(parentStack.Count - 1);
+			functionElementStack.RemoveAt(functionElementStack.Count - 1);
+			graphStack.RemoveAt(graphStack.Count - 1);
+			dataStack.RemoveAt(dataStack.Count - 1);
+			debugDataStack.RemoveAt(debugDataStack.Count - 1);
+		}
+
+
 		protected bool TryEnterParentElement(Guid parentElementGuid, out string error, int? maxRecursionDepth = null)
 		{
 			if (!graph.elements.TryGetValue(parentElementGuid, out var element))
@@ -495,12 +592,6 @@ namespace Ludiq
 			}
 		}
 
-
-		public void SetRootDebug(IGraphRoot root)
-        {
-			setRootDebugDataBinding?.Invoke(root, debugData);
-		}
-
 		private void EnterValidParentElement(IGraphParentElement parentElement)
 		{
 			var childGraph = parentElement.childGraph;
@@ -563,24 +654,44 @@ namespace Ludiq
 
 					for (var depth = 1; depth < this.depth; depth++)
 					{
-						var parentElement = parentElementStack[depth - 1];
+						//var parentElement = parentElementStack[depth - 1];
 						var parentGraph = graphStack[depth - 1];
 						var childGraph = graphStack[depth];
-						
+
+						var parent = parentStack[depth];
+
 						// Important to check by object and not by GUID here,
 						// because object stack integrity has to be guaranteed
 						// (GUID integrity is implied because they're immutable)
-						if (!parentGraph.elements.Contains(parentElement))
+						if (parent is IGraphParentElement parentElement)
 						{
-							// Parent graph no longer contains the parent element
-							return false;
+							if (!parentGraph.elements.Contains(parentElement))
+							{
+								// Parent graph no longer contains the parent element
+								return false;
+							}
+
+							if (parentElement.childGraph != childGraph)
+							{
+								// Child graph has changed
+								return false;
+							}
+						}
+						else if(parent is IGraphFunctionElement functionElement)
+                        {
+							if (!parentGraph.functions.Contains(functionElement))
+							{
+								// Parent graph no longer contains the parent element
+								return false;
+							}
+
+							if (functionElement.childGraph != childGraph)
+							{
+								// Child graph has changed
+								return false;
+							}
 						}
 
-						if (parentElement.childGraph != childGraph)
-						{
-							// Child graph has changed
-							return false;
-						}
 					}
 
 					return true;
@@ -661,10 +772,10 @@ namespace Ludiq
 
 			for (int d = 1; d < depth; d++)
 			{
-				var parentElement = parentElementStack[d - 1];
-				var otherParentElement = other.parentElementStack[d - 1];
+				var parent = parentStack[d];
+				var otherParent = other.parentStack[d];
 
-				if (parentElement != otherParentElement)
+				if (parent != otherParent)
 				{
 					return false;
 				}
@@ -685,9 +796,18 @@ namespace Ludiq
 			
 			for (int d = 1; d < depth; d++)
 			{
-				var parentElementGuid = parentElementStack[d - 1].guid;
+				var parent = parentStack[d];
+				Guid guid;
+				if (parent is IGraphParentElement parentElement)
+				{
+					guid = parentElement.guid;
+				}
+				else if(parent is IGraphFunctionElement functionElement)
+                {
+					guid = functionElement.guid;
+                }
 				
-				hashCode = hashCode * 23 + parentElementGuid.GetHashCode();
+				hashCode = hashCode * 23 + guid.GetHashCode();
 			}
 
 			return hashCode;
@@ -711,15 +831,13 @@ namespace Ludiq
 			{
 				sb.Append(" > ");
 
-				var parentElementIndex = depth - 1;
-
-				if (parentElementIndex >= parentElementStack.Count)
+				if (depth >= parentStack.Count)
 				{
 					sb.Append("?");
 					break;
 				}
 				
-				var parentElement = parentElementStack[parentElementIndex];
+				var parentElement = parentStack[depth];
 
 				sb.Append(parentElement);
 			}

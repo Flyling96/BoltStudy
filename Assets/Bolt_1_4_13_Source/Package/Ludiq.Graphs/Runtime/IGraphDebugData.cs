@@ -9,6 +9,8 @@ namespace Ludiq
 
 		IGraphDebugData GetOrCreateChildGraphData(IGraphParentElement element);
 
+		IGraphDebugData GetOrCreateFunctionGraphData(IGraphFunctionElement element);
+
 		IEnumerable<IGraphElementDebugData> elementsData { get; }
 	}
 }

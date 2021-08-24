@@ -11,6 +11,8 @@ namespace Ludiq
 		
 		MergedGraphElementCollection elements { get; }
 
+		IGraphFunctions functions { get; }
+
 		string title { get; }
 
 		string summary { get; }

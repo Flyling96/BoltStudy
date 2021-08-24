@@ -1,26 +1,18 @@
 ﻿using System;
+using System.Text;
 using Ludiq;
 
 namespace Bolt.Extend
 {
-	public interface IFunctionElement
-	{
-		string name { get; }
-		GraphSource source { get; }
-		IGraph embed { get; set; }
-		IMacro macro { get; set; }
-		IGraph graph { get; }
-
-		Type graphType { get; }
-		Type macroType { get; }
-	}
-
 	[SerializationVersion("A")]
-    public sealed class FunctionDeclaration<TGraph, TMacro> : IFunctionElement
+    public abstract class FunctionDeclaration<TGraph, TMacro> : IGraphFunctionElement
 		where TGraph : class, IGraph, new()
 		where TMacro : Macro<TGraph>
 	{
-        [Serialize]
+		[Serialize]
+		public Guid guid { get; set; } = Guid.NewGuid();
+
+		[Serialize]
         public string name { get; private set; }
 
 		[DoNotSerialize]
@@ -112,23 +104,45 @@ namespace Bolt.Extend
 			}
 		}
 
-		IMacro IFunctionElement.macro
+		[DoNotSerialize]
+		private IGraphFunctions _parent;
+
+		[DoNotSerialize]
+		public IGraphFunctions parent
+        {
+			get
+            {
+				return _parent;
+			}
+			set
+            {
+				_parent = value;
+            }
+        }
+
+		IMacro IGraphFunctionElement.macro
 		{
 			get => macro;
 			set => macro = (TMacro)value;
 		}
 
-		IGraph IFunctionElement.embed
+		IGraph IGraphFunctionElement.embed
 		{
 			get => embed;
 			set => embed = (TGraph)value;
 		}
 
-		IGraph IFunctionElement.graph => graph;
+		IGraph IGraphFunctionElement.graph => graph;
 
-		Type IFunctionElement.graphType => typeof(TGraph);
+		Type IGraphFunctionElement.graphType => typeof(TGraph);
 
-		Type IFunctionElement.macroType => typeof(TMacro);
+		Type IGraphFunctionElement.macroType => typeof(TMacro);
+
+        public IGraph childGraph => graph;
+
+        public bool isSerializationRoot => false;
+
+        public UnityEngine.Object serializedObject => macro;
 
 		public FunctionDeclaration() { }
 
@@ -136,7 +150,9 @@ namespace Bolt.Extend
 		{
 			this.name = name;
 			this.source = source;
+			embed = (TGraph)DefaultGraph();
 		}
+        
 
 		private void BeforeGraphChange()
 		{
@@ -146,6 +162,18 @@ namespace Bolt.Extend
 		private void AfterGraphChange()
 		{
 
+		}
+
+		public abstract IGraph DefaultGraph();
+
+		public override string ToString()
+		{
+			var sb = new StringBuilder();
+			sb.Append(name);
+			sb.Append("#");
+			sb.Append(guid.ToString().Substring(0, 5));
+			sb.Append("...");
+			return sb.ToString();
 		}
 	}
 }

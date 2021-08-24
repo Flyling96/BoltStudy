@@ -106,7 +106,10 @@ namespace Ludiq
 
 			analyserProvider.AnalyzeAll();
 
-			reference.parent.Describe();
+			if (!(reference.parent is IGraphFunctionElement))
+			{
+				reference.parent.Describe();
+			}
 		}
 
 		#endregion

@@ -5,19 +5,9 @@ using Ludiq;
 
 namespace Bolt.Extend
 {
-	public interface IFunctions
-    {
-		bool Editable { get; }
-		void Clear();
-		bool IsDefined(string key);
-		IFunctions GetDeclaration(string key);
-		IFunctionElement CreateFunction(string key);
-	}
-
     [SerializationVersion("A")]
-    public class FunctionDeclarations<TGraph, TMacro> : IEnumerable<FunctionDeclaration<TGraph, TMacro>>, IFunctions
-		where TGraph : class, IGraph, new()
-		where TMacro : Macro<TGraph>
+    public abstract class FunctionDeclarations<TElement> : IGraphFunctions
+		where TElement : IGraphFunctionElement
 	{
         private bool m_Editable;
         public bool Editable
@@ -28,19 +18,14 @@ namespace Bolt.Extend
             }
         }
 
-		public IFunctionElement CreateFunction(string key)
-        {
-			return new FunctionDeclaration<TGraph, TMacro>(key);
-        }
-
 		public FunctionDeclarations(bool editable = true)
         {
             m_Editable = editable;
-            collection = new FunctionDeclarationCollection<FunctionDeclaration<TGraph,TMacro>>();
+            collection = new FunctionDeclarationCollection<TElement>(this);
         }
 
         [Serialize, InspectorWide(true)]
-        private FunctionDeclarationCollection<FunctionDeclaration<TGraph, TMacro>> collection;
+        private FunctionDeclarationCollection<TElement> collection;
 
 		public void Clear()
 		{
@@ -57,24 +42,32 @@ namespace Bolt.Extend
 			return collection.Contains(variable);
 		}
 
-		public IFunctions GetDeclaration(string variable)
+		public IGraphFunctions GetDeclaration(string variable)
 		{
 			if (collection.TryGetValue(variable, out var declaration))
 			{
-				return declaration as IFunctions;
+				return declaration as IGraphFunctions;
 			}
 
 			throw new InvalidOperationException($"Variable not found: '{variable}'.");
 		}
 
-		public IEnumerator<FunctionDeclaration<TGraph, TMacro>> GetEnumerator()
+		public IEnumerator<TElement> GetEnumerator()
 		{
 			return collection.GetEnumerator();
 		}
 
+		IEnumerator<IGraphFunctionElement> IEnumerable<IGraphFunctionElement>.GetEnumerator()
+		{
+			return GetEnumerator() as IEnumerator<IGraphFunctionElement>;
+		}
+
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return ((IEnumerable)collection).GetEnumerator();
+			return GetEnumerator();
 		}
-	}
+
+		public abstract IGraphFunctionElement CreateFunction(string key);
+
+    }
 }

@@ -8,8 +8,15 @@ namespace Bolt.Extend
 
     [SerializationVersion("A")]
     public class FunctionDeclarationCollection<TFunctionElement> : KeyedCollection<string, TFunctionElement>, IKeyedCollection<string, TFunctionElement>
-        where TFunctionElement: IFunctionElement
+        where TFunctionElement: IGraphFunctionElement
     {
+
+        IGraphFunctions parent { get; set; }
+
+        public FunctionDeclarationCollection(IGraphFunctions parent)
+        {
+            this.parent = parent;
+        }
 
         protected override string GetKeyForItem(TFunctionElement item)
         {
@@ -30,6 +37,12 @@ namespace Bolt.Extend
             }
 
             return Dictionary.TryGetValue(key, out value);
+        }
+
+        protected override void InsertItem(int index, TFunctionElement item)
+        {
+            item.parent = parent;
+            base.InsertItem(index, item);
         }
 
     }

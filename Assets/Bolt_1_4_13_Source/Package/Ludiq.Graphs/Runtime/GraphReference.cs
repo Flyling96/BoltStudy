@@ -30,7 +30,7 @@ namespace Ludiq
 			return reference;
 		}
 
-		public static GraphReference New(IGraphRoot root, IEnumerable<IGraphParentElement> parentElements, bool ensureValid)
+		public static GraphReference New(IGraphRoot root, IEnumerable<IGraphParent> parents, bool ensureValid)
 		{
 			if (!ensureValid && !IsValidRoot(root))
 			{
@@ -38,7 +38,7 @@ namespace Ludiq
 			}
 
 			var reference = new GraphReference();
-			reference.Initialize(root, parentElements, ensureValid);
+			reference.Initialize(root, parents, ensureValid);
 			reference.Hash();
 			return reference;
 		}
@@ -261,13 +261,32 @@ namespace Ludiq
 			return pointer;
 		}
 
-		#endregion
-		
+        public GraphReference ChildReference(IGraphFunctionElement functionElement, bool ensureValid)
+        {
+            var pointer = Clone();
+			if (!pointer.TryEnterFunctionElement(functionElement, out var error))
+			{
+				if (ensureValid)
+				{
+					throw new GraphPointerException(error, this);
+				}
+				else
+				{
+					return null;
+				}
+			}
+
+			pointer.Hash();
+			return pointer;
+		}
+
+        #endregion
 
 
-		#region Validation
 
-		public GraphReference Revalidate(bool ensureValid)
+        #region Validation
+
+        public GraphReference Revalidate(bool ensureValid)
 		{
 			try
 			{
@@ -294,9 +313,9 @@ namespace Ludiq
 
 		public IEnumerable<GraphReference> GetBreadcrumbs()
 		{
-			for (int depth = 0; depth < this.depth; depth++)
+			for (int depth = 1; depth <= this.depth; depth++)
 			{
-				yield return New(root, parentElementStack.Take(depth), true);
+				yield return New(root, parentStack.Take(depth), true);
 			}
 		}
 

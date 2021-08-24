@@ -8,6 +8,8 @@ namespace Ludiq
 
 		public Dictionary<IGraphParentElement, IGraphDebugData> childrenGraphsData { get; } = new Dictionary<IGraphParentElement, IGraphDebugData>();
 
+		public Dictionary<IGraphFunctionElement, IGraphDebugData> functionGraphsData { get; } = new Dictionary<IGraphFunctionElement, IGraphDebugData>();
+
 		IEnumerable<IGraphElementDebugData> IGraphDebugData.elementsData => elementsData.Values;
 
 		public GraphDebugData(IGraph definition) { }
@@ -48,5 +50,16 @@ namespace Ludiq
 				childrenGraphsData.Add(child.Key, child.Value);
 			}
 		}
-	}
+
+        public IGraphDebugData GetOrCreateFunctionGraphData(IGraphFunctionElement element)
+        {
+			if (!functionGraphsData.TryGetValue(element, out var data))
+			{
+				data = new GraphDebugData(element.childGraph);
+				functionGraphsData.Add(element, data);
+			}
+
+			return data;
+		}
+    }
 }

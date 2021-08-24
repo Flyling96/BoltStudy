@@ -64,7 +64,7 @@ namespace Bolt.Extend
 
             flow.RestoreStack(m_ParentFlow.stack);
 
-            flow.stack.SetRootDebug(this);
+            //flow.stack.SetRootDebug(this);
 
             ControlOutput nextPort = null; 
 

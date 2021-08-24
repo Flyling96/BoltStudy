@@ -54,12 +54,15 @@ namespace Ludiq
 		[DoNotSerialize]
 		public MergedGraphElementCollection elements { get; }
 
+		[DoNotSerialize]
+		public IGraphFunctions functions{ get; }
+
 		#endregion
 
 
 
 		#region Metadata
-		
+
 		[Serialize]
 		public string title { get; set; }
 		
