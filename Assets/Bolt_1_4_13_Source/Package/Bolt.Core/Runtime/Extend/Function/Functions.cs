@@ -23,7 +23,8 @@ namespace Bolt.Extend
 
 		public static IGraphFunctions GraphInstance(GraphPointer pointer)
 		{
-			return pointer.GetGraphData<IGraphDataWithVariables>().functions;
+			return null;
+			//return pointer.GetGraphData<IGraphDataWithVariables>().functions;
 		}
 
 		public static IGraphFunctions GraphDefinition(GraphPointer pointer)

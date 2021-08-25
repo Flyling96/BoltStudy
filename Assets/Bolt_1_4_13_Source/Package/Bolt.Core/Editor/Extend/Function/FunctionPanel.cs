@@ -31,13 +31,16 @@ namespace Bolt.Extend
 
 			if (reference != null)
 			{
-				if (reference.hasData)
-				{
-					var instanceVariables = Functions.GraphInstance(reference);
+				//if (reference.hasData)
+				//{
+				//	var instanceVariables = Functions.GraphInstance(reference);
 
-					tabs.Add(new Tab("Instance",instanceVariables, reference.serializedObject, "Instance"));
-				}
+				//	tabs.Add(new Tab("Instance",instanceVariables, reference.serializedObject, "Instance"));
+				//}
 
+				//var definitionVariables = Functions.GraphDefinition(reference);
+
+				//tabs.Add(new Tab("Definition", definitionVariables, context.reference.serializedObject, "Definition"));
 				var definitionVariables = Functions.GraphDefinition(reference);
 
 				tabs.Add(new Tab("Definition", definitionVariables, context.reference.serializedObject, "Definition"));
