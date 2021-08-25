@@ -41,7 +41,6 @@ namespace Bolt.Extend
 
         protected override void InsertItem(int index, TFunctionElement item)
         {
-            item.parent = parent;
             base.InsertItem(index, item);
         }
 

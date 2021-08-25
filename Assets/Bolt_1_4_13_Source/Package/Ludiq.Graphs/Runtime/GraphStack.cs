@@ -109,6 +109,21 @@ namespace Ludiq
 			base.ExitParentElement();
 		}
 
+		public new void EnterFunctionElement(IGraphFunctionElement functionElement)
+		{
+			base.EnterFunctionElement(functionElement);
+		}
+
+		public bool TryEnterFunctionElement(IGraphFunctionElement functionElement)
+		{
+			return TryEnterFunctionElement(functionElement, out var error);
+		}
+
+		public new void ExitFunctionElement()
+		{
+			base.ExitFunctionElement();
+		}
+
 		#endregion
 	}
 }

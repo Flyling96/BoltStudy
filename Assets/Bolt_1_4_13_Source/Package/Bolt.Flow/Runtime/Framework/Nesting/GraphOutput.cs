@@ -22,13 +22,31 @@ namespace Bolt
 
 				ControlInput(key, (flow) =>
 				{
-					var superUnit = flow.stack.GetParent<SuperUnit>();
-					
-					flow.stack.ExitParentElement();
+					if (flow.stack.IsWithin<SuperUnit>())
+					{
+						var superUnit = flow.stack.GetParent<SuperUnit>();
 
-					superUnit.EnsureDefined();
+						flow.stack.ExitParentElement();
 
-					return superUnit.controlOutputs[key];
+						superUnit.EnsureDefined();
+
+						return superUnit.controlOutputs[key];
+					}
+					else if (flow.stack.IsWithin<Extend.FlowFunctionDeclaration>())
+					{
+						var function = flow.stack.GetParent<Extend.FlowFunctionDeclaration>();
+
+						if (function.executeElement != null && function.executeElement is Extend.FunctionSuperUnit functionSuperUnit)
+						{
+							flow.stack.ExitFunctionElement();
+
+							functionSuperUnit.EnsureDefined();
+
+							return functionSuperUnit.controlOutputs[key];
+						}
+					}
+
+					return null;
 				});
 			}
 

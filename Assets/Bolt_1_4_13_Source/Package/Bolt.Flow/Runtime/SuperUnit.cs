@@ -69,7 +69,6 @@ namespace Bolt
 								return inputUnit.controlOutputs[key];
 							}
 						}
-
 						return null;
 					});
 				}

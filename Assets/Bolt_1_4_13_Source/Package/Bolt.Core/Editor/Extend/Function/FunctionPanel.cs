@@ -27,15 +27,26 @@ namespace Bolt.Extend
 
 			titleContent = new GUIContent("Functions", LudiqGraphs.Icons.window?[IconSize.Small]);
 
-			if (context.graph != null && context.graph is IGraphWithFunctions funcGraph)
+			var reference = context.reference;
+
+			if (reference != null)
 			{
-				tabs.Add(new Tab("Definition", funcGraph.functions, context.reference.serializedObject, "Definition"));
+				if (reference.hasData)
+				{
+					var instanceVariables = Functions.GraphInstance(reference);
+
+					tabs.Add(new Tab("Instance",instanceVariables, reference.serializedObject, "Instance"));
+				}
+
+				var definitionVariables = Functions.GraphDefinition(reference);
+
+				tabs.Add(new Tab("Definition", definitionVariables, context.reference.serializedObject, "Definition"));
 			}
+
 
 			_currentTab = tabs.FirstOrDefault(t => t.enabled);
 
 		}
-
 
 		public float GetHeight(float width)
 		{
@@ -62,19 +73,22 @@ namespace Bolt.Extend
 			var tabBarHeight = GetTabBarHeight(position.width);
 			var tabButtonWidth = position.width / tabs.Count;
 
-			for (var i = 0; i < tabs.Count; i++)
+			if (tabs.Count > 1)
 			{
-				var tab = tabs[i];
+				for (var i = 0; i < tabs.Count; i++)
+				{
+					var tab = tabs[i];
 
-				var tabButtonPosition = new Rect
-				(
-					position.x + i * tabButtonWidth,
-					y,
-					tabButtonWidth,
-					tabBarHeight
-				);
+					var tabButtonPosition = new Rect
+					(
+						position.x + i * tabButtonWidth,
+						y,
+						tabButtonWidth,
+						tabBarHeight
+					);
 
-				OnTabButtonGUI(tabButtonPosition, tab);
+					OnTabButtonGUI(tabButtonPosition, tab);
+				}
 			}
 
 			y += tabBarHeight;

@@ -284,7 +284,7 @@ namespace Bolt
 		{
 			return DragAndDropUtility.Is<FlowMacro>() ||
 				   (DragAndDropUtility.Is<UnityObject>() && !DragAndDropUtility.Is<IMacro>() && CanDetermineDraggedInput(DragAndDropUtility.Get<UnityObject>())) ||
-				   EditorVariablesUtility.isDraggingVariable;
+				   EditorVariablesUtility.isDraggingVariable || EditorVariablesUtility.isDraggingFunction;
 		}
 
 		public override void PerformDragAndDrop()
@@ -432,6 +432,15 @@ namespace Bolt
 					unit.name.SetDefaultValue(declaration.name);
 				}
 
+			}
+			else if (EditorVariablesUtility.isDraggingFunction)
+            {
+				var function = EditorVariablesUtility.functionElement;
+				Extend.FunctionSuperUnit unit = new Extend.FunctionSuperUnit();
+				unit.functionName = function.name;
+
+				AddUnit(unit, DragAndDropUtility.position);
+				//unit.name.SetDefaultValue(function.name);
 			}
 		}
 

@@ -11,7 +11,7 @@ namespace Ludiq
 		IGraph embed { get; set; }
 		IMacro macro { get; set; }
 		IGraph graph { get; }
-		IGraphFunctions parent { get; set; }
+		IGraphElement executeElement { get; set; }
 
 		Type graphType { get; }
 		Type macroType { get; }

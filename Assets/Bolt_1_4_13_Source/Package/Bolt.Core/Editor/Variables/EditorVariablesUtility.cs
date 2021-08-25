@@ -31,6 +31,10 @@ namespace Bolt
 
 		public static VariableDeclaration declaration => ((DragAndDrop.GetGenericData(DraggedListItem.TypeName) as DraggedListItem)?.item as VariableDeclaration);
 
+		public static bool isDraggingFunction => functionElement != null;
+
+		public static IGraphFunctionElement functionElement => ((DragAndDrop.GetGenericData(DraggedListItem.TypeName) as DraggedListItem)?.item as IGraphFunctionElement);
+
 		private static void PrepareAsset(string fileName)
 		{
 			var path = Path.Combine(BoltCore.Paths.variableResources, fileName + ".asset");

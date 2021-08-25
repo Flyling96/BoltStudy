@@ -29,22 +29,46 @@ namespace Bolt
 
 				ValueOutput(type, key, (flow) =>
 				{
-					var superUnit = flow.stack.GetParent<SuperUnit>();
-					
-					if (flow.enableDebug)
+					if (flow.stack.IsWithin<SuperUnit>())
 					{
-						var editorData = flow.stack.GetElementDebugData<IUnitDebugData>(superUnit);
+						var superUnit = flow.stack.GetParent<SuperUnit>();
 
-						editorData.lastInvokeFrame = EditorTimeBinding.frame;
-						editorData.lastInvokeTime = EditorTimeBinding.time;
+						if (flow.enableDebug)
+						{
+							var editorData = flow.stack.GetElementDebugData<IUnitDebugData>(superUnit);
+
+							editorData.lastInvokeFrame = EditorTimeBinding.frame;
+							editorData.lastInvokeTime = EditorTimeBinding.time;
+						}
+
+						flow.stack.ExitParentElement();
+						superUnit.EnsureDefined();
+						var value = flow.GetValue(superUnit.valueInputs[key], type);
+						flow.stack.EnterParentElement(superUnit);
+						return value;
+					}
+					else if(flow.stack.IsWithin<Extend.FlowFunctionDeclaration>())
+                    {
+						var function = flow.stack.GetParent<Extend.FlowFunctionDeclaration>();
+						if(function.executeElement != null && function.executeElement is Extend.FunctionSuperUnit functionSuperUnit)
+                        {
+							if (flow.enableDebug)
+							{
+								var editorData = flow.stack.GetElementDebugData<IUnitDebugData>(functionSuperUnit);
+
+								editorData.lastInvokeFrame = EditorTimeBinding.frame;
+								editorData.lastInvokeTime = EditorTimeBinding.time;
+							}
+
+							flow.stack.ExitFunctionElement();
+							functionSuperUnit.EnsureDefined();
+							var value = flow.GetValue(functionSuperUnit.valueInputs[key], type);
+							flow.stack.EnterFunctionElement(function);
+							return value;
+						}
 					}
 
-					flow.stack.ExitParentElement();
-					superUnit.EnsureDefined();
-					var value = flow.GetValue(superUnit.valueInputs[key], type);
-					flow.stack.EnterParentElement(superUnit);
-
-					return value;
+					return null;
 				});
 			}
 		}

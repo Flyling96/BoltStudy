@@ -20,8 +20,6 @@ namespace Bolt.Extend
 
         private Metadata macroGraphMetadata => metadata[nameof(IGraphFunctionElement.macro)];
 
-        private Metadata parentMetadata => metadata[nameof(IGraphFunctionElement.parent)];
-
         protected Type graphType => ((Type)metadata[nameof(IGraphFunctionElement.graphType)].value);
 
         protected Type macroType => ((Type)metadata[nameof(IGraphFunctionElement.macroType)].value);

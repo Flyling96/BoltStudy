@@ -5,5 +5,7 @@ namespace Bolt
 	public interface IGraphDataWithVariables : IGraphData 
 	{
 		VariableDeclarations variables { get; }
+
+		IGraphFunctions functions { get; }
 	}
 }

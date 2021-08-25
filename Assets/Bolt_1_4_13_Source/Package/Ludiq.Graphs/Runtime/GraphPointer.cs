@@ -483,7 +483,7 @@ namespace Ludiq
 			return true;
 		}
 
-		private void EnterFunctionElement(IGraphFunctionElement functionElement)
+		protected void EnterFunctionElement(IGraphFunctionElement functionElement)
 		{
             var childGraph = functionElement.childGraph;
 

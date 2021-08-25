@@ -104,21 +104,6 @@ namespace Bolt.Extend
 			}
 		}
 
-		[DoNotSerialize]
-		private IGraphFunctions _parent;
-
-		[DoNotSerialize]
-		public IGraphFunctions parent
-        {
-			get
-            {
-				return _parent;
-			}
-			set
-            {
-				_parent = value;
-            }
-        }
 
 		IMacro IGraphFunctionElement.macro
 		{
@@ -144,7 +129,10 @@ namespace Bolt.Extend
 
         public UnityEngine.Object serializedObject => macro;
 
-		public FunctionDeclaration() { }
+		[DoNotSerialize]
+        public IGraphElement executeElement { get; set; }
+
+        public FunctionDeclaration() { }
 
         public FunctionDeclaration(string name, GraphSource source = GraphSource.Embed) 
 		{
@@ -152,16 +140,19 @@ namespace Bolt.Extend
 			this.source = source;
 			embed = (TGraph)DefaultGraph();
 		}
-        
+
+		public event Action beforeGraphChange;
+
+		public event Action afterGraphChange;
 
 		private void BeforeGraphChange()
 		{
-
+			beforeGraphChange?.Invoke();
 		}
 
 		private void AfterGraphChange()
 		{
-
+			afterGraphChange?.Invoke();
 		}
 
 		public abstract IGraph DefaultGraph();
