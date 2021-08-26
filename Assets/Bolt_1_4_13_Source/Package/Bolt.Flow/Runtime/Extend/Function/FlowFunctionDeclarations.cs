@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Bolt.Extend
 {
 
+    [SerializationVersion("A")]
     public class FlowFunctionDeclaration : FunctionDeclaration<FlowGraph, FlowMacro>
     {
         public FlowFunctionDeclaration(string name) : base(name) { }

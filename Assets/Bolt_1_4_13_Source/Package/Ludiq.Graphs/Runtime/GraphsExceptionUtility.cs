@@ -55,10 +55,20 @@ namespace Ludiq
 
 			while (reference.isChild)
 			{
-				var parentElement = reference.parentElement;
+				IGraphParent graphParent = null;
+				if (reference.parent is IGraphParentElement parentElement)
+                {
+					graphParent = parentElement;
+
+				}
+				else if(reference.parent is IGraphFunctionElement functionElement)
+                {
+					graphParent = functionElement;
+                }
+
 				reference = reference.ParentReference(true);
 
-				if (parentElement is IGraphElementWithDebugData debuggableParentElement)
+				if (graphParent is IGraphElementWithDebugData debuggableParentElement)
 				{
 					if (!ex.HandledIn(reference))
 					{

@@ -236,7 +236,14 @@ namespace Ludiq
 			}
 
 			var pointer = Clone();
-			pointer.ExitParentElement();
+			if (pointer.parent is IGraphParentElement)
+			{
+				pointer.ExitParentElement();
+			}
+			else if(pointer.parent is IGraphFunctionElement)
+            {
+				pointer.ExitFunctionElement();
+            }
 			pointer.Hash();
 			return pointer;
 		}

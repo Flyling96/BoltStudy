@@ -376,8 +376,9 @@ namespace Bolt
 				
 				var dynamicOptions = UnityAPI.Await(() => GetDynamicOptions().ToHashSet());
 				var contextualOptions = UnityAPI.Await(() => GetContextualOptions(reference).ToHashSet());
-				
-				return LinqUtility.Concat<IUnitOption>(options, dynamicOptions, contextualOptions)
+				var functionOptions = UnityAPI.Await(() => GetFunctionOptions(filter,reference).ToHashSet());
+
+				return LinqUtility.Concat<IUnitOption>(options, dynamicOptions, contextualOptions, functionOptions)
 								  .Where((filter ?? UnitOptionFilter.Any).ValidateOption)
 								  .ToArray();
 			}
@@ -577,7 +578,26 @@ namespace Bolt
 			}
 		}
 
-		private static IEnumerable<IUnitOption> GetDynamicOptions()
+        private static IEnumerable<IUnitOption> GetFunctionOptions(UnitOptionFilter filter, GraphReference reference)
+        {
+            if (filter != null && filter.CompatibleInputPort != null && filter.CompatibleInputPort.unit is Extend.ISubFlowUnit)
+            {
+				var gameObject = Flow.Predict(filter.CompatibleInputPort, reference) as GameObject;
+				if(gameObject != null)
+                {
+					var flowMachine = gameObject.GetComponent<FlowMachine>();
+					if(flowMachine != null)
+                    {
+                        foreach (var function in flowMachine.graph.functions)
+                        {
+							yield return new Extend.FunctionOption(function);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static IEnumerable<IUnitOption> GetDynamicOptions()
 		{
 			// Super Units
 

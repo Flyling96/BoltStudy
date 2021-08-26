@@ -98,6 +98,7 @@ namespace Bolt
 			yield return new UnitCategory("Math");
 			yield return new UnitCategory("Nesting");
 			yield return new UnitCategory("Macros");
+			yield return new UnitCategory("Functions");
 		}
 
 		private static readonly HashSet<Type> noSurfaceConstructors = new HashSet<Type>()
@@ -203,6 +204,8 @@ namespace Bolt
 			if (filter.CompatibleInputType != null)
 			{
 				var inputType = filter.CompatibleInputType;
+
+				//if(inputType )
 
 				if (!inputType.IsPrimitive && inputType != typeof(object))
 				{
@@ -427,6 +430,15 @@ namespace Bolt
 			}
 		}
 
+		private IEnumerable<object> FunctionChildren()
+		{
+			foreach (var function in options.Where(option => option.UnitIs<Extend.FunctionSuperUnit>())
+											   .OrderBy(option => option.label))
+			{
+				yield return function;
+			}
+		}
+
 		private IEnumerable<object> VariablesChildren()
 		{
 			yield return VariableKind.Flow;
@@ -602,6 +614,13 @@ namespace Bolt
 						yield return macroChild;
 					}
 				}
+				else if(category.fullName == "Functions")
+                {
+					foreach(var functionChild in FunctionChildren())
+                    {
+						yield return functionChild;
+                    }
+                }
 			}
 		}
 

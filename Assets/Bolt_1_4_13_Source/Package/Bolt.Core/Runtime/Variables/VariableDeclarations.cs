@@ -75,6 +75,11 @@ namespace Bolt
 			return ConversionUtility.Convert(Get(variable), expectedType);
 		}
 
+		public void Remove(string key)
+        {
+			collection.Remove(key);
+        }
+
 		public void Clear()
 		{
 			collection.Clear();

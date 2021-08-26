@@ -141,6 +141,7 @@ namespace Ludiq
 
 			parentStack.Clear();
 			parentElementStack.Clear();
+			functionElementStack.Clear();
 			graphStack.Clear();
 			dataStack.Clear();
 			debugDataStack.Clear();
@@ -154,7 +155,12 @@ namespace Ludiq
 			{
 				parentElementStack.Add(parentElement);
 			}
-			
+
+			foreach (var functionElement in other.functionElementStack)
+			{
+				functionElementStack.Add(functionElement);
+			}
+
 			foreach (var graph in other.graphStack)
 			{
 				graphStack.Add(graph);

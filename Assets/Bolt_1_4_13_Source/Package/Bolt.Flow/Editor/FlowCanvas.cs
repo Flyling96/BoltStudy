@@ -74,13 +74,13 @@ namespace Bolt
 
 		public const float inspectorZoomThreshold = 0.7f;
 
-		#endregion
+        #endregion
 
 
 
-		#region Lifecycle
+        #region Lifecycle
 
-		public override void Close()
+        public override void Close()
 		{
 			base.Close();
 
@@ -134,6 +134,7 @@ namespace Bolt
 			{
 				var valueOutput = (ValueOutput)connectionSource;
 				var filter = UnitOptionFilter.Any;
+				filter.CompatibleInputPort = valueOutput;
 				filter.CompatibleInputType = valueOutput.type;
 				NewUnit(mousePosition, GetNewUnitOptions(filter), (unit) => CompleteContextualConnection(valueOutput, unit.CompatibleValueInput(valueOutput.type)));
 			}
@@ -284,7 +285,7 @@ namespace Bolt
 		{
 			return DragAndDropUtility.Is<FlowMacro>() ||
 				   (DragAndDropUtility.Is<UnityObject>() && !DragAndDropUtility.Is<IMacro>() && CanDetermineDraggedInput(DragAndDropUtility.Get<UnityObject>())) ||
-				   EditorVariablesUtility.isDraggingVariable || EditorVariablesUtility.isDraggingFunction;
+				   EditorVariablesUtility.isDraggingVariable || Extend.EditorFunctionsUtility.isDraggingFunction;
 		}
 
 		public override void PerformDragAndDrop()
@@ -404,13 +405,25 @@ namespace Bolt
 				}
 				else if (kind == VariableKind.AutoSubFlow)
 				{
-					var value = declaration.value as Extend.SubFlowMachine;
-					if (value != null && value.nest.macro != null)
-					{
-						var customSuperUnit = new Extend.CustomSuperUnit(value.nest.macro);
-						customSuperUnit.VariableName = declaration.name;
-						AddUnit(customSuperUnit, DragAndDropUtility.position);
-					}
+					//var value = declaration.value as Extend.SubFlowMachine;
+					//if (value != null && value.nest.macro != null)
+					//{
+					//	var customSuperUnit = new Extend.CustomSuperUnit(value.nest.macro);
+					//	customSuperUnit.VariableName = declaration.name;
+					//	AddUnit(customSuperUnit, DragAndDropUtility.position);
+					//}
+					string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+					UriBuilder uri = new UriBuilder(codeBase);
+					string path = Uri.UnescapeDataString(uri.Path);
+					string assemblyPath = Path.GetDirectoryName(path) + @"\Assembly-CSharp.dll";
+					Assembly assembly = Assembly.LoadFile(assemblyPath);
+					string typeName = "Bolt.Extend.SubFlowUnit";
+					dynamic obj = assembly.CreateInstance(typeName);
+					Type type = assembly.GetType(typeName);
+					PropertyInfo variableName = type.GetProperty("variableName", BindingFlags.Public | BindingFlags.Instance);
+					variableName.SetValue(obj, declaration.name);
+					Unit unit = (Unit)obj;
+					AddUnit(unit, DragAndDropUtility.position);
 				}
 				else
 				{
@@ -433,9 +446,9 @@ namespace Bolt
 				}
 
 			}
-			else if (EditorVariablesUtility.isDraggingFunction)
+			else if (Extend.EditorFunctionsUtility.isDraggingFunction)
             {
-				var function = EditorVariablesUtility.functionElement;
+				var function = Extend.EditorFunctionsUtility.functionElement;
 				Extend.FunctionSuperUnit unit = new Extend.FunctionSuperUnit();
 				unit.functionName = function.name;
 

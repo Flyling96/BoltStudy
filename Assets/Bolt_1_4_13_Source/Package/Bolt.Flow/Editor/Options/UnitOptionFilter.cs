@@ -61,6 +61,7 @@ namespace Bolt
 		public bool Expose { get; set; }
 		public bool Obsolete { get; set; }
 
+		public ValueOutput CompatibleInputPort { get; set; }
 		public Type CompatibleInputType { get; set; }
 		public Type CompatibleOutputType { get; set; }
 
@@ -95,7 +96,8 @@ namespace Bolt
 				Expose = Expose,
 				Obsolete = Obsolete,
 				CompatibleInputType = CompatibleInputType,
-				CompatibleOutputType = CompatibleOutputType
+				CompatibleOutputType = CompatibleOutputType,
+				CompatibleInputPort = CompatibleInputPort,
 			};
 		}
 
@@ -130,7 +132,8 @@ namespace Bolt
 				   Expose == other.Expose &&
 				   Obsolete == other.Obsolete &&
 				   CompatibleInputType == other.CompatibleInputType &&
-				   CompatibleOutputType == other.CompatibleOutputType;
+				   CompatibleOutputType == other.CompatibleOutputType &&
+				   CompatibleInputPort == other.CompatibleInputPort;
 		}
 
 		public override int GetHashCode()

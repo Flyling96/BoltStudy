@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 namespace Bolt
 {
+	public interface ISubVariable
+    {
+		int SubObjectId { get; }
+    }
 	[AddComponentMenu("Bolt/Variables")]
 	[DisableAnnotation]
 	[IncludeInSettings(false)]
@@ -99,6 +103,113 @@ namespace Bolt
 				}
 			}
 		}
+
+		#region Auto
+		[HideInInspector]
+		public int m_CurrentSubObjectId = 0;
+        
+		public void RemoveNull()
+        {
+			List<string> nullKeys = new List<string>();
+            foreach (var variable in subFlowDeclarations)
+            {
+				if(variable.value == null)
+                {
+					nullKeys.Add(variable.name);
+                }
+            }
+
+            for (int i = 0; i < nullKeys.Count; i++)
+            {
+				subFlowDeclarations.Remove(nullKeys[i]);
+            }
+
+			nullKeys.Clear();
+			foreach (var variable in subSceneObjectDeclarations)
+			{
+				if (variable.value == null)
+				{
+					nullKeys.Add(variable.name);
+				}
+			}
+
+			for (int i = 0; i < nullKeys.Count; i++)
+			{
+				subSceneObjectDeclarations.Remove(nullKeys[i]);
+			}
+		}
+
+		public bool AddSubFlow(ISubVariable subVariable,MonoBehaviour subFlow)
+        {
+            foreach (var variable in subFlowDeclarations)
+            {
+				if(variable.value != null && variable.value is MonoBehaviour mono && mono == subFlow)
+                {
+					return false;
+                }
+            }
+
+			var key = subFlow.gameObject.name;
+			subFlowDeclarations[key] = subFlow;
+			return true;
+        }
+
+		public void RemoveSubFlow(ISubVariable subVariable,MonoBehaviour subFlow)
+        {
+			RemoveSubFlow(subVariable, subFlow.gameObject.name);
+        }
+
+		public void RemoveSubFlow(ISubVariable subVariable,string name)
+        {
+			subFlowDeclarations.Remove(name);
+        }
+
+		public bool AddSceneObject(ISubVariable subVariable, MonoBehaviour subFlow)
+		{
+			foreach (var variable in subSceneObjectDeclarations)
+			{
+				if (variable.value != null && variable.value is MonoBehaviour mono && mono == subFlow)
+				{
+					return false;
+				}
+			}
+
+			var key = subFlow.gameObject.name;
+			subSceneObjectDeclarations[key] = subFlow;
+			return true;
+		}
+
+		public void RemoveSceneObject(ISubVariable subVariable, MonoBehaviour subFlow)
+		{
+			RemoveSceneObject(subVariable, subFlow.gameObject.name);
+		}
+
+		public void RemoveSceneObject(ISubVariable subVariable, string name)
+		{
+			subSceneObjectDeclarations.Remove(name);
+		}
+
+		public void RenameSceneObject(string originStr,string newStr)
+        {
+			var value = subSceneObjectDeclarations[originStr];
+			subSceneObjectDeclarations.Remove(originStr);
+			if(value != null)
+            {
+				subSceneObjectDeclarations[newStr] = value;
+            }
+        }
+
+		public void RenameSubFlow(string originStr, string newStr)
+		{
+			var value = subFlowDeclarations[originStr];
+			subFlowDeclarations.Remove(originStr);
+			if (value != null)
+			{
+				subFlowDeclarations[newStr] = value;
+			}
+		}
+
+		#endregion
 	}
 
 }

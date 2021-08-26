@@ -3,17 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ludiq;
 using System;
+using System.Linq;
 
 namespace Bolt.Extend
 {
+    [UnitCategory("Functions")]
+    [CustomRutimeType]
+    [SpecialUnit]
     public class FunctionSuperUnit : Unit
     {
         [Inspectable, Serialize]
         public string functionName { get; set; }
 
-        private FlowFunctionDeclaration _function;
         [DoNotSerialize]
-        private FlowFunctionDeclaration function
+        [PortLabelHidden]
+        [NullMeansSelf]
+        public ValueInput self { get; private set; }
+
+        [Serialize]
+        private FlowFunctionDeclaration _function;
+
+        public FlowFunctionDeclaration function
         {
             get
             {
@@ -30,25 +40,34 @@ namespace Bolt.Extend
             }
         }
 
+
         protected override void Definition()
         {
-            if (string.IsNullOrEmpty(functionName) || graph == null)
+            if (string.IsNullOrEmpty(functionName))
             {
                 return;
             }
+            //var gameObject = Flow.Predict(self, reference) as GameObject;
+            //if (gameObject != null)
+            //{
+            //    var flowMachine = gameObject.GetComponent<FlowMachine>();
+            //    if(flowMachine != null)
+            //    {
+            //        functions = flowMachine.graph.functions;
+            //    }
+            //}
 
-            FlowFunctionDeclaration tempFunction = null;
-
-            foreach (var func in graph.functions)
+            if (function == null)
             {
-                if (func.name == functionName)
+                foreach (var func in graph.functions)
                 {
-                    tempFunction = func;
-                    break;
+                    if (func.name == functionName)
+                    {
+                        function = func;
+                        break;
+                    }
                 }
             }
-
-            function = tempFunction;
 
             if (function == null || function.graph == null )
             {
@@ -66,6 +85,26 @@ namespace Bolt.Extend
 
                     ControlInput(key, (flow) =>
                     {
+                        if(!graph.functions.Contains(function))
+                        {
+                            var gameObject = flow.GetValue(self) as GameObject;
+                            if(gameObject != null)
+                            {
+                                var flowMachine = gameObject.GetComponent<FlowMachine>();
+                                if (flowMachine != null)
+                                {
+                                    foreach (var func in flowMachine.graph.functions)
+                                    {
+                                        if (func.name == functionName)
+                                        {
+                                            function = func;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         function.executeElement = this;
                         foreach (var unit in function.graph.units)
                         {
@@ -133,6 +172,8 @@ namespace Bolt.Extend
                     });
                 }
             }
+
+            self = ValueInput<GameObject>(nameof(self), null).NullMeansSelf();
         }
 
         #region Editing

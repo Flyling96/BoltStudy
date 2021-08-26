@@ -206,7 +206,7 @@ namespace Ludiq
 			}
 		}
 
-		public void Update()
+		public virtual void Update()
 		{
 			foreach (var widget in widgets)
 			{
