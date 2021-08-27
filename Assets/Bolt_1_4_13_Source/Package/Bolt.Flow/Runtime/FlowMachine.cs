@@ -91,5 +91,18 @@ namespace Bolt
 		{
 			base.ShowData();
 		}
+
+		public GraphReference GetFunctionReference(string functionName)
+        {
+			foreach(var function in graph.functions)
+            {
+				if(function.name == functionName)
+                {
+					return reference.ChildReference(function, false);
+                }
+            }
+			return null;
+
+        }
 	}
 }
