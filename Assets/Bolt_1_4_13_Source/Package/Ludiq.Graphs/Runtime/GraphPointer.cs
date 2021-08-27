@@ -195,7 +195,20 @@ namespace Ludiq
 		
 		public GameObject gameObject { get; private set; }
 
-		public GameObject self => gameObject;
+		public GameObject self
+		{
+			get
+            {
+				if(parent is IGraphFunctionElement functionElement)
+				{
+					return functionElement.self;
+				}
+				else
+                {
+					return gameObject;
+                }
+            }
+		}
 
 		public ScriptableObject scriptableObject => root as ScriptableObject;
 
@@ -498,7 +511,20 @@ namespace Ludiq
             graphStack.Add(childGraph);
 
             IGraphData childGraphData = null;
+			if(functionElement.self != null)
+            {
+				var machine = functionElement.machine;
+				if(machine != null)
+                {
+					dataStack.Add(machine?.graphData);
+					debugDataStack.Add(fetchRootDebugDataBinding?.Invoke(machine));
+				}
+            }
             _data?.TryGetFunctionGraphData(functionElement, out childGraphData);
+			if(childGraphData == null)
+            {
+				childGraphData = _data?.CreateFunctionGraphData(functionElement);
+			}
             dataStack.Add(childGraphData);
 
             var childGraphDebugData = _debugData?.GetOrCreateFunctionGraphData(functionElement);
@@ -510,6 +536,15 @@ namespace Ludiq
 			if (!isChild)
 			{
 				throw new GraphPointerException("Trying to exit the root graph.", this);
+			}
+
+			if(parent is IGraphFunctionElement functionElement)
+			{
+				if (functionElement.machine != null)
+				{
+					dataStack.RemoveAt(dataStack.Count - 1);
+					debugDataStack.RemoveAt(debugDataStack.Count - 1);
+				}
 			}
 
 			parentStack.RemoveAt(parentStack.Count - 1);

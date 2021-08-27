@@ -85,10 +85,10 @@ namespace Bolt.Extend
 
                     ControlInput(key, (flow) =>
                     {
-                        if(!graph.functions.Contains(function))
+                        var gameObject = flow.GetValue(self) as GameObject;
+                        if (gameObject != null)
                         {
-                            var gameObject = flow.GetValue(self) as GameObject;
-                            if(gameObject != null)
+                            if (!graph.functions.Contains(function))
                             {
                                 var flowMachine = gameObject.GetComponent<FlowMachine>();
                                 if (flowMachine != null)
@@ -103,18 +103,19 @@ namespace Bolt.Extend
                                     }
                                 }
                             }
-                        }
 
-                        function.executeElement = this;
-                        foreach (var unit in function.graph.units)
-                        {
-                            if (unit is GraphInput)
+                            function.executeElement = this;
+                            function.self = gameObject;
+                            foreach (var unit in function.graph.units)
                             {
-                                var inputUnit = (GraphInput)unit;
+                                if (unit is GraphInput)
+                                {
+                                    var inputUnit = (GraphInput)unit;
 
-                                flow.stack.EnterFunctionElement(function);
+                                    flow.stack.EnterFunctionElement(function);
 
-                                return inputUnit.controlOutputs[key];
+                                    return inputUnit.controlOutputs[key];
+                                }
                             }
                         }
                         return null;
@@ -150,19 +151,24 @@ namespace Bolt.Extend
 
                     ValueOutput(type, key, (flow) =>
                     {
-                        flow.stack.EnterFunctionElement(function);
-
-                        foreach (var unit in function.graph.units)
+                        var gameObject = flow.GetValue(self) as GameObject;
+                        if (gameObject != null)
                         {
-                            if (unit is GraphOutput)
+                            function.self = gameObject;
+                            flow.stack.EnterFunctionElement(function);
+
+                            foreach (var unit in function.graph.units)
                             {
-                                var outputUnit = (GraphOutput)unit;
+                                if (unit is GraphOutput)
+                                {
+                                    var outputUnit = (GraphOutput)unit;
 
-                                var value = flow.GetValue(outputUnit.valueInputs[key]);
+                                    var value = flow.GetValue(outputUnit.valueInputs[key]);
 
-                                flow.stack.ExitFunctionElement();
+                                    flow.stack.ExitFunctionElement();
 
-                                return value;
+                                    return value;
+                                }
                             }
                         }
 

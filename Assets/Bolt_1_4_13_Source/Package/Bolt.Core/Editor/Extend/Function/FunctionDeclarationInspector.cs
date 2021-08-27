@@ -31,7 +31,9 @@ namespace Bolt.Extend
         {
             get
             {
-                return LudiqGraphsEditorUtility.editedContext.value.reference.ChildReference((IGraphFunctionElement)metadata.value, false);
+                var functionElement = (IGraphFunctionElement)metadata.value;
+                functionElement.self = LudiqGraphsEditorUtility.editedContext.value.reference.gameObject;
+                return LudiqGraphsEditorUtility.editedContext.value.reference.ChildReference(functionElement, false);
             }
         }
 

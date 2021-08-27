@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Ludiq;
+using UnityEngine;
 
 namespace Bolt.Extend
 {
@@ -122,6 +123,11 @@ namespace Bolt.Extend
 		Type IGraphFunctionElement.graphType => typeof(TGraph);
 
 		Type IGraphFunctionElement.macroType => typeof(TMacro);
+
+		[DoNotSerialize]
+		public GameObject self { get; set; }
+
+		public abstract IMachine machine { get; }
 
         public IGraph childGraph => graph;
 

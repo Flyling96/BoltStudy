@@ -13,8 +13,8 @@ namespace Bolt.Extend
         }
 
 
-        protected new CustomVariableNameInspector variableNameInspector = null;
-        private CustomUnityObjectInspector macroInspector = null;
+        //protected new CustomVariableNameInspector variableNameInspector = null;
+        //private CustomUnityObjectInspector macroInspector = null;
 
         private Metadata macroMetadata => metadata[nameof(CustomSuperUnit.nest)][nameof(IGraphNest.macro)];
 
@@ -33,7 +33,7 @@ namespace Bolt.Extend
 
         public void UpdateMacro()
         {
-            string value = metadata[nameof(SpecifyVariableUnit.VariableName)].value as string;
+            string value = metadata[nameof(SpecifyVariableUnit.variableName)].value as string;
             FlowMachine machine = Variables.AutoSubFlow(reference.gameObject).Get(value) as FlowMachine;
             if (machine != null)
             {

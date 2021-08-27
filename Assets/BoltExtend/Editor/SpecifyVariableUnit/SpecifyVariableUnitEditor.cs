@@ -17,7 +17,7 @@ namespace Bolt.Extend
 
         protected VariableNameInspector variableNameInspector = null;
 
-        protected Metadata variableNameMetadata => metadata[nameof(SpecifyVariableUnit.VariableName)];
+        protected Metadata variableNameMetadata => metadata[nameof(SpecifyVariableUnit.variableName)];
 
         protected override float GetInspectorHeight(float width)
         {
@@ -26,16 +26,17 @@ namespace Bolt.Extend
 
         protected override void OnInspectorGUI(Rect position)
         {
-            using (LudiqGUIUtility.currentInspectorWidth.Override(position.width))
-            using (Inspector.adaptiveWidth.Override(true))
-            {
-                variableNameInspector.Draw(position, GUIContent.none);
-            }
+            //using (LudiqGUIUtility.currentInspectorWidth.Override(position.width))
+            //using (Inspector.adaptiveWidth.Override(true))
+            //{
+            //    variableNameInspector.Draw(position, GUIContent.none);
+            //}
+            base.OnInspectorGUI(position);
         }
 
         protected IEnumerable<string> GetVariablesName()
         {
-            if (unit is CustomSuperUnit)
+            if (unit is SubFlowUnit)
             {
                 return EditorVariablesUtility.GetVariableNameSuggestions(VariableKind.AutoSubFlow, reference);
             }

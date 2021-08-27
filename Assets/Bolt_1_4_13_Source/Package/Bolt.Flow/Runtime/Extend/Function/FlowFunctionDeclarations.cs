@@ -9,6 +9,19 @@ namespace Bolt.Extend
     [SerializationVersion("A")]
     public class FlowFunctionDeclaration : FunctionDeclaration<FlowGraph, FlowMacro>
     {
+        public override IMachine machine
+        {
+            get
+            {
+                if(self != null)
+                {
+                    return self.GetComponent<FlowMachine>();
+                }
+
+                return null;
+            }
+        }
+
         public FlowFunctionDeclaration(string name) : base(name) { }
 
         public override IGraph DefaultGraph()

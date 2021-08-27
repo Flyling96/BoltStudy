@@ -132,9 +132,6 @@ GameObject:
   - component: {fileID: 377179242}
   - component: {fileID: 377179244}
   - component: {fileID: 377179243}
-  - component: {fileID: 377179239}
-  - component: {fileID: 377179240}
-  - component: {fileID: 377179241}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -142,57 +139,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &377179239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377179238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e71a0f425ae0c744cbc3c1bc384d1bc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneObjectType: 1
-  m_SceneObjectData:
-    id: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: SceneObjectData, ns: DragonSlay, asm: Assembly-CSharp}
-      data:
-        m_Tid: 0
-        m_Position: {x: 0, y: 0, z: 0}
-        m_Rotation: {x: 0, y: 0, z: 0, w: 1}
-        m_IsExtend: 0
---- !u!114 &377179240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377179238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00b939aa534618c48a6deade81e02fc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_CurrentSubObjectId: 10073
---- !u!114 &377179241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377179238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0d74ecba12e2f34d98d190f03d47dd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SubObjectId: 10070
-  m_IsInit: 1
 --- !u!4 &377179242
 Transform:
   m_ObjectHideFlags: 0
@@ -203,7 +149,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2038514712}
+  - {fileID: 2016363754}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -236,9 +184,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"declarations":{"collection":{"$content":[{"name":"Time","value":{"$content":0.0,"$type":"System.Single"},"$version":"A"},{"name":"OriginPos","value":{"x":0.0,"y":5.0,"z":0.0,"$type":"UnityEngine.Vector3"},"$version":"A"}],"$version":"A"},"$version":"A"},"subFlowDeclarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"subSceneObjectDeclarations":{"collection":{"$content":[{"name":"Level_SceneObject_10070","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
+    _json: '{"declarations":{"collection":{"$content":[{"name":"Time","value":{"$content":0.0,"$type":"System.Single"},"$version":"A"},{"name":"OriginPos","value":{"x":0.0,"y":5.0,"z":0.0,"$type":"UnityEngine.Vector3"},"$version":"A"}],"$version":"A"},"$version":"A"},"subFlowDeclarations":{"collection":{"$content":[{"name":"Actor@1","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Actor@2","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"},"subSceneObjectDeclarations":{"collection":{"$content":[{"name":"Actor@1","value":{"$content":2,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Actor@2","value":{"$content":3,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"},"m_CurrentSubObjectId":3}'
     _objectReferences:
-    - {fileID: 377179239}
+    - {fileID: 2038514713}
+    - {fileID: 2016363755}
+    - {fileID: 2038514709}
+    - {fileID: 2016363751}
+  m_CurrentSubObjectId: 3
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,3 +366,215 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2016363750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2016363754}
+  - component: {fileID: 2016363753}
+  - component: {fileID: 2016363755}
+  - component: {fileID: 2016363751}
+  - component: {fileID: 2016363752}
+  m_Layer: 0
+  m_Name: Actor@2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2016363751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016363750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e71a0f425ae0c744cbc3c1bc384d1bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneObjectType: 2
+  m_SceneObjectData:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: SceneObjectData, ns: DragonSlay, asm: Assembly-CSharp}
+      data:
+        m_Tid: 0
+        m_Position: {x: 0, y: 0, z: 0}
+        m_Rotation: {x: 0, y: 0, z: 0, w: 0}
+        m_IsExtend: 0
+--- !u!114 &2016363752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016363750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0d74ecba12e2f34d98d190f03d47dd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SubObjectId: 2
+  m_IsInit: 1
+  m_OriginName: Actor@2
+--- !u!114 &2016363753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016363750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e741851cba3ad425c91ecf922cc6b379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"declarations":{"collection":{"$content":[{"name":"333","value":{"$content":4444.0,"$type":"System.Single"},"$version":"A"}],"$version":"A"},"$version":"A"},"subFlowDeclarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"subSceneObjectDeclarations":{"collection":{"$content":[{"name":"Actor@0","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"},"m_CurrentSubObjectId":1}'
+    _objectReferences:
+    - {fileID: 2016363751}
+  m_CurrentSubObjectId: 1
+--- !u!4 &2016363754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016363750}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 377179242}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2016363755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016363750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2fe5546f775c47d2820aa5e8a715f53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"nest":{"source":"Macro","macro":0,"embed":null}}'
+    _objectReferences:
+    - {fileID: 11400000, guid: 4bdebe90e48ab7048b74876a7c2ad5ca, type: 2}
+--- !u!1 &2038514708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2038514712}
+  - component: {fileID: 2038514711}
+  - component: {fileID: 2038514713}
+  - component: {fileID: 2038514709}
+  - component: {fileID: 2038514710}
+  m_Layer: 0
+  m_Name: Actor@1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2038514709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038514708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e71a0f425ae0c744cbc3c1bc384d1bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneObjectType: 2
+  m_SceneObjectData:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: SceneObjectData, ns: DragonSlay, asm: Assembly-CSharp}
+      data:
+        m_Tid: 0
+        m_Position: {x: 0, y: 0, z: 0}
+        m_Rotation: {x: 0, y: 0, z: 0, w: 0}
+        m_IsExtend: 0
+--- !u!114 &2038514710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038514708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0d74ecba12e2f34d98d190f03d47dd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SubObjectId: 1
+  m_IsInit: 1
+  m_OriginName: Actor@1
+--- !u!114 &2038514711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038514708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e741851cba3ad425c91ecf922cc6b379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"declarations":{"collection":{"$content":[{"name":"333","value":{"$content":3333.0,"$type":"System.Single"},"$version":"A"}],"$version":"A"},"$version":"A"},"subFlowDeclarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"subSceneObjectDeclarations":{"collection":{"$content":[{"name":"Actor@0","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"},"m_CurrentSubObjectId":1}'
+    _objectReferences:
+    - {fileID: 2038514709}
+  m_CurrentSubObjectId: 1
+--- !u!4 &2038514712
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038514708}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 377179242}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2038514713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038514708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2fe5546f775c47d2820aa5e8a715f53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"nest":{"source":"Macro","macro":0,"embed":null}}'
+    _objectReferences:
+    - {fileID: 11400000, guid: 4bdebe90e48ab7048b74876a7c2ad5ca, type: 2}

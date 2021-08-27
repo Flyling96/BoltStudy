@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Ludiq
 {
@@ -15,6 +16,9 @@ namespace Ludiq
 
 		Type graphType { get; }
 		Type macroType { get; }
+
+		GameObject self { get; set; }
+		IMachine machine { get; }
 	}
 
 	public interface IGraphFunctions: IEnumerable<IGraphFunctionElement>

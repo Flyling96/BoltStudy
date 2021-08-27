@@ -8,7 +8,15 @@ namespace Bolt.Extend
     public abstract class SpecifyVariableUnit : Unit
     {
         [Serialize]
-        public string VariableName { get; set; }
+        public string variableName { get; set; }
 
+        [DoNotSerialize]
+        [PortLabelHidden]
+        public ValueInput name { get; private set; }
+
+        protected override void Definition()
+        {
+            name = ValueInput(nameof(name), variableName);
+        }
     }
 }

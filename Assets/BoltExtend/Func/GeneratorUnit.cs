@@ -222,7 +222,7 @@ namespace Bolt.Extend
             void OnDestroy()
             {
                 Flow destroyFlow = Flow.New(reference);
-                Debug.Log($"[_] {destroyFlow.stack.gameObject}");
+                //Debug.Log($"[_] {destroyFlow.stack.gameObject}");
                 OnSceneObjectDestroy(destroyFlow, newSceneObject, true);
                 newSceneObject.Shell.OnDestroyEvent -= OnDestroy;
             }

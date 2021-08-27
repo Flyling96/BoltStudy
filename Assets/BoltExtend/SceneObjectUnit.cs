@@ -23,7 +23,7 @@ namespace Bolt.Extend
 		{
 			VariableDeclarations variables = Variables.AutoSceneObject(flow.stack.self);
 
-            var shell = variables.Get(VariableName) as SceneObjectDataShell;
+            var shell = variables.Get(variableName) as SceneObjectDataShell;
 
             return shell.SceneObject;
 		}
