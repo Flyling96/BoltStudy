@@ -9,6 +9,10 @@ namespace Bolt.Extend
     [CustomRutimeType]
     public class SubFlowUnit : SpecifyVariableUnit, ISubFlowUnit
     {
+        public SubFlowUnit(string name) : base(name) { }
+
+        public SubFlowUnit() : base() { }
+
         [DoNotSerialize]
         [PortLabelHidden]
         [NullMeansSelf]

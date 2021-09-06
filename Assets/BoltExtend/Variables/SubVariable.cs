@@ -6,15 +6,31 @@ using UnityEngine;
 
 namespace Bolt.Extend
 {
-    public partial class SubVariable : MonoBehaviour, ISubVariable
+
+    public partial class SubVariable : AbstractSubVariable
     {
         public int m_SubObjectId = 0;
 
-        public int SubObjectId
+        public override int SubObjectId
         {
             get
             {
                 return m_SubObjectId;
+            }
+        }
+
+        public override int Mask
+        {
+            get
+            {
+                bool isMachine = transform.GetComponent<FlowMachine>() != null;
+                bool isSceneObject = transform.GetComponent<SceneObjectDataShell>() != null;
+                int result = 0;
+                result |= isMachine ? 1 << 0 : 0;
+                result |= isSceneObject ? 1 << 1 : 0;
+
+                return result;
+                
             }
         }
     }
@@ -88,11 +104,11 @@ namespace Bolt.Extend
             {
                 if(shell != null)
                 {
-                    m_Root.AddSceneObject(this, shell);
+                    m_Root.AddSceneObject(shell);
                 }
                 if(subFlow != null)
                 {
-                    m_Root.AddSubFlow(this, subFlow);
+                    m_Root.AddSubFlow(subFlow);
                 }
             }
         }
@@ -106,11 +122,11 @@ namespace Bolt.Extend
             {
                 if(shell != null)
                 {
-                    m_Root.RemoveSceneObject(this, shell);
+                    m_Root.RemoveSceneObject(shell);
                 }
                 if(subFlow != null)
                 {
-                    m_Root.RemoveSubFlow(this, subFlow);
+                    m_Root.RemoveSubFlow(subFlow);
                 }
             }
         }

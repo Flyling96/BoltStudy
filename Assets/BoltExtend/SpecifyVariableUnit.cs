@@ -7,6 +7,13 @@ namespace Bolt.Extend
 {
     public abstract class SpecifyVariableUnit : Unit
     {
+        public SpecifyVariableUnit(string name) : base()
+        {
+            variableName = name;
+        }
+
+        public SpecifyVariableUnit() : base() { }
+
         [Serialize]
         public string variableName { get; set; }
 

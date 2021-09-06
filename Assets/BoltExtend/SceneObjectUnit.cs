@@ -10,6 +10,10 @@ namespace Bolt.Extend
     [CustomRutimeType]
     public class SceneObjectUnit : SpecifyVariableUnit
     {
+        public SceneObjectUnit(string name) : base(name) { }
+
+        public SceneObjectUnit() : base() { }
+
         [DoNotSerialize]
         [PortLabelHidden]
         public ValueOutput value { get; private set; }

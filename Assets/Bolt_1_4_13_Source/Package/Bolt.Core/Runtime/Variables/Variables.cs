@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 
 namespace Bolt
 {
-	public interface ISubVariable
-    {
-		int SubObjectId { get; }
-    }
+	public abstract class AbstractSubVariable : MonoBehaviour
+	{
+		public abstract int SubObjectId { get; }
+
+		public abstract int Mask { get; }
+	}
 	[AddComponentMenu("Bolt/Variables")]
 	[DisableAnnotation]
 	[IncludeInSettings(false)]
@@ -139,7 +141,7 @@ namespace Bolt
 			}
 		}
 
-		public bool AddSubFlow(ISubVariable subVariable,MonoBehaviour subFlow)
+		public bool AddSubFlow(MonoBehaviour subFlow)
         {
             foreach (var variable in subFlowDeclarations)
             {
@@ -154,17 +156,17 @@ namespace Bolt
 			return true;
         }
 
-		public void RemoveSubFlow(ISubVariable subVariable,MonoBehaviour subFlow)
+		public void RemoveSubFlow(MonoBehaviour subFlow)
         {
-			RemoveSubFlow(subVariable, subFlow.gameObject.name);
+			RemoveSubFlow(subFlow.gameObject.name);
         }
 
-		public void RemoveSubFlow(ISubVariable subVariable,string name)
+		public void RemoveSubFlow(string name)
         {
 			subFlowDeclarations.Remove(name);
         }
 
-		public bool AddSceneObject(ISubVariable subVariable, MonoBehaviour subFlow)
+		public bool AddSceneObject(MonoBehaviour subFlow)
 		{
 			foreach (var variable in subSceneObjectDeclarations)
 			{
@@ -179,12 +181,12 @@ namespace Bolt
 			return true;
 		}
 
-		public void RemoveSceneObject(ISubVariable subVariable, MonoBehaviour subFlow)
+		public void RemoveSceneObject(MonoBehaviour subFlow)
 		{
-			RemoveSceneObject(subVariable, subFlow.gameObject.name);
+			RemoveSceneObject(subFlow.gameObject.name);
 		}
 
-		public void RemoveSceneObject(ISubVariable subVariable, string name)
+		public void RemoveSceneObject(string name)
 		{
 			subSceneObjectDeclarations.Remove(name);
 		}

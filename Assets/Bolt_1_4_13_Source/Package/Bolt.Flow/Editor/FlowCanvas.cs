@@ -261,7 +261,14 @@ namespace Bolt
 		{
 			if (uo.IsSceneBound())
 			{
-				if (reference.self == uo.GameObject())
+				var go = uo.GameObject();
+
+				if (go != null && go.transform.parent == reference.self.transform && go.transform.GetComponent<AbstractSubVariable>() != null)
+                {
+					return true;
+                }
+
+				if (reference.self == go)
 				{
 					// Because we'll be able to assign it to Self
 					return true;
@@ -287,6 +294,8 @@ namespace Bolt
 				   (DragAndDropUtility.Is<UnityObject>() && !DragAndDropUtility.Is<IMacro>() && CanDetermineDraggedInput(DragAndDropUtility.Get<UnityObject>())) ||
 				   EditorVariablesUtility.isDraggingVariable || Extend.EditorFunctionsUtility.isDraggingFunction;
 		}
+
+		public static Func<AbstractSubVariable,IEnumerable<IUnitOption>> SubVariableOptions;
 
 		public override void PerformDragAndDrop()
 		{
@@ -334,9 +343,15 @@ namespace Bolt
 				if (uo is GameObject)
 				{
 					root.AddRange(uo.GetComponents<Component>().Select(c => c.GetType()));
+					var subVariable = uo.GetComponent<AbstractSubVariable>();
+					if(subVariable != null)
+                    {
+						root.AddRange(SubVariableOptions(subVariable));
+					}
 				}
 
 				options.rootOverride = root.ToArray();
+				var go = uo.GameObject();
 
 				NewUnit(DragAndDropUtility.position, options, (unit) =>
 				{
@@ -371,6 +386,10 @@ namespace Bolt
 							// The component is from another object from the same scene
 							compatibleInput.SetDefaultValue(uo.ConvertTo(compatibleInput.type));
 						}
+						else if (go != null && go.transform.parent == reference.self.transform && go.transform.GetComponent<AbstractSubVariable>() != null)
+						{
+
+						}
 						else
 						{
 							throw new NotSupportedException("Cannot determine compatible input from dragged Unity object.");
@@ -398,20 +417,13 @@ namespace Bolt
 					string typeName = "Bolt.Extend.SceneObjectUnit";
 					dynamic obj = assembly.CreateInstance(typeName);
 					Type type = assembly.GetType(typeName);
-					PropertyInfo variableName = type.GetProperty("VariableName", BindingFlags.Public | BindingFlags.Instance);
+					PropertyInfo variableName = type.GetProperty("variableName", BindingFlags.Public | BindingFlags.Instance);
 					variableName.SetValue(obj, declaration.name);
 					Unit unit = (Unit)obj;
 					AddUnit(unit, DragAndDropUtility.position);
 				}
 				else if (kind == VariableKind.AutoSubFlow)
 				{
-					//var value = declaration.value as Extend.SubFlowMachine;
-					//if (value != null && value.nest.macro != null)
-					//{
-					//	var customSuperUnit = new Extend.CustomSuperUnit(value.nest.macro);
-					//	customSuperUnit.VariableName = declaration.name;
-					//	AddUnit(customSuperUnit, DragAndDropUtility.position);
-					//}
 					string codeBase = Assembly.GetExecutingAssembly().CodeBase;
 					UriBuilder uri = new UriBuilder(codeBase);
 					string path = Uri.UnescapeDataString(uri.Path);
