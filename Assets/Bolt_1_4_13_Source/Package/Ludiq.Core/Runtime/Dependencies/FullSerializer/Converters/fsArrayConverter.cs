@@ -24,7 +24,6 @@ namespace Ludiq.FullSerializer
 		{
 			// note: IList[index] is **significantly** faster than Array.Get, so
 			//       make sure we use that instead.
-
 			IList arr = (Array)instance;
 			var elementType = storageType.GetElementType();
 

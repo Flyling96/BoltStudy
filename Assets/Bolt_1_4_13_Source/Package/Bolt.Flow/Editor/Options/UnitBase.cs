@@ -601,12 +601,12 @@ namespace Bolt
 		{
 			// Super Units
 
-			var flowMacros = AssetUtility.GetAllAssetsOfType<FlowMacro>().ToArray();
+			//var flowMacros = AssetUtility.GetAllAssetsOfType<FlowMacro>().ToArray();
 
-			foreach (var superUnit in flowMacros.Select(flowMacro => new SuperUnit(flowMacro)))
-			{
-				yield return superUnit.Option();
-			}
+			//foreach (var superUnit in flowMacros.Select(flowMacro => new SuperUnit(flowMacro)))
+			//{
+			//	yield return superUnit.Option();
+			//}
 
 			// Extensions
 
