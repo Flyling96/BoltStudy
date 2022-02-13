@@ -7,13 +7,13 @@ using UnityEngine;
 
 namespace AutoBinary
 {
-    public abstract class BinaryStatementBuilder
+    public abstract class BinaryStatementBuilder: BinaryBuilder
     {
         public abstract bool CanProcess(Type type);
 
-        public abstract IEnumerable<CodeStatement> BuildSerializeStatement(Type type, string variableName);
+        public abstract IEnumerable<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable);
 
-        public abstract IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, string variableName);
+        public abstract IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable);
 
 
     }

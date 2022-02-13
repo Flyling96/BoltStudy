@@ -8,7 +8,7 @@
 	[UnitShortTitle("Switch")]
 	[UnitSubtitle("On Integer")]
 	[UnitOrder(5)]
-	public class SwitchOnInteger : SwitchUnit<int>
+	public partial class SwitchOnInteger : SwitchUnit<int>
 	{
 
 	}

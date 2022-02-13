@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Bolt
 {
 	[SerializationVersion("A")]
-	public abstract class Unit : GraphElement<FlowGraph>, IUnit
+	public abstract partial class Unit : GraphElement<FlowGraph>, IUnit
 	{
 		public class DebugData : IUnitDebugData
 		{

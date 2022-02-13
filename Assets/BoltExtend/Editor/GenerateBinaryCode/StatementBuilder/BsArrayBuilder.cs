@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AutoBinary
@@ -13,35 +14,68 @@ namespace AutoBinary
             return type.IsArray;
         }
 
-        public override IEnumerable<CodeStatement> BuildSerializeStatement(Type type, string variableName)
+        string countName = "_count";
+
+        public override IEnumerable<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable)
         {
-            string collectionName = "collection";
-            CodeVariableReferenceExpression variable =new CodeVariableReferenceExpression(variableName);
-            //(ICollection)variableName;
-            var convert = new CodeCastExpression(typeof(ICollection), variable);
-            //ICollection collection = (ICollection)variableName;
-            yield return new CodeVariableDeclarationStatement(typeof(ICollection), collectionName, convert);
+            //variableName.Length
+            var arrayCount = new CodeFieldReferenceExpression(variable, "Length");
+            //int _count = variableName.Length;
+            yield return new CodeVariableDeclarationStatement(typeof(int), countName, arrayCount);
+            //writer.write(_count)
+            var countStatements = GenerateBinaryCodeManager.BuildSerializeStatement(typeof(int), new CodeVariableReferenceExpression(countName));
+            foreach(var countStatement in countStatements)
+            {
+                yield return countStatement;
+            }
 
             var elementType = type.GetElementType();
-            var elementStatements = AutoBinaryBuilder.BuildSerializeStatement(elementType, variableName);
-            //for(int i =0 ;i< collection.Count;i++)
+            var elementStatements = GenerateBinaryCodeManager.BuildSerializeStatement(elementType, new CodeIndexerExpression(variable, new CodeVariableReferenceExpression("i")));
+            //for(int i =0 ;i< _count;i++)
             CodeIterationStatement forLoop = new CodeIterationStatement(
                 new CodeVariableDeclarationStatement(typeof(int),"i", new CodePrimitiveExpression(0)),
-                new CodeBinaryOperatorExpression(new CodeVariableReferenceExpression("i"),CodeBinaryOperatorType.LessThan, 
-            new CodeFieldReferenceExpression(new CodeVariableReferenceExpression("collection"),"Count")),
+                new CodeBinaryOperatorExpression(new CodeVariableReferenceExpression("i"),CodeBinaryOperatorType.LessThan,
+                new CodeVariableReferenceExpression(countName)),
                 new CodeAssignStatement(new CodeVariableReferenceExpression("i"), new CodeBinaryOperatorExpression(
-        new CodeVariableReferenceExpression("i"), CodeBinaryOperatorType.Add, new CodePrimitiveExpression(1))),
+                new CodeVariableReferenceExpression("i"), CodeBinaryOperatorType.Add, new CodePrimitiveExpression(1))),
                 //LoopContent
-                
+                elementStatements?.ToArray()
                 );
-
+            yield return forLoop;
 
 
         }
 
-        public override IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, string variableName)
+        public override IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable)
         {
-            throw new NotImplementedException();
+            //int _count = 0;
+            yield return new CodeVariableDeclarationStatement(typeof(int), countName, new CodePrimitiveExpression(0));
+            //_count = reader.ReadInt32();
+            var countStatements = GenerateBinaryCodeManager.BuildDeserializeStatement(typeof(int), new CodeVariableReferenceExpression(countName));
+            foreach (var countStatement in countStatements)
+            {
+                yield return countStatement;
+            }
+
+            var elementType = type.GetElementType();
+            //variableName = new type[_count];
+            CodeArrayCreateExpression arrayCreate = new CodeArrayCreateExpression(elementType, new CodeVariableReferenceExpression(countName));
+
+            //variableName = new type[_count];
+            yield return new CodeAssignStatement(variable, arrayCreate);
+
+            var elementStatements = GenerateBinaryCodeManager.BuildDeserializeStatement(elementType, new CodeIndexerExpression(variable, new CodeVariableReferenceExpression("i")));
+            //for(int i =0 ;i< _count;i++)
+            CodeIterationStatement forLoop = new CodeIterationStatement(
+                new CodeVariableDeclarationStatement(typeof(int), "i", new CodePrimitiveExpression(0)),
+                new CodeBinaryOperatorExpression(new CodeVariableReferenceExpression("i"), CodeBinaryOperatorType.LessThan,
+                new CodeVariableReferenceExpression(countName)),
+                new CodeAssignStatement(new CodeVariableReferenceExpression("i"), new CodeBinaryOperatorExpression(
+                new CodeVariableReferenceExpression("i"), CodeBinaryOperatorType.Add, new CodePrimitiveExpression(1))),
+                //LoopContent
+                elementStatements?.ToArray()
+                );
+            yield return forLoop;
         }
     }
 }
