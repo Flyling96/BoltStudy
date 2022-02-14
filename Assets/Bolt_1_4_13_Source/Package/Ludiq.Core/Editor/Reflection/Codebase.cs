@@ -342,7 +342,7 @@ namespace Ludiq
 				name == "Assembly-CSharp-firstpass";
 		}
 
-		private static bool IsUserAssembly(Assembly assembly)
+		public static bool IsUserAssembly(Assembly assembly)
 		{
 			return IsUserAssembly(assembly.GetName());
 		}

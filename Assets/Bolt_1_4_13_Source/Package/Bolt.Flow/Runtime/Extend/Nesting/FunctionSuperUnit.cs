@@ -5,7 +5,7 @@ using Ludiq;
 using System;
 using System.Linq;
 
-namespace Bolt.Extend
+namespace Bolt
 {
     [UnitCategory("Functions")]
     [CustomRutimeType]

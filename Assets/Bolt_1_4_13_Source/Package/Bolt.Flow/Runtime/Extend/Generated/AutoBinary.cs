@@ -12,38 +12,6 @@ namespace Bolt
 {
 	
 	
-	public partial class SpecifyVariableUnit
-	{
-		
-		public override void BinarySerialize(System.IO.BinaryWriter writer)
-		{
-			base.BinarySerialize(writer);
-			writer.Write(variableName);
-		}
-		
-		public override void BinaryDeserialize(System.IO.BinaryReader reader)
-		{
-			base.BinaryDeserialize(reader);
-			variableName = reader.ReadString();
-		}
-	}
-	
-	public partial class Vector3New
-	{
-		
-		public override void BinarySerialize(System.IO.BinaryWriter writer)
-		{
-			base.BinarySerialize(writer);
-			writer.Write(m_Value);
-		}
-		
-		public override void BinaryDeserialize(System.IO.BinaryReader reader)
-		{
-			base.BinaryDeserialize(reader);
-			m_Value = reader.ReadVector3();
-		}
-	}
-	
 	public partial class CreateStruct
 	{
 		
@@ -168,23 +136,7 @@ namespace Bolt
 		}
 	}
 	
-	public partial class SelectOnString
-	{
-		
-		public override void BinarySerialize(System.IO.BinaryWriter writer)
-		{
-			base.BinarySerialize(writer);
-			writer.Write(ignoreCase);
-		}
-		
-		public override void BinaryDeserialize(System.IO.BinaryReader reader)
-		{
-			base.BinaryDeserialize(reader);
-			ignoreCase = reader.ReadBoolean();
-		}
-	}
-	
-	public partial class SelectUnit`1
+	public partial class SelectOnInteger
 	{
 		
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
@@ -192,6 +144,10 @@ namespace Bolt
 			base.BinarySerialize(writer);
 			int _count = options.Count;
 			writer.Write(_count);
+			for (int i = 0; (i < _count); i = (i + 1))
+			{
+				writer.Write(options[i]);
+			}
 		}
 		
 		public override void BinaryDeserialize(System.IO.BinaryReader reader)
@@ -199,10 +155,42 @@ namespace Bolt
 			base.BinaryDeserialize(reader);
 			int _count = 0;
 			_count = reader.ReadInt32();
-			options = new System.Collections.Generic.List<>();
+			options = new System.Collections.Generic.List<int>();
 			for (int i = 0; (i < _count); i = (i + 1))
 			{
-				T _temp;
+				int _temp;
+				_temp = reader.ReadInt32();
+				options.Add(_temp);
+			}
+		}
+	}
+	
+	public partial class SelectOnString
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(ignoreCase);
+			int _count = options.Count;
+			writer.Write(_count);
+			for (int i = 0; (i < _count); i = (i + 1))
+			{
+				writer.Write(options[i]);
+			}
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			ignoreCase = reader.ReadBoolean();
+			int _count = 0;
+			_count = reader.ReadInt32();
+			options = new System.Collections.Generic.List<string>();
+			for (int i = 0; (i < _count); i = (i + 1))
+			{
+				string _temp;
+				_temp = reader.ReadString();
 				options.Add(_temp);
 			}
 		}
@@ -238,23 +226,7 @@ namespace Bolt
 		}
 	}
 	
-	public partial class SwitchOnString
-	{
-		
-		public override void BinarySerialize(System.IO.BinaryWriter writer)
-		{
-			base.BinarySerialize(writer);
-			writer.Write(ignoreCase);
-		}
-		
-		public override void BinaryDeserialize(System.IO.BinaryReader reader)
-		{
-			base.BinaryDeserialize(reader);
-			ignoreCase = reader.ReadBoolean();
-		}
-	}
-	
-	public partial class SwitchUnit`1
+	public partial class SwitchOnInteger
 	{
 		
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
@@ -262,6 +234,10 @@ namespace Bolt
 			base.BinarySerialize(writer);
 			int _count = options.Count;
 			writer.Write(_count);
+			for (int i = 0; (i < _count); i = (i + 1))
+			{
+				writer.Write(options[i]);
+			}
 		}
 		
 		public override void BinaryDeserialize(System.IO.BinaryReader reader)
@@ -269,10 +245,42 @@ namespace Bolt
 			base.BinaryDeserialize(reader);
 			int _count = 0;
 			_count = reader.ReadInt32();
-			options = new System.Collections.Generic.List<>();
+			options = new System.Collections.Generic.List<int>();
 			for (int i = 0; (i < _count); i = (i + 1))
 			{
-				T _temp;
+				int _temp;
+				_temp = reader.ReadInt32();
+				options.Add(_temp);
+			}
+		}
+	}
+	
+	public partial class SwitchOnString
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(ignoreCase);
+			int _count = options.Count;
+			writer.Write(_count);
+			for (int i = 0; (i < _count); i = (i + 1))
+			{
+				writer.Write(options[i]);
+			}
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			ignoreCase = reader.ReadBoolean();
+			int _count = 0;
+			_count = reader.ReadInt32();
+			options = new System.Collections.Generic.List<string>();
+			for (int i = 0; (i < _count); i = (i + 1))
+			{
+				string _temp;
+				_temp = reader.ReadString();
 				options.Add(_temp);
 			}
 		}
@@ -340,23 +348,969 @@ namespace Bolt
 		}
 	}
 	
+	public partial class BoltAnimationEvent
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class BoltNamedAnimationEvent
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnAnimatorIK
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnAnimatorMove
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnApplicationFocus
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnApplicationLostFocus
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnApplicationPause
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnApplicationQuit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnApplicationResume
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class BoltUnityEvent
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
 	public partial class CustomEvent
 	{
 		
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
 		{
 			base.BinarySerialize(writer);
+			writer.Write(coroutine);
 			writer.Write(_argumentCount);
 		}
 		
 		public override void BinaryDeserialize(System.IO.BinaryReader reader)
 		{
 			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
 			_argumentCount = reader.ReadInt32();
 		}
 	}
 	
-	public partial class EventUnit`1
+	public partial class OnDrawGizmos
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnDrawGizmosSelected
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class EventUnit<TArgs>
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class GenericGuiEventUnit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnButtonClick
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnDropdownValueChanged
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnGUI
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnInputFieldEndEdit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnInputFieldValueChanged
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnMove
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnScrollRectValueChanged
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnScrollbarValueChanged
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnSliderValueChanged
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnToggleValueChanged
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class PointerEventUnit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class GameObjectEventUnit<TArgs>
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class GlobalEventUnit<TArgs>
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnTransformChildrenChanged
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnTransformParentChanged
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnButtonInput
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnKeyboardInput
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnMouseDown
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnMouseDrag
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnMouseEnter
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnMouseExit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnMouseInput
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnMouseOver
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnMouseUp
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnMouseUpAsButton
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class FixedUpdate
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class LateUpdate
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnDestroy
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnDisable
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnEnable
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class Start
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class Update
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class MachineEventUnit<TArgs>
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class ManualEventUnit<TArgs>
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnDestinationReached
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class CollisionEvent2DUnit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnJointBreak2D
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class TriggerEvent2DUnit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class CollisionEventUnit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnControllerColliderHit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnJointBreak
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnParticleCollision
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class TriggerEventUnit
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnBecameInvisible
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnBecameVisible
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(coroutine);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			coroutine = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class OnTimerElapsed
 	{
 		
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
@@ -452,7 +1406,7 @@ namespace Bolt
 		}
 	}
 	
-	public partial class MoveTowards`1
+	public partial class MoveTowards<T>
 	{
 		
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
@@ -468,18 +1422,131 @@ namespace Bolt
 		}
 	}
 	
-	public partial class Round`2
+	public partial class ScalarMoveTowards
 	{
 		
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
 		{
 			base.BinarySerialize(writer);
-			writer.Write(rounding);
+			writer.Write(perSecond);
 		}
 		
 		public override void BinaryDeserialize(System.IO.BinaryReader reader)
 		{
 			base.BinaryDeserialize(reader);
+			perSecond = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class ScalarRound
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(((int)(rounding)));
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			rounding = ((Bolt.Round<float, int>.Rounding)(reader.ReadInt32()));
+		}
+	}
+	
+	public partial class Vector2MoveTowards
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(perSecond);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			perSecond = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class Vector2Round
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(((int)(rounding)));
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			rounding = ((Bolt.Round<UnityEngine.Vector2, UnityEngine.Vector2>.Rounding)(reader.ReadInt32()));
+		}
+	}
+	
+	public partial class Vector3MoveTowards
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(perSecond);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			perSecond = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class Vector3Round
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(((int)(rounding)));
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			rounding = ((Bolt.Round<UnityEngine.Vector3, UnityEngine.Vector3>.Rounding)(reader.ReadInt32()));
+		}
+	}
+	
+	public partial class Vector4MoveTowards
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(perSecond);
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			perSecond = reader.ReadBoolean();
+		}
+	}
+	
+	public partial class Vector4Round
+	{
+		
+		public override void BinarySerialize(System.IO.BinaryWriter writer)
+		{
+			base.BinarySerialize(writer);
+			writer.Write(((int)(rounding)));
+		}
+		
+		public override void BinaryDeserialize(System.IO.BinaryReader reader)
+		{
+			base.BinaryDeserialize(reader);
+			rounding = ((Bolt.Round<UnityEngine.Vector4, UnityEngine.Vector4>.Rounding)(reader.ReadInt32()));
 		}
 	}
 	
@@ -523,16 +1590,17 @@ namespace Bolt
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
 		{
 			base.BinarySerialize(writer);
-			writer.Write(kind);
+			writer.Write(((int)(kind)));
 		}
 		
 		public override void BinaryDeserialize(System.IO.BinaryReader reader)
 		{
 			base.BinaryDeserialize(reader);
+			kind = ((Bolt.VariableKind)(reader.ReadInt32()));
 		}
 	}
 	
-	public partial class MultiInputUnit`1
+	public partial class MultiInputUnit<T>
 	{
 		
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
@@ -548,7 +1616,7 @@ namespace Bolt
 		}
 	}
 	
-	public partial class NesterUnit`2
+	public partial class SuperUnit
 	{
 		
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
@@ -559,19 +1627,6 @@ namespace Bolt
 		public override void BinaryDeserialize(System.IO.BinaryReader reader)
 		{
 			base.BinaryDeserialize(reader);
-		}
-	}
-	
-	public partial class Unit
-	{
-		
-		public virtual void BinarySerialize(System.IO.BinaryWriter writer)
-		{
-		}
-		
-		public virtual void BinaryDeserialize(System.IO.BinaryReader reader)
-		{
-			position = reader.ReadVector2();
 		}
 	}
 	

@@ -11,7 +11,7 @@ namespace AutoBinary
     {
         public override bool CanProcess(Type type)
         {
-            return type.IsValueType || type == typeof(string);
+            return type.IsValueType && !type.IsEnum || type == typeof(string);
         }
 
         public override IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable)

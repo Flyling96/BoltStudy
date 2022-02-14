@@ -1,7 +1,7 @@
 ﻿using Ludiq;
 using System;
 
-namespace Bolt.Extend
+namespace Bolt
 {
 	[TypeIcon(typeof(FlowGraph))]
 	[UnitCategory("Extend")]

@@ -17,12 +17,7 @@ namespace AutoBinary
     public static class GenerateBinaryCodeManager
     {
         public static string AutoBinaryPath => Path.Combine(BoltFlow.Paths.package, "Runtime/Extend/Generated/AutoBinary.cs");
-
-        public static List<string> IngoreMemberNames = new List<string>()
-        {
-            "position",
-            "guid"
-        };
+        public static string AutoBinaryExtendPath => "Assets/BoltExtend/Generated/AutoBinary.cs";
 
         [MenuItem("Tools/TestBinary")]
         private static void GenerateScript()
@@ -35,40 +30,15 @@ namespace AutoBinary
 
             foreach (var unit in Codebase.ludiqRuntimeTypes.Where(t => typeof(IUnit).IsAssignableFrom(t)))
             {
-                var type = GenerateClass(unit);
-                if (type != null)
+                if (unit.Assembly.GetName().Name == "Bolt.Flow.Runtime")
                 {
-                    @namespace.Types.Add(type);
+                    var type = GenerateClass(unit);
+                    if (type != null)
+                    {
+                        @namespace.Types.Add(type);
+                    }
                 }
             }
-
-
-            //var @class = new CodeTypeDeclaration("FlowGraphBinarySerialization")
-            //{
-            //    IsClass = true
-            //};
-
-            //@class.Comments.Add(new CodeCommentStatement("自动生成FlowGraph的二进制序列化相关代码"));
-            //@namespace.Types.Add(@class);
-
-            //var @method = new CodeMemberMethod
-            //{
-            //    Name = "AAA",
-            //    ReturnType = new CodeTypeReference(typeof(void)),
-            //    Attributes = MemberAttributes.Public | MemberAttributes.Static,
-            //};
-
-            //method.Parameters.Add(new CodeParameterDeclarationExpression(typeof(BinaryReader), "reader"));
-
-            //@method.Comments.Add(new CodeCommentStatement("2333"));
-
-            //CodeExpression invokeExpression = new CodeMethodInvokeExpression(
-            //    new CodeTypeReferenceExpression("Binary"),
-            //   "Read", new CodePrimitiveExpression("reader"));
-
-            //@method.Statements.Add(new CodeExpressionStatement(invokeExpression));
-
-            //@class.Members.Add(@method);
 
             if (File.Exists(AutoBinaryPath))
             {
@@ -92,29 +62,112 @@ namespace AutoBinary
                 }
             }
 
+            //Bolt.Extend
+            compileUnit = new CodeCompileUnit();
+
+            @namespace = new CodeNamespace("Bolt.Extend");
+
+            compileUnit.Namespaces.Add(@namespace);
+
+            foreach (var unit in Codebase.ludiqRuntimeTypes.Where(t => typeof(IUnit).IsAssignableFrom(t)))
+            {
+                if (Codebase.IsUserAssembly(unit.Assembly))
+                {
+                    var type = GenerateClass(unit);
+                    if (type != null)
+                    {
+                        @namespace.Types.Add(type);
+                    }
+                }
+            }
+
+            if (File.Exists(AutoBinaryExtendPath))
+            {
+                File.Delete(AutoBinaryExtendPath);
+            }
+
+            using (var provider = CodeDomProvider.CreateProvider("CSharp"))
+            {
+                var options = new CodeGeneratorOptions
+                {
+                    BracingStyle = "C",
+                    IndentString = "\t",
+                    BlankLinesBetweenMembers = true,
+                    ElseOnClosing = false,
+                    VerbatimOrder = true
+                };
+
+                using (var scriptWriter = new StreamWriter(AutoBinaryExtendPath))
+                {
+                    provider.GenerateCodeFromCompileUnit(compileUnit, scriptWriter, options);
+                }
+            }
+
+
+            AssetDatabase.Refresh();
+        }
+
+        [MenuItem("Tools/DeleteBinary")]
+        private static void DeleteGeneratedScript()
+        {
+            if(File.Exists(AutoBinaryPath))
+            {
+                File.Delete(AutoBinaryPath);
+            }
+
+            if(File.Exists(AutoBinaryExtendPath))
+            {
+                File.Delete(AutoBinaryExtendPath);
+            }
+
             AssetDatabase.Refresh();
         }
 
         private static CodeTypeDeclaration GenerateClass(Type type)
         {
             List<MemberInfo> m_MemberInfos = new List<MemberInfo>();
-            type.GetFields(BindingFlags.DeclaredOnly);
-            foreach (var memberInfo in type.GetMembers(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic))
+            var flags = type.BaseType != null && type.BaseType.IsGenericType ? BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic :
+                BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            foreach (var memberInfo in type.GetMembers(flags))
             {
+                if(memberInfo.DeclaringType.IsAssignableFrom(typeof(Unit)))
+                {
+                    continue;
+                }
+
                 if (memberInfo.HasAttribute<SerializeAttribute>() || memberInfo.HasAttribute<SerializeAsAttribute>())
                 {
-                    m_MemberInfos.Add(memberInfo);
+                    Type memberType = GetMemberInfoType(memberInfo);
+                    if (!memberType.IsGenericParameter)
+                    {
+                        var arguments = memberType.GetGenericArguments();
+                        bool isGenericParameter = false;
+                        if (arguments != null)
+                        {
+                            foreach(var argument in arguments)
+                            {
+                                if(argument.IsGenericParameter)
+                                {
+                                    isGenericParameter = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!isGenericParameter)
+                        {
+                            m_MemberInfos.Add(memberInfo);
+                        }
+                    }
                 }
             }
 
             if (m_MemberInfos.Count > 0)
             {
-                var @class = new CodeTypeDeclaration(type.Name)
+                var @class = new CodeTypeDeclaration(type.DisplayName(true))
                 {
                     IsClass = true,
                     IsPartial = true
                 };
-
 
                 @class.Members.Add(GenerateSerializeMethod(m_MemberInfos, type == typeof(Unit)));
                 @class.Members.Add(GenerateDeserializeMethod(m_MemberInfos, type == typeof(Unit)));
@@ -122,9 +175,25 @@ namespace AutoBinary
             }
             else
             {
+
                 return null;
             }
 
+        }
+
+        private static Type GetMemberInfoType(MemberInfo memberInfo)
+        {
+            Type type = null;
+            if (memberInfo is FieldInfo fieldInfo)
+            {
+                type = fieldInfo.FieldType;
+            }
+            else if (memberInfo is PropertyInfo propertyInfo)
+            {
+                type = propertyInfo.PropertyType;
+            }
+
+            return type;
         }
 
         private static string SerializeMethodName = "BinarySerialize";
@@ -150,20 +219,7 @@ namespace AutoBinary
 
             foreach (var memberInfo in memberInfos)
             {
-                if (IngoreMemberNames.Contains(memberInfo.Name))
-                {
-                    continue;
-                }
-
-                Type type = null;
-                if (memberInfo is FieldInfo fieldInfo)
-                {
-                    type = fieldInfo.FieldType;
-                }
-                else if (memberInfo is PropertyInfo propertyInfo)
-                {
-                    type = propertyInfo.PropertyType;
-                }
+                Type type = GetMemberInfoType(memberInfo);
 
                 if (type != null)
                 {
@@ -197,15 +253,7 @@ namespace AutoBinary
 
             foreach (var memberInfo in memberInfos)
             {
-                Type type = null;
-                if (memberInfo is FieldInfo fieldInfo)
-                {
-                    type = fieldInfo.FieldType;
-                }
-                else if (memberInfo is PropertyInfo propertyInfo)
-                {
-                    type = propertyInfo.PropertyType;
-                }
+                Type type = GetMemberInfoType(memberInfo);
 
                 if (type != null)
                 {
@@ -280,6 +328,7 @@ namespace AutoBinary
             new BsArrayBuilder(),
             new BsBaseTypeBuilder(),
             new BsIListBuilder(),
+            new BsEnumBuilder()
         };
 
 
