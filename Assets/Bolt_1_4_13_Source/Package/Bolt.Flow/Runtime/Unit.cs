@@ -411,7 +411,7 @@ namespace Bolt
 		#region CustomSerialize
 		public virtual void BinarySerialize(System.IO.BinaryWriter writer)
         {
-
+			
         }
 
 		public virtual void BinaryDeserialize(System.IO.BinaryReader reader)

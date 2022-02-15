@@ -9,7 +9,7 @@ namespace Bolt
 	/// </summary>
 	[UnitCategory("Events")]
 	[UnitOrder(0)]
-	public sealed class CustomEvent : GameObjectEventUnit<CustomEventArgs>
+	public sealed partial class CustomEvent : GameObjectEventUnit<CustomEventArgs>
 	{
 		protected override string hookName => EventHooks.Custom;
 

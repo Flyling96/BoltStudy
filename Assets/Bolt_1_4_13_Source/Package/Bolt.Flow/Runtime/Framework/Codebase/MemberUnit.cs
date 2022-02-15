@@ -7,7 +7,7 @@ using UnityObject = UnityEngine.Object;
 namespace Bolt
 {
 	[SpecialUnit]
-	public abstract class MemberUnit : Unit, IAotStubbable
+	public abstract partial class MemberUnit : Unit, IAotStubbable
 	{
 		protected MemberUnit() : base() { }
 

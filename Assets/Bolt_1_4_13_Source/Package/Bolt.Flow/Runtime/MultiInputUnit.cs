@@ -12,7 +12,7 @@ namespace Bolt
 		ReadOnlyCollection<ValueInput> multiInputs { get; }
 	}
 
-	public abstract class MultiInputUnit<T> : Unit, IMultiInputUnit
+	public abstract partial class MultiInputUnit<T> : Unit, IMultiInputUnit
 	{
 		[SerializeAs(nameof(inputCount))]
 		private int _inputCount = 2;

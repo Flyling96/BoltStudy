@@ -13,7 +13,7 @@ namespace Bolt
 	[TypeIcon(typeof(CustomEvent))]
 	[UnitCategory("Events")]
 	[UnitOrder(1)]
-	public sealed class TriggerCustomEvent : Unit
+	public sealed partial class TriggerCustomEvent : Unit
 	{
 		[SerializeAs(nameof(argumentCount))]
 		private int _argumentCount;

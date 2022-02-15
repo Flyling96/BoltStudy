@@ -13,7 +13,7 @@ namespace Bolt
 	[UnitSubtitle("On Flow")]
 	[UnitOrder(8)]
 	[TypeIcon(typeof(ISelectUnit))]
-	public sealed class SelectOnFlow : Unit, ISelectUnit
+	public sealed partial class SelectOnFlow : Unit, ISelectUnit
 	{
 		[SerializeAs(nameof(branchCount))]
 		private int _branchCount = 2;

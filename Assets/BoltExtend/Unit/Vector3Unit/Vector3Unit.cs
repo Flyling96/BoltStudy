@@ -111,7 +111,7 @@ namespace Bolt.Extend
     }
     [UnitCategory("Extend/Vector3Unit")]
     [CustomRutimeType]
-    public class Vector3New : Unit {
+    public partial class Vector3New : Unit {
 
         [Serialize, Inspectable]
         public Vector3 m_Value

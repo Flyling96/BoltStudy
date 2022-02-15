@@ -8,7 +8,7 @@ namespace Bolt
 {
 	[SerializationVersion("A")]
 	[SpecialUnit]
-	public abstract class EventUnit<TArgs> : Unit, IEventUnit, IGraphElementWithData, IGraphEventHandler<TArgs>
+	public abstract partial class EventUnit<TArgs> : Unit, IEventUnit, IGraphElementWithData, IGraphEventHandler<TArgs>
 	{
 		public class Data : IGraphElementData
 		{

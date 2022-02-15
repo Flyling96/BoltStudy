@@ -9,7 +9,7 @@ namespace Bolt
 	/// <summary>
 	/// Invokes a method or a constructor via reflection.
 	/// </summary>
-	public sealed class InvokeMember : MemberUnit
+	public sealed partial class InvokeMember : MemberUnit
 	{
 		public InvokeMember() : base() { }
 

@@ -5,7 +5,7 @@ namespace Bolt
 	/// <summary>
 	/// Sets the value of a field or property via reflection.
 	/// </summary>
-	public sealed class SetMember : MemberUnit
+	public sealed partial class SetMember : MemberUnit
 	{
 		public SetMember() : base() { }
 

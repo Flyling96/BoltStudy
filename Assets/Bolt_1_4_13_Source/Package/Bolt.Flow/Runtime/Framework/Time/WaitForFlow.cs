@@ -12,7 +12,7 @@ namespace Bolt
 	[UnitCategory("Time")]
 	[UnitOrder(6)]
 	[TypeIcon(typeof(WaitUnit))]
-	public sealed class WaitForFlow : Unit, IGraphElementWithData
+	public sealed partial class WaitForFlow : Unit, IGraphElementWithData
 	{
 		public sealed class Data : IGraphElementData
 		{

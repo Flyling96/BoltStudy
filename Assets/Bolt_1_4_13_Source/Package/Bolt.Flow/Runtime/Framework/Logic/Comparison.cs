@@ -10,7 +10,7 @@ namespace Bolt
 	[UnitTitle("Comparison")]
 	[UnitShortTitle("Comparison")]
 	[UnitOrder(99)]
-	public sealed class Comparison : Unit
+	public sealed partial class Comparison : Unit
 	{
 		/// <summary>
 		/// The first input.

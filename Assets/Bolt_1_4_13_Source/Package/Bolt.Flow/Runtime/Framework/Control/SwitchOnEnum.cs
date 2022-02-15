@@ -13,7 +13,7 @@ namespace Bolt
 	[UnitSubtitle("On Enum")]
 	[UnitOrder(3)]
 	[TypeIcon(typeof(IBranchUnit))]
-	public sealed class SwitchOnEnum : Unit, IBranchUnit
+	public sealed partial class SwitchOnEnum : Unit, IBranchUnit
 	{
 		[DoNotSerialize]
 		public Dictionary<Enum, ControlOutput> branches { get; private set; }

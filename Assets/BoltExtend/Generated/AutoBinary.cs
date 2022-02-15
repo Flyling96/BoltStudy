@@ -8,8 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+namespace Bolt
+{
+	using UnityEngine;
+	using Ludiq;
+	
+}
 namespace Bolt.Extend
 {
+	using UnityEngine;
+	using Ludiq;
 	
 	
 	public partial class SpecifyVariableUnit

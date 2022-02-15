@@ -8,7 +8,7 @@ namespace Bolt
 	[UnitCategory("Control")]
 	[UnitOrder(18)]
 	[UnitFooterPorts(ControlInputs = true, ControlOutputs = true)]
-	public sealed class ToggleFlow : Unit, IGraphElementWithData
+	public sealed partial class ToggleFlow : Unit, IGraphElementWithData
 	{
 		public class Data : IGraphElementData
 		{

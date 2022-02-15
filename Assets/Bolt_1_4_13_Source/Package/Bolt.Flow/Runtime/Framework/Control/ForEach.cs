@@ -10,7 +10,7 @@ namespace Bolt
 	[UnitTitle("For Each Loop")]
 	[UnitCategory("Control")]
 	[UnitOrder(10)]
-	public class ForEach : LoopUnit
+	public partial class ForEach : LoopUnit
 	{
 		/// <summary>
 		/// The collection over which to loop.

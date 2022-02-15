@@ -14,47 +14,51 @@ namespace AutoBinary
             return type.IsArray;
         }
 
-        string countName = "_count";
 
-        public override IEnumerable<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable)
+        public override List<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable,ref int tempIndex)
         {
+            var statements = new List<CodeStatement>();
+            string countName = GetTemporaryName("_count", ref tempIndex);
             //variableName.Length
             var arrayCount = new CodeFieldReferenceExpression(variable, "Length");
             //int _count = variableName.Length;
-            yield return new CodeVariableDeclarationStatement(typeof(int), countName, arrayCount);
+            statements.Add(new CodeVariableDeclarationStatement(typeof(int), countName, arrayCount));
             //writer.write(_count)
-            var countStatements = GenerateBinaryCodeManager.BuildSerializeStatement(typeof(int), new CodeVariableReferenceExpression(countName));
+            var countStatements = GenerateBinaryCodeManager.BuildSerializeStatement(typeof(int), new CodeVariableReferenceExpression(countName), ref tempIndex);
             foreach(var countStatement in countStatements)
             {
-                yield return countStatement;
+                statements.Add(countStatement);
             }
 
+            string iterationIndexName = GetTemporaryName("i", ref tempIndex);
             var elementType = type.GetElementType();
-            var elementStatements = GenerateBinaryCodeManager.BuildSerializeStatement(elementType, new CodeIndexerExpression(variable, new CodeVariableReferenceExpression("i")));
+            var elementStatements = GenerateBinaryCodeManager.BuildSerializeStatement(elementType, new CodeIndexerExpression(variable, new CodeVariableReferenceExpression(iterationIndexName)), ref tempIndex);
             //for(int i =0 ;i< _count;i++)
             CodeIterationStatement forLoop = new CodeIterationStatement(
-                new CodeVariableDeclarationStatement(typeof(int),"i", new CodePrimitiveExpression(0)),
-                new CodeBinaryOperatorExpression(new CodeVariableReferenceExpression("i"),CodeBinaryOperatorType.LessThan,
+                new CodeVariableDeclarationStatement(typeof(int), iterationIndexName, new CodePrimitiveExpression(0)),
+                new CodeBinaryOperatorExpression(new CodeVariableReferenceExpression(iterationIndexName),CodeBinaryOperatorType.LessThan,
                 new CodeVariableReferenceExpression(countName)),
-                new CodeAssignStatement(new CodeVariableReferenceExpression("i"), new CodeBinaryOperatorExpression(
-                new CodeVariableReferenceExpression("i"), CodeBinaryOperatorType.Add, new CodePrimitiveExpression(1))),
+                new CodeAssignStatement(new CodeVariableReferenceExpression(iterationIndexName), new CodeBinaryOperatorExpression(
+                new CodeVariableReferenceExpression(iterationIndexName), CodeBinaryOperatorType.Add, new CodePrimitiveExpression(1))),
                 //LoopContent
                 elementStatements?.ToArray()
                 );
-            yield return forLoop;
+            statements.Add(forLoop);
 
-
+            return statements;
         }
 
-        public override IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable)
+        public override List<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable, ref int tempIndex)
         {
+            var statements = new List<CodeStatement>();
+            string countName = GetTemporaryName("_count", ref tempIndex);
             //int _count = 0;
-            yield return new CodeVariableDeclarationStatement(typeof(int), countName, new CodePrimitiveExpression(0));
+            statements.Add(new CodeVariableDeclarationStatement(typeof(int), countName, new CodePrimitiveExpression(0)));
             //_count = reader.ReadInt32();
-            var countStatements = GenerateBinaryCodeManager.BuildDeserializeStatement(typeof(int), new CodeVariableReferenceExpression(countName));
+            var countStatements = GenerateBinaryCodeManager.BuildDeserializeStatement(typeof(int), new CodeVariableReferenceExpression(countName),ref tempIndex);
             foreach (var countStatement in countStatements)
             {
-                yield return countStatement;
+                statements.Add(countStatement);
             }
 
             var elementType = type.GetElementType();
@@ -62,20 +66,23 @@ namespace AutoBinary
             CodeArrayCreateExpression arrayCreate = new CodeArrayCreateExpression(elementType, new CodeVariableReferenceExpression(countName));
 
             //variableName = new type[_count];
-            yield return new CodeAssignStatement(variable, arrayCreate);
+            statements.Add(new CodeAssignStatement(variable, arrayCreate));
 
-            var elementStatements = GenerateBinaryCodeManager.BuildDeserializeStatement(elementType, new CodeIndexerExpression(variable, new CodeVariableReferenceExpression("i")));
+            string iterationIndexName = GetTemporaryName("i", ref tempIndex);
+            var elementStatements = GenerateBinaryCodeManager.BuildDeserializeStatement(elementType, new CodeIndexerExpression(variable, new CodeVariableReferenceExpression(iterationIndexName)),ref tempIndex);
             //for(int i =0 ;i< _count;i++)
             CodeIterationStatement forLoop = new CodeIterationStatement(
-                new CodeVariableDeclarationStatement(typeof(int), "i", new CodePrimitiveExpression(0)),
-                new CodeBinaryOperatorExpression(new CodeVariableReferenceExpression("i"), CodeBinaryOperatorType.LessThan,
+                new CodeVariableDeclarationStatement(typeof(int), iterationIndexName, new CodePrimitiveExpression(0)),
+                new CodeBinaryOperatorExpression(new CodeVariableReferenceExpression(iterationIndexName), CodeBinaryOperatorType.LessThan,
                 new CodeVariableReferenceExpression(countName)),
-                new CodeAssignStatement(new CodeVariableReferenceExpression("i"), new CodeBinaryOperatorExpression(
-                new CodeVariableReferenceExpression("i"), CodeBinaryOperatorType.Add, new CodePrimitiveExpression(1))),
+                new CodeAssignStatement(new CodeVariableReferenceExpression(iterationIndexName), new CodeBinaryOperatorExpression(
+                new CodeVariableReferenceExpression(iterationIndexName), CodeBinaryOperatorType.Add, new CodePrimitiveExpression(1))),
                 //LoopContent
                 elementStatements?.ToArray()
                 );
-            yield return forLoop;
+            statements.Add(forLoop);
+
+            return statements;
         }
     }
 }

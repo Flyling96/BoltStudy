@@ -6,7 +6,7 @@ namespace Bolt
 	/// <summary>
 	/// Gets the value of a variable.
 	/// </summary>
-	public sealed class GetVariable : UnifiedVariableUnit
+	public sealed partial class GetVariable : UnifiedVariableUnit
 	{
 		/// <summary>
 		/// The value of the variable.

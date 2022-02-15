@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Bolt
 {
 	[UnitOrder(502)]
-	public abstract class MoveTowards<T> : Unit
+	public abstract partial class MoveTowards<T> : Unit
 	{
 		/// <summary>
 		/// The current value.

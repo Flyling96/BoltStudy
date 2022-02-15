@@ -3,7 +3,7 @@
 namespace Bolt
 {
 	[UnitCategory("Logic")]
-	public abstract class BinaryComparisonUnit : Unit
+	public abstract partial class BinaryComparisonUnit : Unit
 	{
 		/// <summary>
 		/// The first input.

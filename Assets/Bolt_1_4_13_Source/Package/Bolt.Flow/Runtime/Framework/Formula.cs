@@ -9,7 +9,7 @@ namespace Bolt
 	/// <summary>
 	/// Evaluates a mathematical or logical formula with multiple arguments.
 	/// </summary>
-	public sealed class Formula : MultiInputUnit<object>
+	public sealed partial class Formula : MultiInputUnit<object>
 	{
 		[SerializeAs(nameof(Formula))]
 		private string _formula;

@@ -11,20 +11,26 @@ namespace AutoBinary
         public override bool CanProcess(Type type)
         {
             return type.IsEnum;
-        }
+        }   
 
-        public override IEnumerable<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable)
+        public override List<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable,ref int tempIndex)
         {
+            var statementList = new List<CodeStatement>();
             var writerExpression = new CodeVariableReferenceExpression(WriterName);
             var castExpression = new CodeCastExpression(typeof(int),variable);
-            yield return new CodeExpressionStatement(new CodeMethodInvokeExpression(writerExpression, "Write", castExpression));
+            //writer.Write((int)variable);
+            statementList.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(writerExpression, "Write", castExpression)));
+            return statementList;
         }
 
-        public override IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable)
+        public override List<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable, ref int tempIndex)
         {
+            var statementList = new List<CodeStatement>();
             var readerExpression = new CodeVariableReferenceExpression(ReaderName);
             var castExpression = new CodeCastExpression(type, new CodeMethodInvokeExpression(readerExpression, "ReadInt32"));
-            yield return new CodeAssignStatement(variable, castExpression);
+            //varialbe = (Enum)reader.ReadInt32()
+            statementList.Add(new CodeAssignStatement(variable, castExpression));
+            return statementList;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Bolt
 	/// Returns a constant value defined from the editor.
 	/// </summary>
 	[SpecialUnit]
-	public sealed class Literal : Unit
+	public sealed partial class Literal : Unit
 	{
 		[Obsolete(Serialization.ConstructorWarning)]
 		public Literal() : base() { }
@@ -32,7 +32,8 @@ namespace Bolt
 		private object _value;
 
 		[Serialize]
-		public Type type {
+		public Type type
+		{
 			get; 
 			internal set; 
 		}

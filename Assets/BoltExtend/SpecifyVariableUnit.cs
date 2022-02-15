@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Bolt.Extend
 {
-    public abstract class SpecifyVariableUnit : Unit
+    public abstract partial class SpecifyVariableUnit : Unit
     {
         public SpecifyVariableUnit(string name) : base()
         {

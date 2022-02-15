@@ -7,7 +7,7 @@ namespace Bolt
 	/// </summary>
 	[UnitCategory("Math/Vector 4")]
 	[UnitTitle("Round")]
-	public sealed class Vector4Round : Round<Vector4, Vector4>
+	public sealed partial class Vector4Round : Round<Vector4, Vector4>
 	{
 		protected override Vector4 Floor(Vector4 input)
 		{

@@ -11,10 +11,13 @@ namespace AutoBinary
     {
         public abstract bool CanProcess(Type type);
 
-        public abstract IEnumerable<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable);
+        public abstract List<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable,ref int tempIndex);
 
-        public abstract IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable);
+        public abstract List<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable, ref int tempIndex);
 
-
+        protected string GetTemporaryName(string name,ref int tempIndex)
+        {
+            return string.Format("{0}_{1}", name, tempIndex++);
+        }
     }
 }

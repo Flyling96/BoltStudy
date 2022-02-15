@@ -22,87 +22,8 @@ namespace AutoBinary
         [MenuItem("Tools/TestBinary")]
         private static void GenerateScript()
         {
-            var compileUnit = new CodeCompileUnit();
-
-            var @namespace = new CodeNamespace("Bolt");
-
-            compileUnit.Namespaces.Add(@namespace);
-
-            foreach (var unit in Codebase.ludiqRuntimeTypes.Where(t => typeof(IUnit).IsAssignableFrom(t)))
-            {
-                if (unit.Assembly.GetName().Name == "Bolt.Flow.Runtime")
-                {
-                    var type = GenerateClass(unit);
-                    if (type != null)
-                    {
-                        @namespace.Types.Add(type);
-                    }
-                }
-            }
-
-            if (File.Exists(AutoBinaryPath))
-            {
-                File.Delete(AutoBinaryPath);
-            }
-
-            using (var provider = CodeDomProvider.CreateProvider("CSharp"))
-            {
-                var options = new CodeGeneratorOptions
-                {
-                    BracingStyle = "C",
-                    IndentString = "\t",
-                    BlankLinesBetweenMembers = true,
-                    ElseOnClosing = false,
-                    VerbatimOrder = true
-                };
-
-                using (var scriptWriter = new StreamWriter(AutoBinaryPath))
-                {
-                    provider.GenerateCodeFromCompileUnit(compileUnit, scriptWriter, options);
-                }
-            }
-
-            //Bolt.Extend
-            compileUnit = new CodeCompileUnit();
-
-            @namespace = new CodeNamespace("Bolt.Extend");
-
-            compileUnit.Namespaces.Add(@namespace);
-
-            foreach (var unit in Codebase.ludiqRuntimeTypes.Where(t => typeof(IUnit).IsAssignableFrom(t)))
-            {
-                if (Codebase.IsUserAssembly(unit.Assembly))
-                {
-                    var type = GenerateClass(unit);
-                    if (type != null)
-                    {
-                        @namespace.Types.Add(type);
-                    }
-                }
-            }
-
-            if (File.Exists(AutoBinaryExtendPath))
-            {
-                File.Delete(AutoBinaryExtendPath);
-            }
-
-            using (var provider = CodeDomProvider.CreateProvider("CSharp"))
-            {
-                var options = new CodeGeneratorOptions
-                {
-                    BracingStyle = "C",
-                    IndentString = "\t",
-                    BlankLinesBetweenMembers = true,
-                    ElseOnClosing = false,
-                    VerbatimOrder = true
-                };
-
-                using (var scriptWriter = new StreamWriter(AutoBinaryExtendPath))
-                {
-                    provider.GenerateCodeFromCompileUnit(compileUnit, scriptWriter, options);
-                }
-            }
-
+            GenerateAssembly("Bolt.Flow.Runtime", AutoBinaryPath);
+            GenerateAssembly("Assembly-CSharp", AutoBinaryExtendPath);
 
             AssetDatabase.Refresh();
         }
@@ -123,10 +44,82 @@ namespace AutoBinary
             AssetDatabase.Refresh();
         }
 
+        private static void GenerateAssembly(string assemblyName, string path)
+        {
+            var compileUnit = new CodeCompileUnit();
+
+            Dictionary<string, HashSet<Type>> namespaceUnitDic = new Dictionary<string, HashSet<Type>>();
+
+            foreach (var unit in Codebase.ludiqRuntimeTypes.Where(t => typeof(IUnit).IsAssignableFrom(t)))
+            {
+                if (unit.Assembly.GetName().Name == assemblyName)
+                {
+                    if(namespaceUnitDic.TryGetValue(unit.Namespace,out var hashSet))
+                    {
+                        hashSet.Add(unit);
+                    }
+                    else
+                    {
+                        hashSet = new HashSet<Type>();
+                        hashSet.Add(unit);
+                        namespaceUnitDic.Add(unit.Namespace, hashSet);
+                    }
+                }
+            }
+
+            foreach(var keyValue in namespaceUnitDic)
+            {
+                compileUnit.Namespaces.Add(GenerateNamespace(keyValue.Key,keyValue.Value));
+            }
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            using (var provider = CodeDomProvider.CreateProvider("CSharp"))
+            {
+                var options = new CodeGeneratorOptions
+                {
+                    BracingStyle = "C",
+                    IndentString = "\t",
+                    BlankLinesBetweenMembers = true,
+                    ElseOnClosing = false,
+                    VerbatimOrder = true
+                };
+
+                using (var scriptWriter = new StreamWriter(path))
+                {
+                    provider.GenerateCodeFromCompileUnit(compileUnit, scriptWriter, options);
+                }
+            }
+
+        }
+
+        private static CodeNamespace GenerateNamespace(string namespaceName, HashSet<Type> classes)
+        {
+            var @namespace = new CodeNamespace(namespaceName);
+
+            foreach(var @class in classes)
+            {
+                var type = GenerateClass(@class);
+                if (type != null)
+                {
+                    @namespace.Types.Add(type);
+                }
+            }
+
+            @namespace.Imports.Add(new CodeNamespaceImport("UnityEngine"));
+            @namespace.Imports.Add(new CodeNamespaceImport("Ludiq"));
+
+            return @namespace;
+        }
+
         private static CodeTypeDeclaration GenerateClass(Type type)
         {
             List<MemberInfo> m_MemberInfos = new List<MemberInfo>();
-            var flags = type.BaseType != null && type.BaseType.IsGenericType ? BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic :
+            var flags = type.BaseType != null && type.BaseType.IsGenericType && !type.IsGenericTypeDefinition ? 
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic :
                 BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
             foreach (var memberInfo in type.GetMembers(flags))
             {
@@ -140,20 +133,39 @@ namespace AutoBinary
                     Type memberType = GetMemberInfoType(memberInfo);
                     if (!memberType.IsGenericParameter)
                     {
-                        var arguments = memberType.GetGenericArguments();
-                        bool isGenericParameter = false;
-                        if (arguments != null)
+                        //子类字段或属性只有泛型特化才加入列表
+                        if (memberInfo.DeclaringType != type && memberInfo.DeclaringType.IsGenericType)
                         {
-                            foreach(var argument in arguments)
+                            var definitionType = memberInfo.DeclaringType.GetGenericTypeDefinition();
+                            Type declaringMemberType = null;
+                            if (memberInfo is FieldInfo)
                             {
-                                if(argument.IsGenericParameter)
-                                {
-                                    isGenericParameter = true;
-                                    break;
-                                }
+                                declaringMemberType = definitionType.GetField(memberInfo.Name).FieldType;
+                            }
+                            else if(memberInfo is PropertyInfo)
+                            {
+                                declaringMemberType = definitionType.GetProperty(memberInfo.Name).PropertyType;
+                            }
+
+                            if(declaringMemberType == memberType)
+                            {
+                                continue;
                             }
                         }
-                        if (!isGenericParameter)
+                        //var arguments = memberType.GetGenericArguments();
+                        //bool isGenericParameter = false;
+                        //if (arguments != null)
+                        //{
+                        //    foreach(var argument in arguments)
+                        //    {
+                        //        if(argument.IsGenericParameter)
+                        //        {
+                        //            isGenericParameter = true;
+                        //            break;
+                        //        }
+                        //    }
+                        //}
+                        if (!memberType.ContainsGenericParameters)
                         {
                             m_MemberInfos.Add(memberInfo);
                         }
@@ -217,16 +229,22 @@ namespace AutoBinary
                     new CodeBaseReferenceExpression(), SerializeMethodName, new CodeVariableReferenceExpression(BinaryBuilder.WriterName))));
             }
 
+            int tempIndex = 0;
             foreach (var memberInfo in memberInfos)
             {
                 Type type = GetMemberInfoType(memberInfo);
 
                 if (type != null)
                 {
-                    var statements = BuildSerializeStatement(type, new CodeVariableReferenceExpression(memberInfo.Name));
+                    var statements = BuildSerializeStatement(type, new CodeVariableReferenceExpression(memberInfo.Name),ref tempIndex);
                     if (statements != null)
                     {
                         method.Statements.AddRange(statements);
+                    }
+                    else
+                    {
+                        Debug.LogError($"BuildSerializeStatement error type :" +
+                            $"{memberInfo.DeclaringType} memberInfo : {memberInfo.Name}");
                     }
                 }
             }
@@ -251,16 +269,22 @@ namespace AutoBinary
                     new CodeBaseReferenceExpression(), DeserializeMethodName, new CodeVariableReferenceExpression(BinaryBuilder.ReaderName))));
             }
 
+            int tempIndex = 0;
             foreach (var memberInfo in memberInfos)
             {
                 Type type = GetMemberInfoType(memberInfo);
 
                 if (type != null)
                 {
-                    var statements = BuildDeserializeStatement(type, new CodeVariableReferenceExpression(memberInfo.Name));
+                    var statements = BuildDeserializeStatement(type, new CodeVariableReferenceExpression(memberInfo.Name),ref tempIndex);
                     if (statements != null)
                     {
                         method.Statements.AddRange(statements);
+                    }
+                    else
+                    {
+                        Debug.LogError($"BuildDeserializeStatement error type :" +
+                            $"{memberInfo.DeclaringType} memberInfo : {memberInfo.Name}");
                     }
                 }
             }
@@ -269,14 +293,14 @@ namespace AutoBinary
         }
 
 
-        public static IEnumerable<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable)
+        public static List<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable,ref int tempIndex)
         {
             if (type != null)
             {
                 var builder = GetBuilder(type);
                 if(builder != null)
                 {
-                    return builder.BuildSerializeStatement(type, variable);
+                    return builder.BuildSerializeStatement(type, variable,ref tempIndex);
                 }
             }
 
@@ -284,14 +308,14 @@ namespace AutoBinary
 
         }
 
-        public static IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable)
+        public static List<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable, ref int tempIndex)
         {
             if (type != null)
             {
                 var builder = GetBuilder(type);
                 if (builder != null)
                 {
-                    return builder.BuildDeserializeStatement(type, variable);
+                    return builder.BuildDeserializeStatement(type, variable, ref tempIndex);
                 }
             }
 
@@ -318,7 +342,6 @@ namespace AutoBinary
                 return value;
             }
 
-            Debug.LogError($"GetBuilder error type :{type}");
             TypeBuilderDic.Add(type, null);
             return null;
         }
@@ -326,9 +349,10 @@ namespace AutoBinary
         private static List<BinaryStatementBuilder> StatementBuilders = new List<BinaryStatementBuilder>()
         {
             new BsArrayBuilder(),
-            new BsBaseTypeBuilder(),
+            new BsPrimitiveBuilder(),
             new BsIListBuilder(),
-            new BsEnumBuilder()
+            new BsEnumBuilder(),
+            new BsTypeBuilder(),
         };
 
 

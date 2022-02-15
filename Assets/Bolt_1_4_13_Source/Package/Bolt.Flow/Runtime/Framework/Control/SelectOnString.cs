@@ -11,7 +11,7 @@ namespace Bolt
 	[UnitShortTitle("Select")]
 	[UnitSubtitle("On String")]
 	[UnitOrder(7)]
-	public class SelectOnString : SelectUnit<string>
+	public partial class SelectOnString : SelectUnit<string>
 	{
 		[Serialize]
 		[Inspectable, UnitHeaderInspectable("Ignore Case")]

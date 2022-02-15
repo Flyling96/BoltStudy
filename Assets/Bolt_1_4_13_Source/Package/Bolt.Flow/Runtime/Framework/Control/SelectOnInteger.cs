@@ -8,7 +8,7 @@
 	[UnitShortTitle("Select")]
 	[UnitSubtitle("On Integer")]
 	[UnitOrder(8)]
-	public class SelectOnInteger : SelectUnit<int>
+	public partial class SelectOnInteger : SelectUnit<int>
 	{
 
 	}

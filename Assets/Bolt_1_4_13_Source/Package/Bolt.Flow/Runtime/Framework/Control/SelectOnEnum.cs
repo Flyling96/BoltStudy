@@ -13,7 +13,7 @@ namespace Bolt
 	[UnitSubtitle("On Enum")]
 	[UnitOrder(7)]
 	[TypeIcon(typeof(ISelectUnit))]
-	public sealed class SelectOnEnum : Unit, ISelectUnit
+	public sealed partial class SelectOnEnum : Unit, ISelectUnit
 	{
 		[DoNotSerialize]
 		public Dictionary<object, ValueInput> branches { get; private set; }

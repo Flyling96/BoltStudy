@@ -8,7 +8,7 @@ namespace Bolt
 	/// </summary>
 	[UnitCategory("Control")]
 	[UnitOrder(16)]
-	public sealed class Throw : Unit
+	public sealed partial class Throw : Unit
 	{
 		/// <summary>
 		/// Whether a custom exception object should be specified manually.

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Bolt
 {
 	[SpecialUnit]
-	public abstract class UnifiedVariableUnit : Unit, IUnifiedVariableUnit
+	public abstract partial class UnifiedVariableUnit : Unit, IUnifiedVariableUnit
 	{
 		/// <summary>
 		/// The kind of variable.

@@ -7,7 +7,7 @@ namespace Bolt
 	/// </summary>
 	[UnitCategory("Math/Scalar")]
 	[UnitTitle("Round")]
-	public sealed class ScalarRound : Round<float, int>
+	public sealed partial class ScalarRound : Round<float, int>
 	{
 		protected override int Floor(float input)
 		{

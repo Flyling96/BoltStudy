@@ -7,7 +7,7 @@ namespace Bolt
 	/// Creates a struct with its default initializer.
 	/// </summary>
 	[SpecialUnit]
-	public sealed class CreateStruct : Unit
+	public sealed partial class CreateStruct : Unit
 	{
 		[Obsolete(Serialization.ConstructorWarning)]
 		public CreateStruct() : base() { }

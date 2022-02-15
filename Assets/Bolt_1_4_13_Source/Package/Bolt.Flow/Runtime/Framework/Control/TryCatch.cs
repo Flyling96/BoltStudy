@@ -9,7 +9,7 @@ namespace Bolt
 	[UnitCategory("Control")]
 	[UnitOrder(17)]
 	[UnitFooterPorts(ControlOutputs = true)]
-	public sealed class TryCatch : Unit
+	public sealed partial class TryCatch : Unit
 	{
 		/// <summary>
 		/// The entry point for the try-catch block.

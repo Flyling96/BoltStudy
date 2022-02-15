@@ -5,12 +5,12 @@ using Ludiq;
 using System;
 using System.Linq;
 
-namespace Bolt
+namespace Bolt.Extend
 {
     [UnitCategory("Functions")]
     [CustomRutimeType]
     [SpecialUnit]
-    public class FunctionSuperUnit : Unit
+    public partial class FunctionSuperUnit : Unit
     {
         [Inspectable, Serialize]
         public string functionName { get; set; }
@@ -20,7 +20,6 @@ namespace Bolt
         [NullMeansSelf]
         public ValueInput self { get; private set; }
 
-        [Serialize]
         private FlowFunctionDeclaration _function;
 
         public FlowFunctionDeclaration function

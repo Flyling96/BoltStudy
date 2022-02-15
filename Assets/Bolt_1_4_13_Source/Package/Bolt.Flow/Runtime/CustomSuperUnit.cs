@@ -1,12 +1,12 @@
 ﻿using Ludiq;
 using System;
 
-namespace Bolt
+namespace Bolt.Extend
 {
 	[TypeIcon(typeof(FlowGraph))]
 	[UnitCategory("Extend")]
 	[CustomRutimeType]
-	public sealed class CustomSuperUnit : SuperUnit
+	public sealed partial class CustomSuperUnit : SuperUnit
 	{
 		public CustomSuperUnit() : base() { }
 

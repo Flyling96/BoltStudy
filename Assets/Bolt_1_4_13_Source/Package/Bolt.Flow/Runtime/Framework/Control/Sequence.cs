@@ -11,7 +11,7 @@ namespace Bolt
 	/// </summary>
 	[UnitCategory("Control")]
 	[UnitOrder(13)]
-	public sealed class Sequence : Unit
+	public sealed partial class Sequence : Unit
 	{
 		[SerializeAs(nameof(outputCount))]
 		private int _outputCount = 2;

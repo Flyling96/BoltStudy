@@ -7,35 +7,40 @@ using UnityEngine;
 
 namespace AutoBinary
 {
-    public class BsBaseTypeBuilder : BinaryStatementBuilder
+    public class BsPrimitiveBuilder : BinaryStatementBuilder
     {
         public override bool CanProcess(Type type)
         {
-            return type.IsValueType && !type.IsEnum || type == typeof(string);
+            return type.IsPrimitive|| type == typeof(string) || type == typeof(Vector2) || type == typeof(Vector3);
         }
 
-        public override IEnumerable<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable)
+        public override List<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable,ref int tempIndex)
         {
+            var statementList = new List<CodeStatement>();
             var deserializeExpression = DeserializeExpression(type);
             if (deserializeExpression != null)
             {
                 //variableName = reader.read();
                 if (variable != null)
                 {
-                    yield return new CodeAssignStatement(variable, deserializeExpression);
+                    statementList.Add(new CodeAssignStatement(variable, deserializeExpression));
                 }
                 else
                 {
-                    yield return new CodeExpressionStatement(deserializeExpression);
+                    statementList.Add(new CodeExpressionStatement(deserializeExpression));
                 }
             }
+            return statementList;
         }
 
-        public override IEnumerable<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable)
+        public override List<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable, ref int tempIndex)
         {
+            var statementList = new List<CodeStatement>();
             var writerExpression = new CodeVariableReferenceExpression(WriterName);
             //writer.write(variableName);
-            yield return new CodeExpressionStatement(new CodeMethodInvokeExpression(writerExpression, "Write", variable));
+            statementList.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(writerExpression, "Write", variable)));
+
+            return statementList;
         }
 
         private CodeMethodInvokeExpression DeserializeExpression(Type type)
@@ -54,9 +59,25 @@ namespace AutoBinary
             {
                 return new CodeMethodInvokeExpression(readerExpression, nameof(reader.ReadInt64));
             }
+            else if(type == typeof(UInt16))
+            {
+                return new CodeMethodInvokeExpression(readerExpression, nameof(reader.ReadUInt16));
+            }
+            else if (type == typeof(UInt32))
+            {
+                return new CodeMethodInvokeExpression(readerExpression, nameof(reader.ReadUInt32));
+            }
+            else if (type == typeof(UInt64))
+            {
+                return new CodeMethodInvokeExpression(readerExpression, nameof(reader.ReadUInt64));
+            }
             else if(type == typeof(Single))
             {
                 return new CodeMethodInvokeExpression(readerExpression, nameof(reader.ReadSingle));
+            }
+            else if(type == typeof(Double))
+            {
+                return new CodeMethodInvokeExpression(readerExpression, nameof(reader.ReadDouble));
             }
             else if(type == typeof(String))
             {

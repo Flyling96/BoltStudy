@@ -11,7 +11,7 @@ namespace Bolt
 	/// Exposes all members of the type.
 	/// </summary>
 	[SpecialUnit]
-	public sealed class Expose : Unit, IAotStubbable
+	public sealed partial class Expose : Unit, IAotStubbable
 	{
 		public Expose() : base() { }
 

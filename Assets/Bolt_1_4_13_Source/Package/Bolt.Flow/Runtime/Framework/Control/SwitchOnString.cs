@@ -11,7 +11,7 @@ namespace Bolt
 	[UnitShortTitle("Switch")]
 	[UnitSubtitle("On String")]
 	[UnitOrder(4)]
-	public class SwitchOnString : SwitchUnit<string>
+	public partial class SwitchOnString : SwitchUnit<string>
 	{
 		[Serialize]
 		[Inspectable, UnitHeaderInspectable("Ignore Case")]
