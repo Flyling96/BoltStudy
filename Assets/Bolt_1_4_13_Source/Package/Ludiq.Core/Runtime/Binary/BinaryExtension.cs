@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace Bolt
+namespace Ludiq
 {
     public static class BinaryExtension
     {

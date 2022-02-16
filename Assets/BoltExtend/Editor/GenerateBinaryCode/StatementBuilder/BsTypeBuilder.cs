@@ -10,7 +10,7 @@ namespace AutoBinary
     {
         public override bool CanProcess(Type type)
         {
-            return type == typeof(Type);
+            return typeof(Type).IsAssignableFrom(type);
         }
 
         public override List<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable,ref int tempIndex)

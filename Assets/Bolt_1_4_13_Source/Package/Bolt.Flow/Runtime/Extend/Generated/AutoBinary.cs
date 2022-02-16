@@ -479,6 +479,7 @@ namespace Bolt
 			base.BinarySerialize(writer);
 			string typeName_0 = RuntimeCodebase.SerializeType(type);
 			writer.Write(typeName_0);
+			BinaryManager.Instance.SerializeObject(writer, _value);
 		}
 		
 		public override void BinaryDeserialize(System.IO.BinaryReader reader)
@@ -493,6 +494,7 @@ namespace Bolt
 			{
 				Debug.LogError("Deserialize Fail type : " + typeName_0);
 			}
+			BinaryManager.Instance.DeserializeObject(reader, _value);
 		}
 	}
 	
