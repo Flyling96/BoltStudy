@@ -7,7 +7,7 @@ namespace Bolt
 	[AddComponentMenu("Bolt/Flow Machine")]
 	[RequireComponent(typeof(Variables))]
 	[DisableAnnotation]
-	public sealed class FlowMachine : EventMachine<FlowGraph, FlowMacro>
+	public class FlowMachine : EventMachine<FlowGraph, FlowMacro>
 	{
 		public override FlowGraph DefaultGraph()
 		{
@@ -86,11 +86,6 @@ namespace Bolt
 			}
 		}
 
-		[ContextMenu("Show Data...")]
-		protected override void ShowData()
-		{
-			base.ShowData();
-		}
 
 		public GraphReference GetFunctionReference(string functionName)
         {
@@ -104,5 +99,7 @@ namespace Bolt
 			return null;
 
         }
-	}
+
+    }
+
 }

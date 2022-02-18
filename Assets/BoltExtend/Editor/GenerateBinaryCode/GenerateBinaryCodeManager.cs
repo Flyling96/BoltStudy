@@ -16,14 +16,16 @@ namespace AutoBinary
 
     public static class GenerateBinaryCodeManager
     {
-        public static string AutoBinaryPath => Path.Combine(BoltFlow.Paths.package, "Runtime/Extend/Generated/AutoBinary.cs");
+        public static string AutoBinaryLudiqCorePath = Path.Combine(LudiqCore.Paths.package, "Runtime/Extend/Generated/AutoBinary.cs");
+        public static string AutoBinaryFlowPath => Path.Combine(BoltFlow.Paths.package, "Runtime/Extend/Generated/AutoBinary.cs");
         public static string AutoBinaryExtendPath => "Assets/BoltExtend/Generated/AutoBinary.cs";
         public static string AutoBinaryUnitsPath => "Assets/BoltExtend/Generated/AutoBinaryUnits.cs";
 
         [MenuItem("Tools/GenerateBinaryCode")]
         private static void GenerateBinaryScript()
         {
-            GenerateAssembly("Bolt.Flow.Runtime", AutoBinaryPath);
+            GenerateAssembly("Ludiq.Core.Runtime", AutoBinaryLudiqCorePath);
+            GenerateAssembly("Bolt.Flow.Runtime", AutoBinaryFlowPath);
             GenerateAssembly("Assembly-CSharp", AutoBinaryExtendPath);
             GenerateBinaryUnits(AutoBinaryUnitsPath);
             AssetDatabase.Refresh();
@@ -33,9 +35,9 @@ namespace AutoBinary
         [MenuItem("Tools/DeleteBinaryCode")]
         private static void DeleteGeneratedScript()
         {
-            if(File.Exists(AutoBinaryPath))
+            if(File.Exists(AutoBinaryFlowPath))
             {
-                File.Delete(AutoBinaryPath);
+                File.Delete(AutoBinaryFlowPath);
             }
 
             if(File.Exists(AutoBinaryExtendPath))
@@ -43,10 +45,10 @@ namespace AutoBinary
                 File.Delete(AutoBinaryExtendPath);
             }
 
-            if (File.Exists(AutoBinaryUnitsPath))
-            {
-                File.Delete(AutoBinaryUnitsPath);
-            }
+            //if (File.Exists(AutoBinaryUnitsPath))
+            //{
+            //    File.Delete(AutoBinaryUnitsPath);
+            //}
 
             AssetDatabase.Refresh();
         }
@@ -57,7 +59,8 @@ namespace AutoBinary
 
             Dictionary<string, HashSet<Type>> namespaceUnitDic = new Dictionary<string, HashSet<Type>>();
 
-            foreach (var unit in Codebase.ludiqRuntimeTypes.Where(t => typeof(Unit).IsAssignableFrom(t)))
+            foreach (var unit in Codebase.ludiqRuntimeTypes.Where(t => typeof(Unit).IsAssignableFrom(t) 
+                || t.IsDefined(typeof(CustomBinaryAttribute),false)))
             {
                 if (unit.Assembly.GetName().Name == assemblyName)
                 {
@@ -77,6 +80,13 @@ namespace AutoBinary
             foreach(var keyValue in namespaceUnitDic)
             {
                 compileUnit.Namespaces.Add(GenerateNamespace(keyValue.Key,keyValue.Value));
+            }
+
+            var directory = Path.GetDirectoryName(path);
+
+            if(!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
             }
 
             if (File.Exists(path))
@@ -109,10 +119,21 @@ namespace AutoBinary
 
             foreach(var @class in classes)
             {
-                var type = GenerateClass(@class);
-                if (type != null)
+                if (typeof(Unit).IsAssignableFrom(@class))
                 {
-                    @namespace.Types.Add(type);
+                    var type = GenerateUnitClass(@class);
+                    if (type != null)
+                    {
+                        @namespace.Types.Add(type);
+                    }
+                }
+                else if(@class.IsDefined(typeof(CustomBinaryAttribute),false))
+                {
+                    var type = GenerateCustomType(@class);
+                    if (type != null)
+                    {
+                        @namespace.Types.Add(type);
+                    }
                 }
             }
 
@@ -122,7 +143,25 @@ namespace AutoBinary
             return @namespace;
         }
 
-        private static CodeTypeDeclaration GenerateClass(Type type)
+        private static Type GetMemberInfoType(MemberInfo memberInfo)
+        {
+            Type type = null;
+            if (memberInfo is FieldInfo fieldInfo)
+            {
+                type = fieldInfo.FieldType;
+            }
+            else if (memberInfo is PropertyInfo propertyInfo)
+            {
+                type = propertyInfo.PropertyType;
+            }
+
+            return type;
+        }
+
+        public static string SerializeMethodName = "BinarySerialize";
+        public static string DeserializeMethodName = "BinaryDeserialize";
+
+        private static CodeTypeDeclaration GenerateUnitClass(Type type)
         {
             List<MemberInfo> m_MemberInfos = new List<MemberInfo>();
             var flags = type.BaseType != null && type.BaseType.IsGenericType && !type.IsGenericTypeDefinition ? 
@@ -188,8 +227,8 @@ namespace AutoBinary
                     IsPartial = true
                 };
 
-                @class.Members.Add(GenerateSerializeMethod(m_MemberInfos, type == typeof(Unit)));
-                @class.Members.Add(GenerateDeserializeMethod(m_MemberInfos, type == typeof(Unit)));
+                @class.Members.Add(GenerateSerializeMethod(m_MemberInfos, false));
+                @class.Members.Add(GenerateDeserializeMethod(m_MemberInfos, false));
                 return @class;
             }
             else
@@ -200,25 +239,45 @@ namespace AutoBinary
 
         }
 
-        private static Type GetMemberInfoType(MemberInfo memberInfo)
+        private static CodeTypeDeclaration GenerateCustomType(Type type)
         {
-            Type type = null;
-            if (memberInfo is FieldInfo fieldInfo)
+            List<MemberInfo> m_MemberInfos = new List<MemberInfo>();
+            foreach (var memberInfo in type.GetMembers(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
             {
-                type = fieldInfo.FieldType;
-            }
-            else if (memberInfo is PropertyInfo propertyInfo)
-            {
-                type = propertyInfo.PropertyType;
+                if (memberInfo.HasAttribute<SerializeAttribute>() || memberInfo.HasAttribute<SerializeAsAttribute>())
+                {
+                    m_MemberInfos.Add(memberInfo);
+                }
             }
 
-            return type;
+            if (m_MemberInfos.Count > 0)
+            {
+                var @class = new CodeTypeDeclaration(type.DisplayName(true))
+                {
+                    IsPartial = true
+                };
+
+                if(type.IsClass)
+                {
+                    @class.IsClass = true;
+                }
+                else if(type.IsStruct())
+                {
+                    @class.IsStruct = true;
+                }
+
+                @class.Members.Add(GenerateSerializeMethod(m_MemberInfos, true));
+                @class.Members.Add(GenerateDeserializeMethod(m_MemberInfos, true));
+                return @class;
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
-        private static string SerializeMethodName = "BinarySerialize";
-        private static string DeserializeMethodName = "BinaryDeserialize";
-
-        private static CodeMemberMethod GenerateSerializeMethod(List<MemberInfo> memberInfos,bool isBase)
+        private static CodeMemberMethod GenerateSerializeMethod(List<MemberInfo> memberInfos, bool isBase)
         {
             CodeMemberMethod method = new CodeMemberMethod
             {
@@ -243,7 +302,7 @@ namespace AutoBinary
 
                 if (type != null)
                 {
-                    var statements = BuildSerializeStatement(type, new CodeVariableReferenceExpression(memberInfo.Name),ref tempIndex);
+                    var statements = BuildSerializeStatement(type, new CodeVariableReferenceExpression(memberInfo.Name), ref tempIndex);
                     if (statements != null)
                     {
                         method.Statements.AddRange(statements);
@@ -265,7 +324,7 @@ namespace AutoBinary
             {
                 Name = DeserializeMethodName,
                 ReturnType = new CodeTypeReference(typeof(void)),
-                Attributes = MemberAttributes.Public ,
+                Attributes = MemberAttributes.Public,
             };
             method.Parameters.Add(new CodeParameterDeclarationExpression(typeof(BinaryReader), BinaryBuilder.ReaderName));
 
@@ -283,7 +342,7 @@ namespace AutoBinary
 
                 if (type != null)
                 {
-                    var statements = BuildDeserializeStatement(type, new CodeVariableReferenceExpression(memberInfo.Name),ref tempIndex);
+                    var statements = BuildDeserializeStatement(type, new CodeVariableReferenceExpression(memberInfo.Name), ref tempIndex);
                     if (statements != null)
                     {
                         method.Statements.AddRange(statements);
@@ -360,6 +419,8 @@ namespace AutoBinary
             new BsEnumBuilder(),
             new BsObjectBuilder(),
             new BsTypeBuilder(),
+            new BsCustomBuilder(),
+            new BsOrderedDictionaryBuilder(),
         };
 
         private static void GenerateBinaryUnits(string path)

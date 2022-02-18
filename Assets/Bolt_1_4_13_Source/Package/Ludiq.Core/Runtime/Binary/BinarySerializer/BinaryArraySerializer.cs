@@ -13,7 +13,7 @@ namespace Ludiq
             return type.IsArray;
         }
 
-        public override void Deserialize(BinaryReader reader, object @object, Type type)
+        public override void Deserialize(BinaryReader reader, ref object @object, Type type)
         {
             int count = reader.ReadInt32();
             var elementType = type.GetElementType();
@@ -21,7 +21,7 @@ namespace Ludiq
             for(int i = 0;i < count;i++)
             {
                 object element = null;
-                BinaryManager.Instance.DeserializeObject(reader,element, elementType);
+                BinaryManager.Instance.DeserializeObject(reader,ref element, elementType);
                 list.Add(element);
             }
             @object = list.ToArray(elementType);

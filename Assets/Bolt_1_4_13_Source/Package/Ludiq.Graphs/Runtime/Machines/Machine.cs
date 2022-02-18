@@ -5,7 +5,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace Ludiq
 {
-	public abstract class Machine<TGraph, TMacro> : LudiqBehaviour, IMachine
+	public abstract class Machine<TGraph, TMacro> : MonoBehaviour, IMachine,ISerializationCallbackReceiver
 		where TGraph : class, IGraph, new()
 		where TMacro : Macro<TGraph>
 	{
@@ -15,8 +15,10 @@ namespace Ludiq
 			nest.source = GraphSource.Macro;
 		}
 		
-		[Serialize]
+		//[Serialize]
 		public GraphNest<TGraph, TMacro> nest { get; private set; } = new GraphNest<TGraph, TMacro>();
+
+		public TMacro m_Macro;
 
 		[DoNotSerialize]
 		IGraphNest IGraphNester.nest => nest;
@@ -215,5 +217,19 @@ namespace Ludiq
 		public abstract TGraph DefaultGraph();
 
 		IGraph IGraphParent.DefaultGraph() => DefaultGraph();
-	}
+
+        public virtual void OnBeforeSerialize()
+        {
+
+        }
+
+		public virtual void OnAfterDeserialize()
+		{
+			nest.source = GraphSource.Macro;
+			if (m_Macro != null)
+			{
+				nest.macro = m_Macro;
+			}
+		}
+    }
 }

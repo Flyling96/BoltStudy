@@ -38,6 +38,9 @@ namespace Bolt
 			internal set; 
 		}
 
+		[Serialize]
+		public AotDictionary dicTest;
+
 		[DoNotSerialize]
 		public object value
 		{

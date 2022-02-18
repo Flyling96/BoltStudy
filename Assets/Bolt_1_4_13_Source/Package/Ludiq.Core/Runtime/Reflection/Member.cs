@@ -9,8 +9,9 @@ using UnityObject = UnityEngine.Object;
 
 namespace Ludiq
 {
+	[CustomBinary]
 	[SerializationVersion("A")]
-	public sealed class Member : ISerializationCallbackReceiver
+	public partial class Member : ISerializationCallbackReceiver
 	{
 		public enum Source
 		{

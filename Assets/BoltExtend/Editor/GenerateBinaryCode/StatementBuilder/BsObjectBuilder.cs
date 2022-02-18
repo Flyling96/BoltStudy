@@ -18,7 +18,7 @@ namespace AutoBinary
             var statements = new List<CodeStatement>();
             statements.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(
                 new CodePropertyReferenceExpression(new CodeTypeReferenceExpression("BinaryManager"),"Instance"), "DeserializeObject",
-                new CodeVariableReferenceExpression(ReaderName),variable)));
+                new CodeVariableReferenceExpression(ReaderName), new CodeDirectionExpression(FieldDirection.Ref, variable))));
 
             return statements;
         }

@@ -13,7 +13,7 @@ namespace Ludiq
             return typeof(Type).IsAssignableFrom(type);
         }
 
-        public override void Deserialize(BinaryReader reader, object @object, Type type)
+        public override void Deserialize(BinaryReader reader, ref object @object, Type type)
         {
             @object = type;
         }

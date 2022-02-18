@@ -13,7 +13,7 @@ namespace Ludiq
             return type.IsPrimitive || type == typeof(string) || type == typeof(Vector2) || type == typeof(Vector3);
         }
 
-        public override void Deserialize(BinaryReader reader, object @object, Type type)
+        public override void Deserialize(BinaryReader reader, ref object @object, Type type)
         {
             if (type == typeof(Int16))
             {

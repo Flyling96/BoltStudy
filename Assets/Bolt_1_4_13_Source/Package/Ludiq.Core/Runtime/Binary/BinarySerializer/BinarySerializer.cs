@@ -12,6 +12,6 @@ namespace Ludiq
 
         public abstract void Serialize(BinaryWriter writer,object @object, Type type);
 
-        public abstract void Deserialize(BinaryReader reader,object @object, Type type);
+        public abstract void Deserialize(BinaryReader reader,ref object @object, Type type);
     }
 }

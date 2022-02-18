@@ -411,12 +411,12 @@ namespace Bolt
 		#region CustomSerialize
 		public virtual void BinarySerialize(System.IO.BinaryWriter writer)
         {
-			
+			writer.Write(position);
         }
 
 		public virtual void BinaryDeserialize(System.IO.BinaryReader reader)
         {
-
+			position = reader.ReadVector2();
         }
 		#endregion
 	}

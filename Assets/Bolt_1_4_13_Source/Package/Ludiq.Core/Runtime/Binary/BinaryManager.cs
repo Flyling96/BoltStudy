@@ -38,7 +38,7 @@ namespace Ludiq
             SerializeObject(writer, @object, type);
         }
 
-        public void DeserializeObject(BinaryReader reader, object @object)
+        public void DeserializeObject(BinaryReader reader, ref object @object)
         {
             string typeString = reader.ReadString();
             if(typeString == m_ObjectNullStr)
@@ -48,7 +48,7 @@ namespace Ludiq
 
             if(RuntimeCodebase.TryDeserializeType(typeString,out var type))
             {
-                DeserializeObject(reader, @object,type);
+                DeserializeObject(reader, ref @object,type);
             }
             else
             {
@@ -69,12 +69,12 @@ namespace Ludiq
             }
         }
 
-        public void DeserializeObject(BinaryReader reader, object @object,Type type)
+        public void DeserializeObject(BinaryReader reader, ref object @object,Type type)
         {
             var serializer = GetSerializer(type);
             if (serializer != null)
             {
-                serializer.Deserialize(reader, @object, type);
+                serializer.Deserialize(reader, ref @object, type);
             }
         }
 

@@ -18,7 +18,11 @@ namespace Ludiq
 
 			if (graphElementCollection != null)
 			{
-				graphElementCollection.ItemAdded += (element) => ItemAdded?.Invoke(element);
+				Action<TSubItem> add = (element) =>
+				{
+					ItemAdded?.Invoke(element);
+				};
+				graphElementCollection.ItemAdded += add;
 				graphElementCollection.ItemRemoved += (element) => ItemRemoved?.Invoke(element);
 				graphElementCollection.CollectionChanged += () => CollectionChanged?.Invoke();
 			}

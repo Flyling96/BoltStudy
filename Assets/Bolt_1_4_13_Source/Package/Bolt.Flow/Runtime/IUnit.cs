@@ -87,9 +87,15 @@ namespace Bolt
 		Vector2 position { get; set; }
 
 		#endregion
+
+		#region CustomBinarySerialize
+		void BinarySerialize(System.IO.BinaryWriter writer);
+
+		void BinaryDeserialize(System.IO.BinaryReader reader);
+		#endregion
 	}
 
-	public static class XUnit
+    public static class XUnit
 	{
 		public static ValueInput CompatibleValueInput(this IUnit unit, Type outputType)
 		{

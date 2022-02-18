@@ -60,12 +60,6 @@ namespace Bolt
 			}
 		}
 
-		[ContextMenu("Show Data...")]
-		protected override void ShowData()
-		{
-			base.ShowData();
-		}
-
 		public override StateGraph DefaultGraph()
 		{
 			return StateGraph.WithStart();
