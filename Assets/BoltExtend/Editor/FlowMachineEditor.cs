@@ -3,6 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using Bolt.Extend;
+using System.Collections.Generic;
 
 namespace Bolt
 {
@@ -77,6 +78,12 @@ namespace Bolt
             }
 
             EditorGUI.EndDisabledGroup();
+
+            //if(GUILayout.Button("Test"))
+            //{
+            //    Debug.LogError(typeof(List<>).IsAssignableFrom(typeof(List<int>).GetGenericTypeDefinition()));
+            //    Debug.LogError(typeof(Dictionary<,>).IsAssignableFrom(typeof(Dictionary<int,string>)));
+            //}
         }
     }
 }

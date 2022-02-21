@@ -97,6 +97,11 @@ namespace Ludiq
             new BinaryEnumSerializer(),
             new BinaryTypeSerializer(),
             new BinaryArraySerializer(),
+            new BinaryArrayListSerializer(),
+            new BinaryListSerializer(),
+            new BinaryOrderedDictionarySerializer(),
+            new BinaryDictionarySerializer(),
+            new BinaryCustomTypeSerializer(),
         };
 
     }

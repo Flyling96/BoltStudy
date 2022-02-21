@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Ludiq;
 
 namespace Bolt
@@ -38,8 +39,6 @@ namespace Bolt
 			internal set; 
 		}
 
-		[Serialize]
-		public AotDictionary dicTest;
 
 		[DoNotSerialize]
 		public object value

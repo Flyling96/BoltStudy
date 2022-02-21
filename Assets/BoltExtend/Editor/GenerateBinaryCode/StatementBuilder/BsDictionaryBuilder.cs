@@ -2,17 +2,21 @@
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
 
 namespace AutoBinary
 {
-    public class BsOrderedDictionaryBuilder : BinaryStatementBuilder
+    public class BsDictionaryBuilder : BinaryStatementBuilder
     {
         public override bool CanProcess(Type type)
         {
-            return typeof(OrderedDictionary).IsAssignableFrom(type);
+            if (type.IsGenericType)
+            {
+                return typeof(Dictionary<,>).IsAssignableFrom(type.GetGenericTypeDefinition());
+            }
+
+            return false;
         }
 
         public override List<CodeStatement> BuildSerializeStatement(Type type, CodeExpression variable, ref int tempIndex)
@@ -28,34 +32,37 @@ namespace AutoBinary
             var dicValuesReference = new CodeVariableReferenceExpression(dicValuesName);
             //writer.Write(variable.Count);
             statementList.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(new CodeArgumentReferenceExpression(WriterName), "Write",
-                new CodePropertyReferenceExpression(variable,"Count"))));
+                new CodePropertyReferenceExpression(variable, "Count"))));
+
+            var keyType = type.GetGenericArguments()[0];
+            var valueType = type.GetGenericArguments()[1];
 
             //for(;dicKeys.MoveNext();)
             //{
-            //    BinaryManage.Instance.SerializeObject(dicKeys.Current);
+            //    GenerateBinaryCodeManager.BuildSerializeStatement(dicKeys.Current);
             //}
+            var whileContentStatements = GenerateBinaryCodeManager.BuildSerializeStatement(keyType, new CodePropertyReferenceExpression(dicKeysReference, "Current"),ref tempIndex);
             var whileStatement = new CodeIterationStatement();
             whileStatement.TestExpression = new CodeMethodInvokeExpression(dicKeysReference, "MoveNext");
-            whileStatement.Statements.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(
-                new CodePropertyReferenceExpression(new CodeTypeReferenceExpression("BinaryManager"), "Instance"), "SerializeObject",
-                new CodeVariableReferenceExpression(WriterName), new CodePropertyReferenceExpression(dicKeysReference, "Current"))));
+            foreach (var statement in whileContentStatements)
+            {
+                whileStatement.Statements.Add(statement);
+            }
             whileStatement.IncrementStatement = new CodeExpressionStatement(new CodeSnippetExpression(""));
             whileStatement.InitStatement = new CodeExpressionStatement(new CodeSnippetExpression(""));
             statementList.Add(whileStatement);
 
-            //writer.Write(variable.Count);
-            statementList.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(new CodeArgumentReferenceExpression(WriterName), "Write",
-                new CodePropertyReferenceExpression(variable, "Count"))));
-
             //for(;dicValues.MoveNext();)
             //{
-            //    BinaryManager.Instance.SerializeObject(dicValues.Current);
+            //    GenerateBinaryCodeManager.BuildSerializeStatement(dicValues.Current);
             //}
+            whileContentStatements = GenerateBinaryCodeManager.BuildSerializeStatement(valueType, new CodePropertyReferenceExpression(dicValuesReference, "Current"), ref tempIndex);
             whileStatement = new CodeIterationStatement();
             whileStatement.TestExpression = new CodeMethodInvokeExpression(dicValuesReference, "MoveNext");
-            whileStatement.Statements.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(
-                new CodePropertyReferenceExpression(new CodeTypeReferenceExpression("BinaryManager"), "Instance"), "SerializeObject",
-                new CodeVariableReferenceExpression(WriterName), new CodePropertyReferenceExpression(dicValuesReference, "Current"))));
+            foreach (var statement in whileContentStatements)
+            {
+                whileStatement.Statements.Add(statement);
+            }
             whileStatement.IncrementStatement = new CodeExpressionStatement(new CodeSnippetExpression(""));
             whileStatement.InitStatement = new CodeExpressionStatement(new CodeSnippetExpression(""));
             statementList.Add(whileStatement);
@@ -66,16 +73,19 @@ namespace AutoBinary
         public override List<CodeStatement> BuildDeserializeStatement(Type type, CodeExpression variable, ref int tempIndex)
         {
             var statementList = new List<CodeStatement>();
+            var keyType = type.GetGenericArguments()[0];
+            var valueType = type.GetGenericArguments()[1];
+
+            var keysType = typeof(List<>).MakeGenericType(keyType);
+            var valuesType = typeof(List<>).MakeGenericType(valueType);
             var keysName = GetTemporaryName("keys", ref tempIndex);
             var valuesName = GetTemporaryName("values", ref tempIndex);
             //var keys = new List<object>();
-            statementList.Add(new CodeVariableDeclarationStatement(typeof(List<object>), keysName, new CodeObjectCreateExpression(typeof(List<object>))));
+            statementList.Add(new CodeVariableDeclarationStatement(keysType, keysName, new CodeObjectCreateExpression(keysType)));
             //var values = new List<object>();
-            statementList.Add(new CodeVariableDeclarationStatement(typeof(List<object>), valuesName, new CodeObjectCreateExpression(typeof(List<object>))));
+            statementList.Add(new CodeVariableDeclarationStatement(valuesType, valuesName, new CodeObjectCreateExpression(valuesType)));
             var keysReference = new CodeVariableReferenceExpression(keysName);
             var valuesReference = new CodeVariableReferenceExpression(valuesName);
-            var keyType = typeof(object);
-            var valueType = typeof(object);
 
             //int _count = 0;
             string countName = GetTemporaryName("_count", ref tempIndex);
@@ -148,14 +158,14 @@ namespace AutoBinary
             var forStatement = new CodeIterationStatement(
                 new CodeVariableDeclarationStatement(typeof(int), iterationIndexName, new CodePrimitiveExpression(0)),
                 new CodeBinaryOperatorExpression(iterationIndexReference, CodeBinaryOperatorType.LessThan,
-                new CodePropertyReferenceExpression(keysReference, "Count")),
+                new CodePropertyReferenceExpression(keysReference,"Count")),
                 new CodeAssignStatement(iterationIndexReference, new CodeBinaryOperatorExpression(
                iterationIndexReference, CodeBinaryOperatorType.Add, new CodePrimitiveExpression(1))),
                 //variable.Add(keys[i],values[i]);
                 new CodeStatement[]
                 {
                     new CodeExpressionStatement(new CodeMethodInvokeExpression(variable,"Add",
-                    new CodeIndexerExpression(keysReference,iterationIndexReference),
+                    new CodeIndexerExpression(keysReference,iterationIndexReference), 
                     new CodeIndexerExpression(valuesReference,iterationIndexReference)))
                 }
                 );

@@ -32,6 +32,11 @@ namespace Bolt.Extend
 			collection.Clear();
 		}
 
+		public void Add(TElement element)
+        {
+			collection.Add(element);
+		}
+
 		public bool IsDefined([InspectorVariableName(ActionDirection.Any)] string variable)
 		{
 			if (string.IsNullOrEmpty(variable))

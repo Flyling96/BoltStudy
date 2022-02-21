@@ -37,10 +37,18 @@ namespace Bolt.Extend
             using (var stream = File.Open(path, FileMode.Create))
             {
                 var writer = new BinaryWriter(stream);
-                SerializeUnits(writer, graph.units);
-                SerializeConnect(writer, graph.controlConnections);
-                SerializeConnect(writer, graph.valueConnections);
+                SerializeGraphFunctions(writer, graph.functions);
+                SerializeGraph(writer, graph);
             }
+        }
+
+        private void SerializeGraph(BinaryWriter writer, FlowGraph graph)
+        {
+            SerializeGraphVarialbes(writer, graph.variables);
+            SerializeGraphPorts(writer, graph.validPortDefinitions);
+            SerializeUnits(writer, graph.units);
+            SerializeConnect(writer, graph.controlConnections);
+            SerializeConnect(writer, graph.valueConnections);
         }
 
         public FlowGraph DeserializeGraph(string path)
@@ -56,9 +64,8 @@ namespace Bolt.Extend
             using (var stream = File.Open(path, FileMode.Open))
             {
                 var reader = new BinaryReader(stream);
-                DeserializeUnits(reader, flowGraph.units);
-                DeserializeControlConnect(reader, flowGraph.controlConnections);
-                DeserializeValueConnect(reader, flowGraph.valueConnections);
+                DeserializeGraphFunctions(reader, flowGraph.functions);
+                DeserializeGraph(reader, ref flowGraph);
             }
 
             return flowGraph;
@@ -70,15 +77,126 @@ namespace Bolt.Extend
             using (var stream = new MemoryStream(asset.bytes))
             {
                 var reader = new BinaryReader(stream);
-                DeserializeUnits(reader, flowGraph.units);
-                DeserializeControlConnect(reader, flowGraph.controlConnections);
-                DeserializeValueConnect(reader, flowGraph.valueConnections);
+                DeserializeGraphFunctions(reader, flowGraph.functions);
+                DeserializeGraph(reader, ref flowGraph);
             }
 
             return flowGraph;
         }
 
+        private void DeserializeGraph(BinaryReader reader, ref FlowGraph graph)
+        {
+            DeserializeGraphVarialbes(reader, graph.variables);
+            DeserializeGraphPorts(reader, graph);
+            DeserializeUnits(reader, graph.units);
+            DeserializeControlConnect(reader, graph.controlConnections);
+            DeserializeValueConnect(reader, graph.valueConnections);
+        }
 
+        private void SerializeGraphPorts(BinaryWriter writer, IEnumerable<IUnitPortDefinition> ports)
+        {
+            writer.Write(ports.Count());
+            foreach (var port in ports)
+            {
+                if (port is ControlInputDefinition controlInput)
+                {
+                    writer.Write(0);
+                    SerializeGraphPort(writer, controlInput);
+                }
+                else if (port is ControlOutputDefinition controlOutput)
+                {
+                    writer.Write(1);
+                    SerializeGraphPort(writer, controlOutput);
+                }
+                else if(port is ValueInputDefinition valueInput)
+                {
+                    writer.Write(2);
+                    SerializeGraphPort(writer, valueInput);
+                    writer.Write(RuntimeCodebase.SerializeType(valueInput.type));
+                    BinaryManager.Instance.SerializeObject(writer, valueInput.defaultValue);
+                }
+                else if(port is ValueOutputDefinition valueOutput)
+                {
+                    writer.Write(3);
+                    SerializeGraphPort(writer, valueOutput);
+                    writer.Write(RuntimeCodebase.SerializeType(valueOutput.type));
+                }
+            }
+        }
+
+        private void SerializeGraphPort(BinaryWriter writer, UnitPortDefinition port)
+        {
+            if(port.key == null)
+            {
+                port.key = string.Empty;
+            }
+            if (port.label == null)
+            {
+                port.label = string.Empty;
+            }
+            if (port.summary == null)
+            {
+                port.summary = string.Empty;
+            }
+            writer.Write(port.key);
+            writer.Write(port.label);
+            writer.Write(port.summary);
+            writer.Write(port.hideLabel);
+        }
+
+        private void DeserializeGraphPorts(BinaryReader reader, FlowGraph graph)
+        {
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                var index = reader.ReadInt32();
+                if(index == 0)
+                {
+                    var port = new ControlInputDefinition();
+                    DeserializeGraphPort(reader, port);
+                    graph.controlInputDefinitions.Add(port);
+                }
+                else if(index == 1)
+                {
+                    var port = new ControlOutputDefinition();
+                    DeserializeGraphPort(reader, port);
+                    graph.controlOutputDefinitions.Add(port);
+                }
+                else if(index == 2)
+                {
+                    var port = new ValueInputDefinition();
+                    DeserializeGraphPort(reader, port);
+                    var typeString = reader.ReadString();
+                    if(RuntimeCodebase.TryDeserializeType(typeString,out var type))
+                    {
+                        port.type = type;
+                    }
+                    object @object = null;
+                    BinaryManager.Instance.DeserializeObject(reader, ref @object);
+                    port.defaultValue = @object;
+                    graph.valueInputDefinitions.Add(port);
+                }
+                else if(index == 3)
+                {
+                    var port = new ValueOutputDefinition();
+                    DeserializeGraphPort(reader, port);
+                    var typeString = reader.ReadString();
+                    if (RuntimeCodebase.TryDeserializeType(typeString, out var type))
+                    {
+                        port.type = type;
+                    }
+                    graph.valueOutputDefinitions.Add(port);
+                }
+            }
+        }
+
+        private void DeserializeGraphPort(BinaryReader reader, UnitPortDefinition port)
+        {
+            port.key = reader.ReadString();
+            port.label = reader.ReadString();
+            port.summary = reader.ReadString();
+            port.hideLabel = reader.ReadBoolean();
+        }
 
         private void SerializeUnits(BinaryWriter writer, IEnumerable<IUnit> units)
         {
@@ -114,7 +232,7 @@ namespace Bolt.Extend
                 positions[i] = (int)reader.BaseStream.Position;
                 reader.BaseStream.Seek(len, SeekOrigin.Current);
                 Unit unit = null;
-                //unit = AutoBinaryUnits.GetUnit(unitName);
+                unit = AutoBinaryUnits.GetUnit(unitName);
                 m_UnitList.Add(unit);
                 if (unit == null)
                 {
@@ -255,6 +373,70 @@ namespace Bolt.Extend
 
                 ValueConnection connect = new ValueConnection(outputPort, inputPort);
                 connections.Add(connect);
+            }
+        }
+
+        private void SerializeGraphVarialbes(BinaryWriter writer, VariableDeclarations variables)
+        {
+            writer.Write(variables.Count());
+            foreach(var variable in variables)
+            {
+                writer.Write(variable.name);
+                BinaryManager.Instance.SerializeObject(writer, variable.value);
+            }
+        }
+
+        private void DeserializeGraphVarialbes(BinaryReader reader, VariableDeclarations variables)
+        {
+            var count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                var name = reader.ReadString();
+                object value = null;
+                BinaryManager.Instance.DeserializeObject(reader, ref value);
+                variables.Set(name, value);
+            }
+        }
+
+        private void SerializeGraphFunctions(BinaryWriter writer, FlowFunctionDeclarations functions)
+        {
+            writer.Write(functions.Count());
+            foreach(var function in functions)
+            {
+                writer.Write(function.name);
+                writer.Write((int)function.source);
+                if(function.source == GraphSource.Embed)
+                {
+                    SerializeGraph(writer, function.embed);
+                }
+                else
+                {
+                    //TODO
+                }
+            }
+        }
+
+        private void DeserializeGraphFunctions(BinaryReader reader, FlowFunctionDeclarations functions)
+        {
+            var count = reader.ReadInt32();
+            for(int i =0; i< count;i++)
+            {
+                var name = reader.ReadString();
+                var function = new FlowFunctionDeclaration(name);
+                var source = (GraphSource)reader.ReadInt32();
+                function.source = source;
+                if(source == GraphSource.Embed)
+                {
+                    var graph = new FlowGraph();
+                    DeserializeGraph(reader, ref graph);
+                    function.embed = graph;
+                }
+                else
+                {
+                    //TODO
+                }
+                functions.Add(function);
+
             }
         }
     }

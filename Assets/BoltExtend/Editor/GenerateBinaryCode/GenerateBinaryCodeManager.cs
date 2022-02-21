@@ -415,12 +415,13 @@ namespace AutoBinary
         {
             new BsArrayBuilder(),
             new BsPrimitiveBuilder(),
-            new BsIListBuilder(),
+            new BsListBuilder(),
             new BsEnumBuilder(),
             new BsObjectBuilder(),
             new BsTypeBuilder(),
             new BsCustomBuilder(),
             new BsOrderedDictionaryBuilder(),
+            new BsDictionaryBuilder(),
         };
 
         private static void GenerateBinaryUnits(string path)

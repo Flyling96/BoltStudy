@@ -227,7 +227,7 @@ namespace Bolt
 			options = new System.Collections.Generic.List<string>();
 			for (int i_1 = 0; (i_1 < _count_0); i_1 = (i_1 + 1))
 			{
-				string _temp_2;
+				string _temp_2 = null;
 				_temp_2 = reader.ReadString();
 				options.Add(_temp_2);
 			}
@@ -328,7 +328,7 @@ namespace Bolt
 			options = new System.Collections.Generic.List<string>();
 			for (int i_1 = 0; (i_1 < _count_0); i_1 = (i_1 + 1))
 			{
-				string _temp_2;
+				string _temp_2 = null;
 				_temp_2 = reader.ReadString();
 				options.Add(_temp_2);
 			}
@@ -483,17 +483,6 @@ namespace Bolt
 			string typeName_0 = RuntimeCodebase.SerializeType(type);
 			writer.Write(typeName_0);
 			BinaryManager.Instance.SerializeObject(writer, _value);
-			System.Collections.IEnumerator dicKeys = dicTest.Keys.GetEnumerator();
-			System.Collections.IEnumerator dicValues = dicTest.Values.GetEnumerator();
-			writer.Write(dicTest.Count);
-			for (; dicKeys.MoveNext(); )
-			{
-				BinaryManager.Instance.SerializeObject(writer, dicKeys.Current);
-			}
-			for (; dicKeys.MoveNext(); )
-			{
-				BinaryManager.Instance.SerializeObject(writer, dicKeys.Current);
-			}
 		}
 		
 		public override void BinaryDeserialize(System.IO.BinaryReader reader)
@@ -509,28 +498,6 @@ namespace Bolt
 				Debug.LogError("Deserialize Fail type : " + typeName_0);
 			}
 			BinaryManager.Instance.DeserializeObject(reader, ref _value);
-			int _count_2 = 0;
-			_count_2 = reader.ReadInt32();
-			System.Collections.Generic.List<object> keys = new System.Collections.Generic.List<object>();
-			System.Collections.Generic.List<object> values = new System.Collections.Generic.List<object>();
-			int _count_3 = 0;
-			_count_3 = reader.ReadInt32();
-			keys = new System.Collections.Generic.List<object>();
-			for (int i_4 = 0; (i_4 < _count_3); i_4 = (i_4 + 1))
-			{
-				object _temp_5;
-				BinaryManager.Instance.DeserializeObject(reader, ref _temp_5);
-				keys.Add(_temp_5);
-			}
-			int _count_6 = 0;
-			_count_6 = reader.ReadInt32();
-			values = new System.Collections.Generic.List<object>();
-			for (int i_7 = 0; (i_7 < _count_6); i_7 = (i_7 + 1))
-			{
-				object _temp_8;
-				BinaryManager.Instance.DeserializeObject(reader, ref _temp_8);
-				values.Add(_temp_8);
-			}
 		}
 	}
 	
