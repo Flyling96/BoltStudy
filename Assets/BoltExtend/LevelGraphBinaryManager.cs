@@ -37,13 +37,13 @@ namespace Bolt.Extend
             using (var stream = File.Open(path, FileMode.Create))
             {
                 var writer = new BinaryWriter(stream);
-                SerializeGraphFunctions(writer, graph.functions);
                 SerializeGraph(writer, graph);
             }
         }
 
         private void SerializeGraph(BinaryWriter writer, FlowGraph graph)
         {
+            SerializeGraphFunctions(writer, graph.functions);
             SerializeGraphVarialbes(writer, graph.variables);
             SerializeGraphPorts(writer, graph.validPortDefinitions);
             SerializeUnits(writer, graph.units);
@@ -64,7 +64,6 @@ namespace Bolt.Extend
             using (var stream = File.Open(path, FileMode.Open))
             {
                 var reader = new BinaryReader(stream);
-                DeserializeGraphFunctions(reader, flowGraph.functions);
                 DeserializeGraph(reader, ref flowGraph);
             }
 
@@ -77,7 +76,6 @@ namespace Bolt.Extend
             using (var stream = new MemoryStream(asset.bytes))
             {
                 var reader = new BinaryReader(stream);
-                DeserializeGraphFunctions(reader, flowGraph.functions);
                 DeserializeGraph(reader, ref flowGraph);
             }
 
@@ -86,6 +84,7 @@ namespace Bolt.Extend
 
         private void DeserializeGraph(BinaryReader reader, ref FlowGraph graph)
         {
+            DeserializeGraphFunctions(reader, graph.functions);
             DeserializeGraphVarialbes(reader, graph.variables);
             DeserializeGraphPorts(reader, graph);
             DeserializeUnits(reader, graph.units);
