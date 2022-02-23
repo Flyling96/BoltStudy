@@ -37,6 +37,15 @@ namespace AutoBinary
         {
             var statementList = new List<CodeStatement>();
             var writerExpression = new CodeVariableReferenceExpression(WriterName);
+            //if(string == null) string = string.Empty;
+            if(type == typeof(string))
+            {
+                statementList.Add(new CodeConditionStatement(new CodeBinaryOperatorExpression(variable, CodeBinaryOperatorType.ValueEquality, new CodePrimitiveExpression(null)),
+                    new CodeStatement[]
+                    {
+                        new CodeAssignStatement(variable,new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(typeof(string)),"Empty"))
+                    }));
+            }
             //writer.write(variableName);
             statementList.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(writerExpression, "Write", variable)));
 

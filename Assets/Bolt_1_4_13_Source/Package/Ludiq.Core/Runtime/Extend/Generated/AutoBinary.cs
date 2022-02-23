@@ -19,8 +19,16 @@ namespace Ludiq
 		
 		public virtual void BinarySerialize(System.IO.BinaryWriter writer)
 		{
+			if ((_name == null))
+			{
+				_name = string.Empty;
+			}
 			writer.Write(_name);
-			int _count_0 = _parameterTypes.Length;
+			int _count_0 = 0;
+			if ((_parameterTypes != null))
+			{
+				_count_0 = _parameterTypes.Length;
+			}
 			writer.Write(_count_0);
 			for (int i_1 = 0; (i_1 < _count_0); i_1 = (i_1 + 1))
 			{
@@ -29,6 +37,10 @@ namespace Ludiq
 			}
 			string typeName_3 = RuntimeCodebase.SerializeType(_targetType);
 			writer.Write(typeName_3);
+			if ((_targetTypeName == null))
+			{
+				_targetTypeName = string.Empty;
+			}
 			writer.Write(_targetTypeName);
 		}
 		

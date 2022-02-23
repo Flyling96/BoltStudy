@@ -186,11 +186,13 @@ namespace AutoBinary
                             Type declaringMemberType = null;
                             if (memberInfo is FieldInfo)
                             {
-                                declaringMemberType = definitionType.GetField(memberInfo.Name).FieldType;
+                                declaringMemberType = definitionType.GetField(memberInfo.Name,
+                                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).FieldType;
                             }
                             else if(memberInfo is PropertyInfo)
                             {
-                                declaringMemberType = definitionType.GetProperty(memberInfo.Name).PropertyType;
+                                declaringMemberType = definitionType.GetProperty(memberInfo.Name,
+                                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).PropertyType;
                             }
 
                             if(declaringMemberType == memberType)

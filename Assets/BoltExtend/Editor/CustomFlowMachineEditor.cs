@@ -31,17 +31,22 @@ namespace Bolt.Extend
                     var root = target as IGraphRoot;
                     if (root != null)
                     {
+                        if(root.childGraph == null)
+                        {
+                            var machine = target as CustomFlowMachine;
+                            machine.LoadGraph();
+                        }
                         var reference = GraphReference.New(root, false);
                         GraphWindow.OpenActive(reference);
                     }
                 }
             }
 
-            if(GUILayout.Button("Reload Graph"))
-            {
-                var machine = target as CustomFlowMachine;
-                machine.LoadGraph();
-            }
+            //if(GUILayout.Button("Reload Graph"))
+            //{
+            //    var machine = target as CustomFlowMachine;
+            //    machine.LoadGraph();
+            //}
 
             EditorGUI.EndDisabledGroup();
         }

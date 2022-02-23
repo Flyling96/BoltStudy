@@ -20,10 +20,10 @@ namespace Ludiq
 
 			try
 			{
-				OnBeforeSerialize();
+				OnBeforeSerializeLudiq();
 				_data = this.Serialize(true);
                 //Debug.Log($"[_LudiqScriptableObject.OnBeforeSerialize] {GetType()}, {_data.json}");
-                OnAfterSerialize();
+                OnAfterSerializeLudiq();
 			}
 			catch (Exception ex)
 			{
@@ -34,7 +34,7 @@ namespace Ludiq
 			Serialization.isUnitySerializing = false;
 		}
 
-		void ISerializationCallbackReceiver.OnAfterDeserialize()
+		public void OnAfterDeserialize()
 		{
 			// Ignore the FullSerializer callback, but still catch the Unity callback
 			if (Serialization.isCustomSerializing)
@@ -47,10 +47,10 @@ namespace Ludiq
             try
 			{
 				object @this = this;
-				OnBeforeDeserialize();
+				OnBeforeDeserializeLudiq();
 				_data.DeserializeInto(ref @this, true);
                 //Debug.Log($"[_LudiqScriptableObject.OnAfterDeserialize] {GetType()}, {_data.json}");
-                OnAfterDeserialize();
+                OnAfterDeserializeLudiq();
 				UnityThread.EditorAsync(OnPostDeserializeInEditor);
 			}
 			catch (Exception ex)
@@ -62,13 +62,13 @@ namespace Ludiq
 			Serialization.isUnitySerializing = false;
 		}
 
-		protected virtual void OnBeforeSerialize() { }
+		protected virtual void OnBeforeSerializeLudiq() { }
 
-		protected virtual void OnAfterSerialize() { }
+		protected virtual void OnAfterSerializeLudiq() { }
 
-		protected virtual void OnBeforeDeserialize() { }
+		protected virtual void OnBeforeDeserializeLudiq() { }
 
-		protected virtual void OnAfterDeserialize() { }
+		protected virtual void OnAfterDeserializeLudiq() { }
 
 		protected virtual void OnPostDeserializeInEditor() { }
 

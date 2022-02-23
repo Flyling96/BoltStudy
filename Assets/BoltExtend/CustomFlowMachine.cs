@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Ludiq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,6 +30,9 @@ namespace Bolt.Extend
             {
                 m_Macro.graph = LevelGraphBinaryManager.Instance.DeserializeGraph(m_MacroBytes);
             }
+
+            nest.source = GraphSource.Macro;
+            nest.macro = m_Macro;
         }
     }
 }

@@ -26,6 +26,10 @@ namespace Bolt.Extend
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
 		{
 			base.BinarySerialize(writer);
+			if ((variableName == null))
+			{
+				variableName = string.Empty;
+			}
 			writer.Write(variableName);
 		}
 		

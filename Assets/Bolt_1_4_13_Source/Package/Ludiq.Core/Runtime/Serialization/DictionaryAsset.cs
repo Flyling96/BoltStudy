@@ -30,9 +30,9 @@ namespace Ludiq
 
 		bool ICollection<KeyValuePair<string, object>>.IsReadOnly => ((ICollection<KeyValuePair<string, object>>)dictionary).IsReadOnly;
 
-		protected override void OnAfterDeserialize()
+		protected override void OnAfterDeserializeLudiq()
 		{
-			base.OnAfterDeserialize();
+			base.OnAfterDeserializeLudiq();
 
 			if (dictionary == null)
 			{

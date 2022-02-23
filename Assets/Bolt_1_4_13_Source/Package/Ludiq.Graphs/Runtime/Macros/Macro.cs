@@ -56,16 +56,16 @@ namespace Ludiq
 			set { }
 		}
 
-		protected override void OnBeforeDeserialize()
+		protected override void OnBeforeDeserializeLudiq()
 		{
-			base.OnBeforeDeserialize();
+			base.OnBeforeDeserializeLudiq();
 
 			Serialization.NotifyDependencyDeserializing(this);
 		}
 
-		protected override void OnAfterDeserialize()
+		protected override void OnAfterDeserializeLudiq()
 		{
-			base.OnAfterDeserialize();
+			base.OnAfterDeserializeLudiq();
 
 			Serialization.NotifyDependencyDeserialized(this);
 		}

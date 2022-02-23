@@ -21,8 +21,18 @@ namespace AutoBinary
             string countName = GetTemporaryName("_count", ref tempIndex);
             //variableName.Length
             var arrayCount = new CodeFieldReferenceExpression(variable, "Length");
-            //int _count = variableName.Length;
-            statements.Add(new CodeVariableDeclarationStatement(typeof(int), countName, arrayCount));
+
+            //int _count = 0;
+            statements.Add(new CodeVariableDeclarationStatement(typeof(int), countName, new CodePrimitiveExpression(0)));
+            //if(variableName != null)
+            //{
+            //    _count = variableName.Length;
+            //}
+            var condition = new CodeConditionStatement(new CodeBinaryOperatorExpression(variable, CodeBinaryOperatorType.IdentityInequality, new CodePrimitiveExpression(null)),
+                new CodeStatement[] { 
+                    new CodeAssignStatement(new CodeVariableReferenceExpression(countName),arrayCount)
+                });
+            statements.Add(condition);
             //writer.write(_count)
             var countStatements = GenerateBinaryCodeManager.BuildSerializeStatement(typeof(int), new CodeVariableReferenceExpression(countName), ref tempIndex);
             foreach(var countStatement in countStatements)

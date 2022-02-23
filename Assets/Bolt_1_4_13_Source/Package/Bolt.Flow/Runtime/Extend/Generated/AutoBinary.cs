@@ -214,6 +214,10 @@ namespace Bolt
 			writer.Write(_count_0);
 			for (int i_1 = 0; (i_1 < _count_0); i_1 = (i_1 + 1))
 			{
+				if ((options[i_1] == null))
+				{
+					options[i_1] = string.Empty;
+				}
 				writer.Write(options[i_1]);
 			}
 		}
@@ -315,6 +319,10 @@ namespace Bolt
 			writer.Write(_count_0);
 			for (int i_1 = 0; (i_1 < _count_0); i_1 = (i_1 + 1))
 			{
+				if ((options[i_1] == null))
+				{
+					options[i_1] = string.Empty;
+				}
 				writer.Write(options[i_1]);
 			}
 		}
@@ -463,6 +471,10 @@ namespace Bolt
 		{
 			base.BinarySerialize(writer);
 			writer.Write(cacheArguments);
+			if ((_formula == null))
+			{
+				_formula = string.Empty;
+			}
 			writer.Write(_formula);
 		}
 		
@@ -705,6 +717,10 @@ namespace Bolt.Extend
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
 		{
 			base.BinarySerialize(writer);
+			if ((VariableName == null))
+			{
+				VariableName = string.Empty;
+			}
 			writer.Write(VariableName);
 		}
 		
@@ -721,6 +737,10 @@ namespace Bolt.Extend
 		public override void BinarySerialize(System.IO.BinaryWriter writer)
 		{
 			base.BinarySerialize(writer);
+			if ((functionName == null))
+			{
+				functionName = string.Empty;
+			}
 			writer.Write(functionName);
 		}
 		
