@@ -18,11 +18,12 @@ namespace Ludiq
 
 		private TypeFilter _typeFilter;
 
-		private Type type;
+		public Type type;
 
 		public bool chooseType => true;
 
-		public bool showValue => type != null && InspectorProvider.instance.GetDecoratorType(type) != typeof(SystemObjectInspector);
+		public bool showValue => type != null && InspectorProvider.instance.GetDecoratorType(type) != typeof(SystemObjectInspector)
+			&& InspectorProvider.instance.GetDecoratorType(type) != typeof(UnknownInspector);
 
 		public TypeFilter typeFilter
 		{

@@ -6,6 +6,7 @@ using Ludiq;
 namespace Bolt
 {
 	[SerializationVersion("A")]
+	[Serializable]
 	public sealed class VariableDeclarations : IEnumerable<VariableDeclaration>, ISpecifiesCloner
 	{
 		private bool m_Editable;
@@ -43,6 +44,32 @@ namespace Bolt
 			if (collection.TryGetValue(variable, out var declaration))
 			{
 				declaration.value = value;
+			}
+			else
+			{
+				collection.Add(new VariableDeclaration(variable, value));
+			}
+		}
+
+		public void Set(VariableDeclaration declaration)
+        {
+			collection.Add(declaration);
+        }
+
+		public void Set([InspectorVariableName(ActionDirection.Set)] string variable, object value,Type type)
+		{
+			if (string.IsNullOrEmpty(variable))
+			{
+				// Do nothing: safer for e.g. default event configurations,
+				// where we don't specify a variable name. If we specified a default,
+				// we might override a user value inadvertently.
+				return;
+			}
+
+			if (collection.TryGetValue(variable, out var declaration))
+			{
+				declaration.value = value;
+				declaration.type = type;
 			}
 			else
 			{

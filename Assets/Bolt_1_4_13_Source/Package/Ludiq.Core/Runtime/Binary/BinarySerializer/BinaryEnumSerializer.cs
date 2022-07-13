@@ -18,7 +18,7 @@ namespace Ludiq
             if (type.IsEnum)
             {
                 var enumIndex = reader.ReadInt32();
-                @object = Convert.ChangeType(enumIndex, type);
+                @object = Enum.ToObject(type, enumIndex);
             }
             else
             {

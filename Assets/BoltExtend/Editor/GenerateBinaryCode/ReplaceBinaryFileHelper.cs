@@ -19,7 +19,6 @@ namespace AutoBinary
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var macro = AssetDatabase.LoadAssetAtPath<FlowMacro>(path);
-                macro.OnAfterDeserialize();
                 var directory = Path.GetDirectoryName(path);
                 directory = directory.Replace(@"Assets",@"Assets\BinaryFile");
                 var name = Path.GetFileNameWithoutExtension(path);

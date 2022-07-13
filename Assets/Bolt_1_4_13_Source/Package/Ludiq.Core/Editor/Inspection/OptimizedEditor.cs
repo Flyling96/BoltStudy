@@ -20,7 +20,7 @@ namespace Ludiq
 			return individualDrawers[hash];
 		}
 
-		public sealed override void OnInspectorGUI()
+		public override void OnInspectorGUI()
 		{
 			if (serializedObject.isEditingMultipleObjects)
 			{

@@ -13,6 +13,9 @@ namespace Bolt
 
 		private Metadata valueMetadata => metadata[nameof(VariableDeclaration.value)];
 
+		private Metadata typeMetadata => metadata[nameof(VariableDeclaration.type)];
+
+
 		protected override float GetHeight(float width, GUIContent label)
 		{
 			var height = 0f;
@@ -87,7 +90,22 @@ namespace Bolt
 
 		public void OnValueGUI(Rect valuePosition)
 		{
+			var inspector = valueMetadata.Inspector() as SystemObjectInspector;
+			if(inspector != null && inspector.type == null && typeMetadata.value != null)
+            {
+				var type = (System.Type)typeMetadata.value;
+				if(!type.IsValueType)
+                {
+					inspector.type = type;
+                }
+            }
+
 			LudiqGUI.Inspector(valueMetadata, valuePosition, GUIContent.none);
+
+			if(inspector != null && inspector.type != null && !inspector.type.IsValueType)
+            {
+				typeMetadata.value = inspector.type;
+            }
 		}
 
 		public static class Styles
