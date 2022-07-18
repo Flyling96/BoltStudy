@@ -55,10 +55,15 @@ namespace Bolt
             }
         }
 
-		[SerializeField]
+		//[SerializeField]
 		private byte[] m_Bytes = null;
 
 		[SerializeField]
+		[DoNotSerialize]
+		private string m_BytesString = null;
+
+		[SerializeField]
+		[DoNotSerialize]
 		private List<UnityEngine.Object> m_UnityObjects = new List<UnityEngine.Object>();
 
 		public void OnBeforeSerialize()
@@ -92,12 +97,13 @@ namespace Bolt
 				m_Bytes = new byte[(int)writer.BaseStream.Length];
 				writer.BaseStream.Position = 0;
 				writer.BaseStream.Read(m_Bytes, 0, (int)writer.BaseStream.Length);
+				m_BytesString = System.Convert.ToBase64String(m_Bytes);
 			}
 		}
 
 		public void OnAfterDeserialize()
         {
-			if (m_Bytes != null && m_Bytes.Length > 0)
+			if (!string.IsNullOrEmpty(m_BytesString))
 			{
 				ReadBytesToObject();
 			}
@@ -112,6 +118,15 @@ namespace Bolt
 
 		private void ReadBytesToObject()
         {
+			try
+            {
+				m_Bytes = System.Convert.FromBase64String(m_BytesString);
+            }
+			catch(Exception e)
+            {
+				Debug.LogError(e.ToString());
+            }
+
 			using (var reader = new BinaryReader(new MemoryStream(m_Bytes)))
 			{
 				if (m_UnityObjects != null && m_UnityObjects.Count > 0)
