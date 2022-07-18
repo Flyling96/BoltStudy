@@ -23,9 +23,10 @@ namespace Ludiq
             }
         }
 
-        private const string m_ObjectNullStr = "Null"; 
+        private const string m_ObjectNullStr = "Null";
+        public List<UnityEngine.Object> m_UnityObjectReferences = null;
 
-        public void SerializeObject(BinaryWriter writer,object @object)
+        public void SerializeObject(BinaryWriter writer,object @object,List<UnityEngine.Object> references = null)
         {
             if(@object == null)
             {
@@ -35,10 +36,19 @@ namespace Ludiq
             Type type = @object.GetType();
             string typeString = RuntimeCodebase.SerializeType(type);
             writer.Write(typeString);
+            if(references != null)
+            {
+                m_UnityObjectReferences = references;
+            }
             SerializeObject(writer, @object, type);
+
+            if (references != null)
+            {
+                m_UnityObjectReferences = null;
+            }
         }
 
-        public void DeserializeObject(BinaryReader reader, ref object @object)
+        public void DeserializeObject(BinaryReader reader, ref object @object, List<UnityEngine.Object> references = null)
         {
             string typeString = reader.ReadString();
             if(typeString == m_ObjectNullStr)
@@ -48,13 +58,25 @@ namespace Ludiq
 
             if(RuntimeCodebase.TryDeserializeType(typeString,out var type))
             {
+                if (references != null)
+                {
+                    m_UnityObjectReferences = references;
+                }
+
                 DeserializeObject(reader, ref @object,type);
+
+                if (references != null)
+                {
+                    m_UnityObjectReferences = null;
+                }
+
             }
             else
             {
                 Debug.LogError($"BinaryManager DeserializeType Error typeString : {typeString}");
             }
         }
+
 
         public void SerializeObject(BinaryWriter writer, object @object, Type type)
         {
@@ -102,6 +124,7 @@ namespace Ludiq
             new BinaryOrderedDictionarySerializer(),
             new BinaryDictionarySerializer(),
             new BinaryCustomTypeSerializer(),
+            new BinaryUnityObjectSerializer(),
         };
 
     }

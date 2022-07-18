@@ -59,10 +59,7 @@ namespace Bolt
 		private byte[] m_Bytes = null;
 
 		[SerializeField]
-		private GameObject m_GameObject = null;
-
-		[SerializeField]
-		private List<GameObject> m_GameObjects = null;
+		private List<UnityEngine.Object> m_UnityObjects = new List<UnityEngine.Object>();
 
 		public void OnBeforeSerialize()
         {
@@ -88,32 +85,14 @@ namespace Bolt
 
 		private void WriteObjectToBytes()
         {
-			if (m_Value is GameObject gameObject)
+			using (var writer = new BinaryWriter(new MemoryStream()))
 			{
-				m_Bytes = null;
-				m_GameObjects = null;
-				m_GameObject = gameObject;
+				m_UnityObjects.Clear();
+				BinaryManager.Instance.SerializeObject(writer, m_Value, m_UnityObjects);
+				m_Bytes = new byte[(int)writer.BaseStream.Length];
+				writer.BaseStream.Position = 0;
+				writer.BaseStream.Read(m_Bytes, 0, (int)writer.BaseStream.Length);
 			}
-			else if (m_Value is List<GameObject> gameObjects)
-			{
-				m_Bytes = null;
-				m_GameObject = null;
-				m_GameObjects = gameObjects;
-			}
-			else
-			{
-				m_GameObject = null;
-				m_GameObjects = null;
-
-				using (var writer = new BinaryWriter(new MemoryStream()))
-				{
-					BinaryManager.Instance.SerializeObject(writer, m_Value);
-					m_Bytes = new byte[(int)writer.BaseStream.Length];
-					writer.BaseStream.Position = 0;
-					writer.BaseStream.Read(m_Bytes, 0, (int)writer.BaseStream.Length);
-				}
-			}
-
 		}
 
 		public void OnAfterDeserialize()
@@ -122,10 +101,6 @@ namespace Bolt
 			{
 				ReadBytesToObject();
 			}
-			else if (m_GameObject != null)
-            {
-				m_Value = m_GameObject;
-            }
 			else if (!string.IsNullOrEmpty(m_TypeFullName))
 			{
 				if(RuntimeCodebase.TryDeserializeType(m_TypeFullName,out var type))
@@ -133,17 +108,20 @@ namespace Bolt
 					m_Type = type;	
                 }
 			}
-			else if(m_GameObjects != null)
-            {
-				m_Value = m_GameObjects;
-            }
 		}
 
 		private void ReadBytesToObject()
         {
 			using (var reader = new BinaryReader(new MemoryStream(m_Bytes)))
 			{
-				BinaryManager.Instance.DeserializeObject(reader,ref m_Value);
+				if (m_UnityObjects != null && m_UnityObjects.Count > 0)
+				{
+					BinaryManager.Instance.DeserializeObject(reader, ref m_Value, m_UnityObjects);
+				}
+				else
+				{
+					BinaryManager.Instance.DeserializeObject(reader, ref m_Value);
+				}
 			}
 		}
 
