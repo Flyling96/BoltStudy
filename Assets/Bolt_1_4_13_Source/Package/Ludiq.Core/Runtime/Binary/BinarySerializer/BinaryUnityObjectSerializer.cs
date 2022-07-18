@@ -15,10 +15,13 @@ public class BinaryUnityObjectSerializer : BinarySerializer
 
     public override void Deserialize(BinaryReader reader, ref object @object, Type type)
     {
-        int index = reader.ReadInt32();
-        if (BinaryManager.Instance.m_UnityObjectReferences != null && index > -1 && index < BinaryManager.Instance.m_UnityObjectReferences.Count)
+        if (BinaryManager.Instance.m_UnityObjectReferences != null)
         {
-            @object = BinaryManager.Instance.m_UnityObjectReferences[index];
+            int index = reader.ReadInt32();
+            if (index > -1 && index < BinaryManager.Instance.m_UnityObjectReferences.Count)
+            {
+                @object = BinaryManager.Instance.m_UnityObjectReferences[index];
+            }
         }
         else
         {
@@ -30,10 +33,10 @@ public class BinaryUnityObjectSerializer : BinarySerializer
 
     public override void Serialize(BinaryWriter writer, object @object, Type type)
     {
-        if(@object is Object unityObject && BinaryManager.Instance.m_UnityObjectReferences != null)
+        if(BinaryManager.Instance.m_UnityObjectReferences != null)
         {
             writer.Write(BinaryManager.Instance.m_UnityObjectReferences.Count);
-            BinaryManager.Instance.m_UnityObjectReferences.Add(unityObject);
+            BinaryManager.Instance.m_UnityObjectReferences.Add(@object as Object);
         }
     }
 }
